@@ -37,6 +37,7 @@ export default [
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/ban-ts-comment": "warn",
       "@typescript-eslint/consistent-type-imports": "error",
+      "linebreak-style": "off",
 
       "prettier/prettier": [
         "error",
@@ -49,6 +50,9 @@ export default [
       ],
     },
   },
+  {
+    "extends": ["eslint:recommended", "plugin:react/recommended", "prettier"]
+  },  
   {
     files: ["**/*.+(ts|tsx)"],
 

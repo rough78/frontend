@@ -52,7 +52,7 @@ export default [
   },
   {
     "extends": ["eslint:recommended", "plugin:react/recommended", "prettier"]
-  },  
+  },
   {
     files: ["**/*.+(ts|tsx)"],
 

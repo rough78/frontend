@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
-
+import { Link } from "react-router-dom";
+import Button from "../components/Button/Button";
 const Home = () => {
   return (
     <div>
@@ -9,6 +9,7 @@ const Home = () => {
         <br />
         <Link to="/review/write">리뷰작성</Link>
       </div>
+      <Button></Button>
     </div>
   );
 };

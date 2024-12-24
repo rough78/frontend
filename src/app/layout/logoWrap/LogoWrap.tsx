@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import styles from "@app/layout/logoWrap/LogoWrap.module.scss";
+import styles from "./LogoWrap.module.scss";
 
 interface LogoWrapProps {
   children: ReactNode;

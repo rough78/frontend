@@ -1,10 +1,10 @@
-import Button from "@/components/button/Button";
-import Logo from "@/components/logo/Logo";
+import Button from "@shared/ui/button/Button";
+import Logo from "@shared/ui/logo/Logo";
 import LogoWrap from "@/layout/logoWrap/LogoWrap";
 import MainLayout from "@/layout/mainLayout/MainLayout";
-import naverLogo from "@assets/images/social-icons/naver-logo.svg";
-import googleLogo from "@assets/images/social-icons/google-logo.svg";
-import facebookLogo from "@assets/images/social-icons/facebook-logo.svg";
+import naverLogo from "@shared/assets/images/social-icons/naver-logo.svg";
+import googleLogo from "@shared/assets/images/social-icons/google-logo.svg";
+import facebookLogo from "@shared/assets/images/social-icons/facebook-logo.svg";
 
 const Login = () => {
   return (

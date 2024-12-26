@@ -13,6 +13,7 @@ import CafeSearch from '@/pages/CafeSearch'
 import WriteReview from '@/pages/WriteReview'
 import CafeInfo from '@/pages/CafeInfo'
 import MyPage from '@/pages/MyPage'
+import { ProtectedRoute } from '@app/routers/ProtectedRoute'
 
 export const AppRouter = () => {
     const routes = createRoutesFromElements(
@@ -26,24 +27,43 @@ export const AppRouter = () => {
             handle={{ crumb: <Link to='/'>Home</Link> }}
         >
             <Route path='login' element={<Login />} />
-            <Route index element={<Home />} />
+            <Route 
+                index 
+                element={
+                    <ProtectedRoute>
+                        <Home />
+                    </ProtectedRoute>
+                } 
+            />
             <Route
                 path='search'
-                element={<CafeSearch />}
+                element={
+                    <ProtectedRoute>
+                        <CafeSearch />
+                    </ProtectedRoute>
+                }
                 handle={{
                     crumb: <Link to='/search'>카페 검색</Link>,
                 }}
             />
             <Route
                 path='review/write'
-                element={<WriteReview />}
+                element={
+                    <ProtectedRoute>
+                        <WriteReview />
+                    </ProtectedRoute>
+                }
                 handle={{
                     crumb: <Link to='/review/write'>리뷰 작성</Link>,
                 }}
             />
             <Route
                 path='cafe/:id'
-                element={<CafeInfo />}
+                element={
+                    <ProtectedRoute>
+                        <CafeInfo />
+                    </ProtectedRoute>
+                }
                 handle={{
                     crumb: ({ params }: { params: { id: string } }) => (
                         <Link to={`/cafe/${params.id}`}>카페 정보</Link>
@@ -52,7 +72,11 @@ export const AppRouter = () => {
             />
             <Route
                 path='mypage'
-                element={<MyPage />}
+                element={
+                    <ProtectedRoute>
+                        <MyPage />
+                    </ProtectedRoute>
+                }
                 handle={{
                     crumb: <Link to='/mypage'>마이페이지</Link>,
                 }}

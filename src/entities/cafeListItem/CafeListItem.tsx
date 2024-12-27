@@ -1,4 +1,6 @@
 import styles from "./CafeListItem.module.scss";
+import defaultProfile from "@shared/assets/images/cafe/profile.svg";
+
 const CafeListItem = ({
   name,
   address,
@@ -12,7 +14,7 @@ const CafeListItem = ({
     <a href="#" className={styles.cafeItem__link}>
       <div className={styles.cafeItem__imageWrapper}>
         <img
-          src={profileImg}
+          src={profileImg || defaultProfile}
           alt={`${name} profile`}
           className={styles.cafeItem__image}
         />

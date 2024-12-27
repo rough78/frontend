@@ -1,11 +1,14 @@
 import CafeItem from "@entities/cafeListItem/CafeListItem";
 import styles from "./CafeList.module.scss";
+import { ICafeDescription } from "@shared/api/cafe/types";
+
+interface CafeListProps {
+  cafeInfo: ICafeDescription[];
+}
 
 export const CafeList = ({
   cafeInfo,
-}: {
-  cafeInfo: { name: string; address: string; profileImg: string }[];
-}) => (
+}: CafeListProps) => (
   <ul className={styles.cafeList}>
     {cafeInfo.map((cafe) => (
       <CafeItem

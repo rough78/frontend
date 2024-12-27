@@ -1,33 +1,43 @@
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { CafeList } from "@widgets/cafeList";
-import cafeProfile from "@shared/assets/images/cafe/profile.svg";
+import { SearchBar } from "@features/search/ui/SearchBar";
+import { searchCafes } from "@shared/api/cafe/cafeSearch";
+import type { ICafeDescription } from "@shared/api/cafe/types";
 
 const CafeSearch = () => {
-  const cafeInfo = [
-    {
-      name: "로우키",
-      address: "서울 성동구 연무장 3길 6 (성수동 2가)",
-      profileImg: cafeProfile,
-    },
-    {
-      name: "로우키커피 헤이그라운드점",
-      address: "서울 성동구 뚝섬로 14길 5 (성수동 1가)",
-      profileImg: cafeProfile,
-    },
-    {
-      name: "로우키 연희점",
-      address: "서울 서대문구 연희로 11가길 42 (연희동)",
-      profileImg: cafeProfile,
-    },
-    {
-      name: "로우키 송정점",
-      address: "서울 성동구 송정 6길 5 (송정동)",
-      profileImg: cafeProfile,
-    },
-  ];
+  const [searchParams] = useSearchParams();
+  const [cafes, setCafes] = useState<ICafeDescription[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const query = searchParams.get('query');
+    if (query) {
+      const fetchCafes = async () => {
+        try {
+          setIsLoading(true);
+          const response = await searchCafes(query);
+          setCafes(response);
+        } catch (error) {
+          console.error('Failed to fetch cafes:', error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchCafes();
+    }
+  }, [searchParams]);
+
   return (
-    <>
-      <CafeList cafeInfo={cafeInfo} />
-    </>
+    <div>
+      <SearchBar />
+      {isLoading ? (
+        <div>검색 중...</div>
+      ) : (
+        <CafeList cafeInfo={cafes} />
+      )}
+    </div>
   );
 };
 

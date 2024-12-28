@@ -4,12 +4,17 @@ import styles from './Input.module.scss';
 interface InputWrapperProps {
   children: ReactNode;
   label?: string;
+  className?: string;
 }
 
-export const InputWrapper = ({ children, label }: InputWrapperProps) => {
+export const InputWrapper = ({ children, label, className }: InputWrapperProps) => {
   return (
     <div className={styles.inputContainer}>
-      {label && <label className={styles.label}>{label}</label>}
+      {label && (
+        <label className={`${styles.label} ${className || ''}`}>
+          {label}
+        </label>
+      )}
       <div className={styles.inputWrapper}>
         {children}
       </div>

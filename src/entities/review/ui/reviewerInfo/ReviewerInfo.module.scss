@@ -1,0 +1,40 @@
+.reviewerInfo {
+  margin: 20px;
+  height: 40px;
+
+  display: flex;
+  gap: 16px;
+
+  position: relative;
+  .reviewerInfo__details {
+    line-height: 140%;
+    .reviewerInfo__name {
+      font-weight: 700;
+    }
+    .reviewerInfo__meta {
+      display: flex;
+      gap: 1px;
+      color: #767676;
+      font-size: 12px;
+      // .reviewerInfo__visitDate {
+      // }
+      .reviewerInfo__rating {
+        display: flex;
+        gap: 2px;
+        color: #ff8922;
+        .reviewerInfo__starList {
+          display: flex;
+        }
+      }
+    }
+  }
+
+  .reviewerInfo__moreIcon {
+    cursor: pointer;
+
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+  }
+}

@@ -3,15 +3,13 @@ import calendarIcon from "@shared/assets/images/calendar/calendar.svg";
 import BottomSheet from "@shared/ui/bottomSheet/BottomSheet";
 import { InputWrapper } from "@shared/ui/input/Input";
 import styles from "./DatePicker.module.scss";
-import { useDateStore } from '@/widgets/datePicker/model/store';
 
 interface DatePickerProps {
-  onChange?: (date: string) => void;
+  value: string;
+  onChange: (date: string) => void;
 }
 
-const DatePicker = ({ onChange }: DatePickerProps) => {
-  const { selectedDate, setSelectedDate } = useDateStore();
-  const [value, setValue] = useState(selectedDate);
+const DatePicker = ({ value, onChange }: DatePickerProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
@@ -64,9 +62,7 @@ const DatePicker = ({ onChange }: DatePickerProps) => {
   const handleConfirm = () => {
     if (tempSelectedDate) {
       const formattedDate = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(tempSelectedDate).padStart(2, '0')}`;
-      setSelectedDate(formattedDate);
-      setValue(formattedDate);
-      onChange?.(formattedDate);
+      onChange(formattedDate);
       setIsOpen(false);
     }
   };

@@ -15,6 +15,7 @@ const CafeListItem = ({
   const navigate = useNavigate();
   const { updateDraft } = useReviewDraftStore();
 
+  // 검색에서 카페 선택 시 카페 정보를 Draft에 저장하고 리뷰 작성 페이지로 이동
   const handleClick = () => {
     updateDraft({ 
       cafe: { 

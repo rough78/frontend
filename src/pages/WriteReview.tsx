@@ -3,7 +3,7 @@ import { StarRating } from "@widgets/starRating";
 import { DatePicker } from "@widgets/datePicker"; 
 import { useReviewDraftStore } from "@shared/store/useReviewDraftStore";
 import { useEffect } from "react";
-import { Tag } from "@shared/ui/tag/ui/Tag";
+import { Tag } from "@shared/ui/tag";
 import CafeListItem from "@entities/cafeListItem/CafeListItem";
 import { InputWrapper } from "@shared/ui/input/Input";
 import styles from "./WriteReview.module.scss";

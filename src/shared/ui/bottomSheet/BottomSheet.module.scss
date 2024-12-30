@@ -18,7 +18,7 @@
   padding: 12px 24px 24px 24px;
   z-index: 101;
   animation: slideUp 0.3s ease-out;
-  height: 80vh;
+  max-height: 80vh;
   overflow-y: auto;
 }
 
@@ -37,4 +37,4 @@
   to {
     transform: translateY(0);
   }
-} 
+}

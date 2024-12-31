@@ -8,7 +8,7 @@ import {
 } from 'react-router-dom'
 import MainLayout from '@app/layout/mainLayout/MainLayout'
 import Login from '@/pages/Login'
-import Home from '@/pages/Home'
+import RevivewList from "@/pages/ReviewList";
 import CafeSearch from '@/pages/CafeSearch'
 import WriteReview from '@/pages/WriteReview'
 import CafeInfo from '@/pages/CafeInfo'
@@ -24,7 +24,7 @@ export const AppRouter = () => {
                     <Outlet />
                 </MainLayout>
             }
-            handle={{ crumb: <Link to='/'>Home</Link> }}
+            handle={{ crumb: <Link to='/'>RevivewList</Link> }}
         >
             <Route path='login' element={<Login />} />
             <Route 
@@ -84,7 +84,8 @@ export const AppRouter = () => {
         </Route>
     )
 
-    const router = createBrowserRouter(routes)
 
-    return <RouterProvider router={router} />
-}
+  const router = createBrowserRouter(routes);
+
+  return <RouterProvider router={router} />;
+};

@@ -31,7 +31,7 @@ export const AppRouter = () => {
                 index 
                 element={
                     <ProtectedRoute>
-                        <Home />
+                        <RevivewList />
                     </ProtectedRoute>
                 } 
             />

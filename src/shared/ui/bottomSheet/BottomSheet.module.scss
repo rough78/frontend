@@ -1,0 +1,40 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+}
+
+.bottomSheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border-radius: 16px 16px 0 0;
+  padding: 12px 24px 24px 24px;
+  z-index: 101;
+  animation: slideUp 0.3s ease-out;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.handle {
+  width: 32px;
+  height: 4px;
+  background-color: #E5E7EB;
+  border-radius: 2px;
+  margin: 0 auto 16px;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

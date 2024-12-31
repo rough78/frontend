@@ -1,0 +1,54 @@
+/* PhotoSwiper.module.scss */
+
+.swiper {
+  width: 100%;
+  height: 185px;
+  position: relative;
+  /* 슬라이드 스타일 */
+  .swiperSlide {
+    height: 172px;
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+
+    &:nth-child(1) {
+      background-image: url("/src/shared/assets/images/slide1.jpg");
+    }
+    &:nth-child(2) {
+      background-image: url("/src/shared/assets/images/slide2.jpg");
+    }
+    &:nth-child(3) {
+      background-image: url("/src/shared/assets/images/slide3.png");
+    }
+    .chipsWrap {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+    }
+  }
+}
+
+/* swiper-pagination에 대한 스타일 */
+:global(.swiper .swiper-pagination) {
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  z-index: 10;
+}
+
+/* swiper-pagination-bullet 스타일 */
+:global(.swiper .swiper-pagination .swiper-pagination-bullet) {
+  width: 4px;
+  height: 4px;
+  margin: 0 4px;
+  background-color: #ebe8e4;
+  border-radius: 50%;
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+/* 활성화된 페이지네이션 버튼 */
+:global(.swiper .swiper-pagination .swiper-pagination-bullet-active) {
+  background-color: #cdc3b9;
+}

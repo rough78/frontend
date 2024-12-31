@@ -1,3 +1,27 @@
 .visitDateLabel {
   color: #121212;
+}
+
+.tagContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  background-color: #F9F8F6;
+  border-radius: 8px;
+}
+
+.tagSection {
+  h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
 } 

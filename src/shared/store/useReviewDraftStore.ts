@@ -7,6 +7,10 @@ interface ReviewDraft {
   rating: number;
   visitDate: string;
   content?: string;
+  tags: {
+    menu: number[];
+    interior: number[];
+  };
 }
 
 interface ReviewDraftStore {
@@ -20,6 +24,10 @@ const initialDraft: ReviewDraft = {
   rating: 0,
   visitDate: '',
   content: '',
+  tags: {
+    menu: [],
+    interior: []
+  }
 };
 
 export const useReviewDraftStore = create<ReviewDraftStore>()(
@@ -28,7 +36,11 @@ export const useReviewDraftStore = create<ReviewDraftStore>()(
       draft: initialDraft,
       updateDraft: (updates) => 
         set((state) => ({
-          draft: { ...state.draft, ...updates }
+          draft: {
+            ...state.draft,
+            ...updates,
+            tags: updates.tags || state.draft.tags || initialDraft.tags
+          }
         })),
       clearDraft: () => set({ draft: initialDraft }),
     }),

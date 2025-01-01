@@ -14,6 +14,7 @@ import WriteReview from '@/pages/WriteReview'
 import CafeInfo from '@/pages/CafeInfo'
 import MyPage from '@/pages/MyPage'
 import { ProtectedRoute } from '@app/routers/ProtectedRoute'
+import { OAuthRedirect }from '@app/auth/OAuthRedirect'
 
 export const AppRouter = () => {
     const routes = createRoutesFromElements(
@@ -27,6 +28,7 @@ export const AppRouter = () => {
             handle={{ crumb: <Link to='/'>RevivewList</Link> }}
         >
             <Route path='login' element={<Login />} />
+            <Route path="oauth/redirect" element={<OAuthRedirect />} />
             <Route 
                 index 
                 element={

@@ -1,3 +1,6 @@
+@use "/src/app/styles/abstracts/mixins";
+@use "/src/app/styles/abstracts/variables";
+
 .chips {
   padding: 4px 12px 4px 8px;
   width: 100px;
@@ -6,7 +9,7 @@
   background-color: #6a635c;
   border-radius: 9999px;
   color: #fff;
-  font-size: 12px;
+  @include mixins.apply-text-style(b2_bold);
 
   display: flex;
   align-items: center;

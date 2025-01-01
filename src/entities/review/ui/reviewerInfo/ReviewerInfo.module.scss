@@ -1,3 +1,6 @@
+@use "/src/app/styles/abstracts/mixins";
+@use "/src/app/styles/abstracts/variables" as var;
+
 .reviewerInfo {
   margin: 20px 0;
   height: 40px;
@@ -7,21 +10,21 @@
 
   position: relative;
   .reviewerInfo__details {
-    line-height: 140%;
     .reviewerInfo__name {
-      font-weight: 700;
+      color: var.$semantic-text-icon-primary;
+      @include mixins.apply-text-style(b1_bold);
     }
     .reviewerInfo__meta {
       display: flex;
       gap: 1px;
-      color: #767676;
-      font-size: 12px;
-      // .reviewerInfo__visitDate {
-      // }
+      color: var.$semantic-text-icon-secondary;
+      @include mixins.apply-text-style(b2_regular);
+
       .reviewerInfo__rating {
         display: flex;
         gap: 2px;
-        color: #ff8922;
+        color: var.$semantic-text-icon-brand;
+        @include mixins.apply-text-style(b2_bold);
         .reviewerInfo__starList {
           display: flex;
         }

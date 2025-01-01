@@ -15,7 +15,7 @@ import CafeInfo from "@/pages/CafeInfo";
 import MyPage from "@/pages/MyPage";
 import { ProtectedRoute } from "@app/routers/ProtectedRoute";
 import styles from "@app/layout/header/Header.module.scss";
-
+import { OAuthRedirect }from '@app/auth/OAuthRedirect'
 
 export const AppRouter = () => {
   const routes = createRoutesFromElements(
@@ -33,6 +33,8 @@ export const AppRouter = () => {
           </MainLayout>
         }
       />
+
+      <Route path="oauth/redirect" element={<OAuthRedirect />} />
 
       <Route
         element={

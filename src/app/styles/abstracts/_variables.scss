@@ -29,12 +29,21 @@ $primitive-gray-gray600: rgba(118, 118, 118, 1);
 $primitive-gray-gray700: rgba(86, 86, 86, 1);
 $primitive-gray-gray800: rgba(50, 50, 50, 1);
 $primitive-gray-gray900: rgba(18, 18, 18, 1);
-$semantic-border-focus: #FFB06B;
+$semantic-border-focus: #ffb06b;
+$semantic-text-icon-secondary: #767676;
+$semantic-text-icon-primary: #121212;
+$semantic-text-icon-brand: #ff8922;
+$primitive-system-error: rgba(255, 77, 77, 1);
+$primitive-system-success: rgba(76, 175, 80, 1);
+$primitive-system-warning: rgba(255, 204, 0, 1);
+$primitive-system-white: rgba(255, 255, 255, 1);
+
 $radius-radius-sm: 4px;
 $radius-radius-md: 8px;
 $radius-radius-lg: 16px;
 $radius-radius-xl: 32px;
 $radius-circle: 9999px;
+
 $spacing-0: 0px;
 $spacing-2: 2px;
 $spacing-4: 4px;
@@ -53,7 +62,54 @@ $spacing-52: 52px;
 $spacing-56: 56px;
 $spacing-60: 60px;
 $spacing-64: 64px;
-$primitive-system-error: rgba(255, 77, 77, 1);
-$primitive-system-success: rgba(76, 175, 80, 1);
-$primitive-system-warning: rgba(255, 204, 0, 1);
-$primitive-system-white: rgba(255, 255, 255, 1);
+
+$text-styles: (
+  h_bold: (
+    font-size: 32px,
+    font-weight: bold,
+  ),
+  h_regular: (
+    font-size: 32px,
+    font-weight: 400,
+  ),
+  t1_bold: (
+    font-size: 24px,
+    font-weight: bold,
+  ),
+  t1_regular: (
+    font-size: 24px,
+    font-weight: 400,
+  ),
+  t2_bold: (
+    font-size: 20px,
+    font-weight: bold,
+  ),
+  t2_regular: (
+    font-size: 20px,
+    font-weight: 400,
+  ),
+  b1_bold: (
+    font-size: 16px,
+    font-weight: bold,
+  ),
+  b1_regular: (
+    font-size: 16px,
+    font-weight: 400,
+  ),
+  b2_bold: (
+    font-size: 12px,
+    font-weight: bold,
+  ),
+  b2_regular: (
+    font-size: 12px,
+    font-weight: 400,
+  ),
+  l_bold: (
+    font-size: 10px,
+    font-weight: bold,
+  ),
+  l_regular: (
+    font-size: 10px,
+    font-weight: 400,
+  ),
+);

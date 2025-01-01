@@ -2,7 +2,13 @@
   box-sizing: border-box;
   font-family: "Pretendard", sans-serif;
 }
+body {
+  letter-spacing: -0.02em;
+  p {
+    line-height: 140%;
+  }
 
-ul {
-  list-style: none;
+  ul {
+    list-style: none;
+  }
 }

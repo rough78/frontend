@@ -1,3 +1,5 @@
+@use '@app/styles/abstracts/variables' as var;
+
 .inputContainer {
   width: 100%;
   position: relative;
@@ -7,12 +9,12 @@
   display: block;
   margin-bottom: 8px;
   font-family: Pretendard;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   line-height: 22.4px;
   letter-spacing: -0.02em;
   text-align: left;
-  color: #374151;
+  color: var.$semantic-text-icon-primary;
   text-underline-position: from-font;
   text-decoration-skip-ink: none;
   height: 22px;

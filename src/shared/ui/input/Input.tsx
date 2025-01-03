@@ -3,7 +3,7 @@ import styles from './Input.module.scss';
 
 interface InputWrapperProps {
   children: ReactNode;
-  label?: string;
+  label?: ReactNode;
   className?: string;
 }
 
@@ -20,4 +20,4 @@ export const InputWrapper = ({ children, label, className }: InputWrapperProps) 
       </div>
     </div>
   );
-}; 
+};

@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { Tag } from "@shared/ui/tag";
 import CafeListItem from "@entities/cafeListItem/CafeListItem";
 import { InputWrapper } from "@shared/ui/input/Input";
-import styles from "./WriteReview.module.scss";
+import styles from "./styles/WriteReview.module.scss";
 
 const TAGS = {
   menu: [
@@ -91,7 +91,7 @@ const WriteReview = () => {
         />
       </InputWrapper>
       <InputWrapper 
-        label="이 카페의 특징을 선택해주세요"
+        label="구체적으로 알려주세요."
         className={styles.visitDateLabel}
       >
         <div className={styles.tagContainer}>
@@ -122,6 +122,25 @@ const WriteReview = () => {
             </div>
           </div>
         </div>
+      </InputWrapper>
+      <InputWrapper 
+        label={
+          <div className={styles.reviewLabelContainer}>
+            <span>상세 리뷰</span>
+            <span className={styles.charCount}>
+              {draft.content?.length || 0} / 200자
+            </span>
+          </div>
+        }
+        className={styles.visitDateLabel}
+      >
+        <textarea
+          className={styles.reviewTextarea}
+          maxLength={200}
+          placeholder="카페에 대한 상세한 리뷰를 작성해주세요 (최대 200자)"
+          value={draft.content}
+          onChange={(e) => updateDraft({ content: e.target.value })}
+        />
       </InputWrapper>
       <div>
         <a href="#" onClick={(e) => {

@@ -25,6 +25,7 @@ export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   }, [checkAuthStatus])
 
   if (isChecking) {
+    console.log('인증 상태 확인 중...', isAuthenticated)
     return <div>인증 상태 확인 중...</div>
   }
 

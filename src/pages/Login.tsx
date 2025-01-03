@@ -6,9 +6,19 @@ import naverLogo from "@shared/assets/images/social-icons/naver-logo.svg";
 import googleLogo from "@shared/assets/images/social-icons/google-logo.svg";
 import facebookLogo from "@shared/assets/images/social-icons/facebook-logo.svg";
 import { useAuthStore } from '@app/auth/useAuthStore';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const Login = () => {
   const login = useAuthStore((state) => state.login);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleLogin = async (provider: string) => {
     try {

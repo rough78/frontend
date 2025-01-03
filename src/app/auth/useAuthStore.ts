@@ -13,8 +13,22 @@ interface AuthStore {
 export const useAuthStore = create<AuthStore>((set) => ({
   isAuthenticated: false,
   
-  login: (provider: string) => {
-    window.location.href = `${AUTH_URL}/${provider}`
+  login: async (provider: string) => {
+    console.log('Development mode:', import.meta.env.DEV)
+    if (import.meta.env.DEV) {
+      // 개발 모드에서는 MSW로 처리
+      try {
+        console.log('Sending request to MSW endpoint:', `/api/auth/${provider}/login`)
+        await apiInstance.get(`/api/auth/${provider}/login`)
+        set({ isAuthenticated: true })
+      } catch (error) {
+        console.error('로그인 실패:', error)
+      }
+    } else {
+      // 운영 모드에서는 리다이렉트
+      console.log('Redirecting to:', `${AUTH_URL}/${provider}`)
+      window.location.href = `${AUTH_URL}/${provider}`
+    }
   },
   
   logout: async () => {

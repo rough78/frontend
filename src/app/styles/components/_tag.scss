@@ -1,5 +1,10 @@
+@use "/src/app/styles/abstracts/variables" as var;
+
 .tag {
   display: flex;
   align-items: center;
   gap: 8px;
+
+  border-radius: var.$radius-radius-sm;
+  color: var.$semantic-text-icon-primary;
 }

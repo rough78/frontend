@@ -1,17 +1,14 @@
-@use "@app/styles/abstracts/variables" as *;
+@use "@app/styles/abstracts/variables" as var;
 
 .tag {
-  padding: 8px 12px;
-  height: 36px;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
-  background-color: #f9f8f6;
-  cursor: pointer;
+  padding: 4px 12px 4px 8px;
+  height: 32px;
+  border: 1px solid var.$semantic-border-secondary;
+  background-color: var.$semantic-background-primary;
   transition: all 0.2s ease;
-  width: auto;
 
   &.active {
-    background-color: $primitive-primary-orange50;
+    background-color: var.$primitive-primary-orange50;
     border-color: #ff8922;
     color: white;
 

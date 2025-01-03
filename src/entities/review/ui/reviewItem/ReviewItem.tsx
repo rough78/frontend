@@ -1,6 +1,7 @@
 import ReviewerInfo from "../reviewerInfo/ReviewerInfo";
 import PhotoSwiper from "../../../../shared/ui/photoSwiper/PhotoSwiper.jsx";
 import ReviewContent from "../reviewContent/reviewContent";
+import ReviewTagList from "../reviewTagList/ReviewTagList";
 
 const ReviewItem = () => {
   return (
@@ -8,6 +9,7 @@ const ReviewItem = () => {
       <ReviewerInfo />
       <PhotoSwiper />
       <ReviewContent />
+      <ReviewTagList />
     </div>
   );
 };

@@ -9,6 +9,11 @@ interface DatePickerProps {
   onChange: (date: string) => void;
 }
 
+interface CalendarDay {
+  day: number | null;
+  isCurrentMonth: boolean;
+}
+
 const DatePicker = ({ value, onChange }: DatePickerProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
@@ -23,10 +28,10 @@ const DatePicker = ({ value, onChange }: DatePickerProps) => {
     return new Date(year, month - 1, 1).getDay();
   };
 
-  const generateCalendarDays = () => {
+  const generateCalendarDays = (): CalendarDay[] => {
     const daysInMonth = getDaysInMonth(currentYear, currentMonth);
     const firstDay = getFirstDayOfMonth(currentYear, currentMonth);
-    const days = [];
+    const days: CalendarDay[] = [];
 
     for (let i = 0; i < firstDay; i++) {
       days.push({ day: null, isCurrentMonth: false });

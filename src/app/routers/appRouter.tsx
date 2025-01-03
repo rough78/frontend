@@ -87,7 +87,9 @@ export const AppRouter = () => {
     )
 
 
-  const router = createBrowserRouter(routes);
+  const router = createBrowserRouter(routes, {
+    basename: '/' // basename 추가
+  });
 
   return <RouterProvider router={router} />;
 };

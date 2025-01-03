@@ -1,12 +1,16 @@
 import styles from "./ReviewerInfo.module.scss";
+// 이미지 import 수정
+import rateImage from "@shared/assets/images/rate.svg";
+import profileImage from "@shared/assets/images/profile.svg";
+import moreIcon from "@shared/assets/images/more.svg";
 
 const ReviewerInfo = () => {
   return (
     <div className={styles.reviewerInfo}>
       <img
         className={styles.reviewerInfo__profilePicture}
-        src="src/shared/assets/images/profile.svg"
-        alt=""
+        src={profileImage}
+        alt="프로필"
       />
       <div className={styles.reviewerInfo__details}>
         <p className={styles.reviewerInfo__name}>코리스타</p>
@@ -17,31 +21,31 @@ const ReviewerInfo = () => {
             <ul className={styles.reviewerInfo__starList}>
               <li className={styles.reviewerInfo__star}>
                 <img
-                  src="src/shared/assets/images/rate.svg"
+                  src={rateImage}
                   alt="Star rating"
                 />
               </li>
               <li className={styles.reviewerInfo__star}>
                 <img
-                  src="src/shared/assets/images/rate.svg"
+                  src={rateImage}
                   alt="Star rating"
                 />
               </li>
               <li className={styles.reviewerInfo__star}>
                 <img
-                  src="src/shared/assets/images/rate.svg"
+                  src={rateImage}
                   alt="Star rating"
                 />
               </li>
               <li className={styles.reviewerInfo__star}>
                 <img
-                  src="src/shared/assets/images/rate.svg"
+                  src={rateImage}
                   alt="Star rating"
                 />
               </li>
               <li className={styles.reviewerInfo__star}>
                 <img
-                  src="src/shared/assets/images/rate.svg"
+                  src={rateImage}
                   alt="Star rating"
                 />
               </li>
@@ -53,7 +57,7 @@ const ReviewerInfo = () => {
 
       <img
         className={styles.reviewerInfo__moreIcon}
-        src="src/shared/assets/images/more.svg"
+        src={moreIcon}
         alt="더보기 아이콘"
       />
     </div>

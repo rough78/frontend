@@ -13,13 +13,13 @@
     position: relative;
 
     &:nth-child(1) {
-      background-image: url("/src/shared/assets/images/slide1.jpg");
+      background-image: url("@shared/assets/images/slide1.jpg");
     }
     &:nth-child(2) {
-      background-image: url("/src/shared/assets/images/slide2.jpg");
+      background-image: url("@shared/assets/images/slide2.jpg");
     }
     &:nth-child(3) {
-      background-image: url("/src/shared/assets/images/slide3.png");
+      background-image: url("@shared/assets/images/slide3.png");
     }
     .chipsWrap {
       position: absolute;

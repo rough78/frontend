@@ -1,0 +1,14 @@
+@use "/src/app/styles/abstracts/mixins";
+@use "/src/app/styles/abstracts/variables" as var;
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  .tagBtn {
+    padding: 4px 8px;
+    background-color: var.$primitive-secondary-brown50;
+    border-radius: var.$radius-radius-sm;
+    @include mixins.apply-text-style(l_regular);
+  }
+}

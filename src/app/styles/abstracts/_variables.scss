@@ -1,4 +1,3 @@
-$gray: rgba(0, 0, 0, 0.05);
 $primitive-primary-orange50: rgba(255, 243, 233, 1);
 $primitive-primary-orange100: rgba(255, 218, 186, 1);
 $primitive-primary-orange200: rgba(255, 201, 153, 1);
@@ -29,10 +28,16 @@ $primitive-gray-gray600: rgba(118, 118, 118, 1);
 $primitive-gray-gray700: rgba(86, 86, 86, 1);
 $primitive-gray-gray800: rgba(50, 50, 50, 1);
 $primitive-gray-gray900: rgba(18, 18, 18, 1);
-$semantic-border-focus: #ffb06b;
-$semantic-text-icon-secondary: #767676;
+
 $semantic-text-icon-primary: #121212;
+$semantic-text-icon-secondary: #767676;
 $semantic-text-icon-brand: #ff8922;
+$semantic-text-icon-button-default: #ffffff;
+$semantic-background-primary: #ffffff;
+$semantic-border-primary: #e5e5e5;
+$semantic-border-secondary: #e2ddd7;
+$semantic-border-focus: #ffb06b;
+
 $primitive-system-error: rgba(255, 77, 77, 1);
 $primitive-system-success: rgba(76, 175, 80, 1);
 $primitive-system-warning: rgba(255, 204, 0, 1);

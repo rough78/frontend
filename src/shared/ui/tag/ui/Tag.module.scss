@@ -1,21 +1,15 @@
-@use '@app/styles/abstracts/variables' as *;
+@use "@app/styles/abstracts/variables" as var;
 
 .tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 12px;
-  height: 36px;
-  border-radius: 8px;
-  border: 1px solid #E5E7EB;
-  background-color: #F9F8F6;
-  cursor: pointer;
+  padding: 4px 12px 4px 8px;
+  height: 32px;
+  border: 1px solid var.$semantic-border-secondary;
+  background-color: var.$semantic-background-primary;
   transition: all 0.2s ease;
-  width: auto;
 
   &.active {
-    background-color: $primitive-primary-orange50;
-    border-color: #FF8922;
+    background-color: var.$primitive-primary-orange50;
+    border-color: #ff8922;
     color: white;
 
     // .icon {
@@ -34,17 +28,17 @@
     color: #374151;
   }
 
-//   &:hover {
-//     background-color: #FF8922;
-//     border-color: #FF8922;
-//     color: white;
+  //   &:hover {
+  //     background-color: #FF8922;
+  //     border-color: #FF8922;
+  //     color: white;
 
-//     .icon {
-//       filter: brightness(0) invert(1);
-//     }
+  //     .icon {
+  //       filter: brightness(0) invert(1);
+  //     }
 
-//     .content {
-//       color: white;
-//     }
-//   }
-} 
+  //     .content {
+  //       color: white;
+  //     }
+  //   }
+}

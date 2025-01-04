@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
-export const API_URL = import.meta.env.DEV ? '' : 'https://packetbreeze.com:8443'
+export const API_URL = import.meta.env.DEV ? 'https://localhost:5173' : 'https://packetbreeze.com:8443'
 export const NAVER_API_URL = 'https://openapi.naver.com/v1'
 export const AUTH_URL = `${API_URL}/oauth2/authorization`
 
@@ -17,7 +17,7 @@ class ApiInstance {
                 'Content-Type': 'application/json'
             },
             xsrfCookieName: 'XSRF-TOKEN',
-            xsrfHeaderName: 'X-XSRF-TOKEN'
+            xsrfHeaderName: 'X-XSRF-TOKEN',
         })
 
         this.naverAxios = axios.create({
@@ -37,13 +37,28 @@ class ApiInstance {
         const isNaverApi = endpoint.startsWith('/v1/search')
         const axiosInstance = isNaverApi ? this.naverAxios : this.axios
         
-        const response: AxiosResponse<T> = await axiosInstance.get(
+        // 기본 옵션 설정
+        const finalOptions: AxiosRequestConfig = {
+            headers: {
+                'Content-Type': 'application/json',
+                ...options.headers
+            },
+            withCredentials: true,
+            ...options
+        }
+    
+        // naver API인 경우만 withCredentials false 설정
+        if (isNaverApi) {
+            finalOptions.withCredentials = false
+        }
+    
+        console.log("Request options:", {
             endpoint,
-            {
-                ...options,
-                withCredentials: !isNaverApi
-            }
-        )
+            withCredentials: finalOptions.withCredentials,
+            headers: finalOptions.headers
+        });
+    
+        const response: AxiosResponse<T> = await axiosInstance.get(endpoint, finalOptions)
         return response.data
     }
 

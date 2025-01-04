@@ -1,0 +1,16 @@
+@use "/src/app/styles/abstracts/mixins";
+@use "/src/app/styles/abstracts/variables" as var;
+
+.starRating {
+  display: flex;
+  gap: 2px;
+  color: var.$semantic-text-icon-brand;
+  @include mixins.apply-text-style(b2_bold);
+  .starRating__list {
+    display: flex;
+    align-items: center;
+    .starRating__list__star {
+      width: 12px;
+    }
+  }
+}

@@ -9,6 +9,7 @@
     padding: 4px 8px;
     background-color: var.$primitive-secondary-brown50;
     border-radius: var.$radius-radius-sm;
+    color: var.$semantic-text-icon-primary;
     @include mixins.apply-text-style(l_regular);
   }
 }

@@ -1,0 +1,62 @@
+@use '@shared/ui/input/Input.module.scss';
+@use '@app/styles/abstracts/variables' as var;
+
+.visitDateLabel {
+  color: #121212;
+}
+
+.tagContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  background-color: #F9F8F6;
+  border-radius: 8px;
+}
+
+.tagSection {
+  h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 8px;
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+.reviewLabelContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.charCount {
+  color: var.$semantic-text-icon-secondary;
+  font-size: 12px;
+  font-weight: 140;
+}
+
+.reviewTextarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 12px;
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: var.$semantic-text-icon-primary;
+  resize: vertical;
+  border: 1px solid var.$semantic-border-secondary;
+
+  &::placeholder {
+    color: var.$primitive-secondary-brown400;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}

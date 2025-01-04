@@ -1,4 +1,5 @@
 import styles from "./ReviewerInfo.module.scss";
+import SimpleStarRating from "@/widgets/simpleStarRating/ui/SimpleStarRating";
 
 const ReviewerInfo = () => {
   return (
@@ -13,11 +14,12 @@ const ReviewerInfo = () => {
         <div className={styles.reviewerInfo__meta}>
           <p className={styles.reviewerInfo__visitDate}>2024.12.17 방문</p>
           <p>・</p>
-          <div className={styles.reviewerInfo__rating}>
+          <SimpleStarRating />
+          {/* <div className={styles.reviewerInfo__rating}>
             <ul className={styles.reviewerInfo__starList}>
               <li className={styles.reviewerInfo__star}>
                 <img
-                  src="src/shared/assets/images/rate.svg"
+                  src="src/shared/assets/images/rate-fill.svg"
                   alt="Star rating"
                 />
               </li>
@@ -47,7 +49,7 @@ const ReviewerInfo = () => {
               </li>
             </ul>
             <p className={styles.reviewerInfo__ratingValue}>5.0</p>
-          </div>
+          </div> */}
         </div>
       </div>
 

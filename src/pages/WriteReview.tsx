@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { StarRating } from "@widgets/starRating";
 import { DatePicker } from "@widgets/datePicker";
 import { useReviewDraftStore } from "@shared/store/useReviewDraftStore";
@@ -22,7 +21,6 @@ const TAGS = {
 };
 
 const WriteReview = () => {
-  const navigate = useNavigate();
   const { draft, updateDraft, clearDraft } = useReviewDraftStore();
 
   useEffect(() => {
@@ -61,7 +59,6 @@ const WriteReview = () => {
   if (!draft.cafe) {
     return (
       <div>
-        <h1>리뷰 작성</h1>
         <p>카페를 선택해주세요.</p>
       </div>
     );
@@ -69,7 +66,6 @@ const WriteReview = () => {
 
   return (
     <div>
-      <h1>리뷰 작성</h1>
       <div className="selected-cafe">
         <CafeListItem {...draft.cafe} />
       </div>
@@ -134,17 +130,6 @@ const WriteReview = () => {
           className={styles.reviewTextarea}
         />
       </InputWrapper>
-      <div>
-        <a
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            navigate(-1);
-          }}
-        >
-          이전 화면으로
-        </a>
-      </div>
     </div>
   );
 };

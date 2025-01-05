@@ -1,0 +1,55 @@
+@use "@app/styles/abstracts/mixins";
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  background-color: #fff;
+  z-index: 10;
+  border-bottom: none;
+
+  .headerContent {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .backButton {
+    position: absolute;
+    left: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 4px;
+    background: none;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    img {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .title {
+    width: 100%;
+    text-align: center;
+    @include mixins.apply-text-style(t2_bold);
+    color: #111827;
+    margin: 0;
+  }
+}

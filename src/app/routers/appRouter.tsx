@@ -8,7 +8,7 @@ import {
 } from 'react-router-dom'
 import MainLayout from '@app/layout/mainLayout/MainLayout'
 import Login from '@/pages/Login'
-import RevivewList from "@/pages/ReviewList";
+import ReviewList from "@/pages/ReviewList";
 import CafeSearch from '@/pages/CafeSearch'
 import WriteReview from '@/pages/WriteReview'
 import CafeInfo from '@/pages/CafeInfo'
@@ -17,75 +17,92 @@ import { ProtectedRoute } from '@app/routers/ProtectedRoute'
 
 export const AppRouter = () => {
     const routes = createRoutesFromElements(
-        <Route
-            path='/'
-            element={
-                <MainLayout>
-                    <Outlet />
+        <Route path='/' element={<Outlet />}>
+            <Route path='login' element={
+                <MainLayout
+                    showHeader={false}
+                    showFooter={false}
+                    showBackButton={false}
+                    headerTitle="로그인"
+                >
+                    <Login />
                 </MainLayout>
-            }
-            handle={{ crumb: <Link to='/'>RevivewList</Link> }}
-        >
-            <Route path='login' element={<Login />} />
-            <Route 
-                index 
-                element={
-                    <ProtectedRoute>
-                        <RevivewList />
-                    </ProtectedRoute>
-                } 
-            />
-            <Route
-                path='search'
-                element={
-                    <ProtectedRoute>
-                        <CafeSearch />
-                    </ProtectedRoute>
-                }
-                handle={{
-                    crumb: <Link to='/search'>카페 검색</Link>,
-                }}
-            />
-            <Route
-                path='review/write'
-                element={
-                    <ProtectedRoute>
-                        <WriteReview />
-                    </ProtectedRoute>
-                }
-                handle={{
-                    crumb: <Link to='/review/write'>리뷰 작성</Link>,
-                }}
-            />
-            <Route
-                path='cafe/:id'
-                element={
-                    <ProtectedRoute>
-                        <CafeInfo />
-                    </ProtectedRoute>
-                }
-                handle={{
-                    crumb: ({ params }: { params: { id: string } }) => (
-                        <Link to={`/cafe/${params.id}`}>카페 정보</Link>
-                    ),
-                }}
-            />
-            <Route
-                path='mypage'
-                element={
-                    <ProtectedRoute>
-                        <MyPage />
-                    </ProtectedRoute>
-                }
-                handle={{
-                    crumb: <Link to='/mypage'>마이페이지</Link>,
-                }}
-            />
+            } />
+
+            <Route element={<ProtectedRoute><Outlet /></ProtectedRoute>}>
+                <Route 
+                    index 
+                    element={
+                        <MainLayout 
+                            showHeader={false}
+                            showFooter={true}
+                            showBackButton={false}
+                            headerTitle="리뷰 목록"
+                        >
+                            <ReviewList />
+                        </MainLayout>
+                    }
+                    handle={{ crumb: <Link to='/'>ReviewList</Link> }}
+                />
+                <Route
+                    path='search'
+                    element={
+                        <MainLayout
+                            showHeader={true}
+                            showFooter={true}
+                            showBackButton={true}
+                            headerTitle="장소 검색"
+                        >
+                            <CafeSearch />
+                        </MainLayout>
+                    }
+                    handle={{ crumb: <Link to='/search'>카페 검색</Link> }}
+                />
+                <Route
+                    path='review/write'
+                    element={
+                        <MainLayout
+                            showHeader={true}
+                            showFooter={false}
+                            showBackButton={true}
+                            headerTitle="리뷰 작성"
+                        >
+                            <WriteReview />
+                        </MainLayout>
+                    }
+                    handle={{ crumb: <Link to='/review/write'>리뷰 작성</Link> }}
+                />
+                <Route
+                    path='cafe/:id'
+                    element={
+                        <MainLayout
+                            showHeader={true}
+                            showFooter={true}
+                            showBackButton={true}
+                            headerTitle="카페 정보"
+                        >
+                            <CafeInfo />
+                        </MainLayout>
+                    }
+                    handle={{ crumb: <Link to='/cafe'>카페 정보</Link> }}
+                />
+                <Route
+                    path='mypage'
+                    element={
+                        <MainLayout
+                            showHeader={true}
+                            showFooter={true}
+                            showBackButton={true}
+                            headerTitle="마이페이지"
+                        >
+                            <MyPage />
+                        </MainLayout>
+                    }
+                    handle={{ crumb: <Link to='/mypage'>마이페이지</Link> }}
+                />
+            </Route>
         </Route>
-    )
+    );
 
-
-  const router = createBrowserRouter(routes);
-
-  return <RouterProvider router={router} />;
+    return <RouterProvider router={createBrowserRouter(routes)} />;
 };

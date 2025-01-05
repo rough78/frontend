@@ -1,0 +1,7 @@
+.mainContent {
+  min-height: 100vh;
+
+  &.withHeader {
+    padding-top: calc(var(--header-height) + 6px);
+  }
+}

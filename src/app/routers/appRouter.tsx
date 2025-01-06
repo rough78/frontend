@@ -14,6 +14,8 @@ import WriteReview from "@/pages/WriteReview";
 import CafeInfo from "@/pages/CafeInfo";
 import MyPage from "@/pages/MyPage";
 import { ProtectedRoute } from "@app/routers/ProtectedRoute";
+import styles from "@app/layout/header/Header.module.scss";
+
 
 export const AppRouter = () => {
   const routes = createRoutesFromElements(
@@ -61,6 +63,16 @@ export const AppRouter = () => {
               showFooter={true}
               showBackButton={true}
               headerTitle="장소 검색"
+              rightElement={
+                <button
+                  className={styles.completeButton}
+                  onClick={() => {
+                    /* 이벤트 처리 */
+                  }}
+                >
+                  완료
+                </button>
+              }
             >
               <CafeSearch />
             </MainLayout>

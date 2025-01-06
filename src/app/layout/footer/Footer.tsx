@@ -10,18 +10,24 @@ const Footer = () => {
   return (
     <footer className={styles.footer}>
       <nav className={styles.nav}>
-        <button onClick={() => navigate('/')} className={styles.navButton}>
-          <img src={homeIcon} alt="홈" />
-          <span>홈</span>
-        </button>
-        <button onClick={() => navigate('/search')} className={styles.navButton}>
-          <img src={searchIcon} alt="검색" />
-          <span>검색</span>
-        </button>
-        <button onClick={() => navigate('/mypage')} className={styles.navButton}>
-          <img src={profileIcon} alt="프로필" />
-          <span>프로필</span>
-        </button>
+        <div onClick={() => navigate('/')} className={styles.navItem}>
+          <button className={styles.navButton}>
+            <img src={homeIcon} alt="홈" />
+            <span>홈</span>
+          </button>
+        </div>
+        <div onClick={() => navigate('/search')} className={styles.navItem}>
+          <button className={styles.navButton}>
+            <img src={searchIcon} alt="검색" />
+            <span>검색</span>
+          </button>
+        </div>
+        <div onClick={() => navigate('/mypage')} className={styles.navItem}>
+          <button className={styles.navButton}>
+            <img src={profileIcon} alt="프로필" />
+            <span>프로필</span>
+          </button>
+        </div>
       </nav>
     </footer>
   );

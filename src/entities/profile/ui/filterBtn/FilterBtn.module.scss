@@ -1,0 +1,26 @@
+@use "/src/app/styles/abstracts/mixins";
+@use "/src/app/styles/abstracts/variables" as var;
+
+.filterBtnWrap {
+  width: 304px;
+  height: 44px;
+  padding: 8px;
+  margin: 32px auto 8px;
+  border-radius: var.$radius-radius-md;
+  background-color: var.$primitive-secondary-brown100;
+
+  display: flex;
+  gap: 8px;
+  .reviewFilterBtn {
+    flex: 1;
+    @include mixins.apply-text-style(b1_regular);
+    background-color: var.$primitive-secondary-brown100;
+    color: var.$semantic-text-icon-button-disabled;
+    border-radius: var.$radius-radius-md;
+    &--on {
+      @include mixins.apply-text-style(b1_bold);
+      background-color: var.$primitive-system-white;
+      color: var.$semantic-text-icon-brand;
+    }
+  }
+}

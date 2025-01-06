@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { throttle } from "lodash";
-import { ProfileHeader } from "@/entities/profile/ui";
+import { ProfileHeader, FilterBtn } from "@/entities/profile/ui";
+import { ReviewList } from "@/widgets/reviewList";
 
 const MyPage = () => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     const handleScroll = throttle(() => {
-      if (window.scrollY > 40) {
+      if (window.scrollY > 60) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
@@ -23,7 +24,8 @@ const MyPage = () => {
     <div>
       <div style={{ height: "48px", backgroundColor: "#F9F8F6" }}></div>
       <ProfileHeader isScrolled={isScrolled} />
-      <div style={{ backgroundColor: "lightblue", height: "2000px" }}></div>
+      <FilterBtn />
+      <ReviewList />
     </div>
   );
 };

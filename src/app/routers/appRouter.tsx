@@ -8,13 +8,14 @@ import {
 } from "react-router-dom";
 import MainLayout from "@app/layout/mainLayout/MainLayout";
 import Login from "@/pages/Login";
-import ReviewList from "@/pages/ReviewList";
+import Main from "@/pages/Main";
 import CafeSearch from "@/pages/CafeSearch";
 import WriteReview from "@/pages/WriteReview";
 import CafeInfo from "@/pages/CafeInfo";
 import MyPage from "@/pages/MyPage";
 import { ProtectedRoute } from "@app/routers/ProtectedRoute";
 import styles from "@app/layout/header/Header.module.scss";
+
 
 export const AppRouter = () => {
   const routes = createRoutesFromElements(
@@ -49,10 +50,10 @@ export const AppRouter = () => {
               showBackButton={false}
               headerTitle="리뷰 목록"
             >
-              <ReviewList />
+              <Main />
             </MainLayout>
           }
-          handle={{ crumb: <Link to="/">ReviewList</Link> }}
+          handle={{ crumb: <Link to="/">Main</Link> }}
         />
         <Route
           path="search"

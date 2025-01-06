@@ -1,7 +1,7 @@
 import { http, HttpResponse } from "msw";
 
 export const authHandlers = [
-  http.get("/api/auth/check", ({ request, cookies }) => {
+  http.get("/api/auth/check", ({ cookies }) => {
     // console.log("All headers:", [...request.headers.entries()]);
     
     // 다른 방법으로 쿠키 읽기 시도

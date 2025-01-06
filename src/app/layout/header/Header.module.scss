@@ -52,4 +52,18 @@
     color: #111827;
     margin: 0;
   }
+
+  .rightElement {
+    position: absolute;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .completeButton {
+    @include mixins.apply-text-style(b1_bold);
+    background: none;
+    border: none;
+  }
 }

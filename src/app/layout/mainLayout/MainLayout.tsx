@@ -9,6 +9,7 @@ interface MainLayoutProps {
   showFooter?: boolean;
   showBackButton?: boolean;
   headerTitle?: string;
+  rightElement?: React.ReactNode;
 }
 
 const MainLayout = ({ 
@@ -16,14 +17,16 @@ const MainLayout = ({
   showHeader = true, 
   showFooter = true, 
   showBackButton = true,
-  headerTitle = '' 
+  headerTitle = '',
+  rightElement
 }: MainLayoutProps) => {
   return (
     <div>
       {showHeader && (
         <Header 
           title={headerTitle}
-          showBackButton={showBackButton} 
+          showBackButton={showBackButton}
+          rightElement={rightElement}
         />
       )}
       <main className={`${styles.mainContent} ${showHeader ? styles.withHeader : ''}`}>

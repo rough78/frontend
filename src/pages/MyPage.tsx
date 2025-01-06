@@ -1,16 +1,29 @@
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { throttle } from "lodash";
+import { ProfileHeader } from "@/entities/profile/ui";
 
 const MyPage = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = throttle(() => {
+      if (window.scrollY > 40) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    }, 100);
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   return (
     <div>
-      <h1>마이 페이지</h1>
-      <div>
-        <Link to="/">메인으로 이동</Link>
-        <br />
-        <Link to="/review/write">리뷰작성</Link>
-        <br />
-        <Link to="/mypage">마이페이지</Link>
-      </div>
+      <div style={{ height: "48px", backgroundColor: "#F9F8F6" }}></div>
+      <ProfileHeader isScrolled={isScrolled} />
+      <div style={{ backgroundColor: "lightblue", height: "2000px" }}></div>
     </div>
   );
 };

@@ -1,8 +1,4 @@
 .mainContent {
   min-height: 100vh;
-  padding-top: calc(var(--header-height) + 6px);
-
-  &.withHeader {
-    // 필요한 경우 스타일 추가
-  }
+  padding-top: var(--header-height);
 }

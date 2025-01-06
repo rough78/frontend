@@ -1,13 +1,13 @@
-import { ReviewItem } from "@/entities/review/ui";
+import { ReviewList } from "@/widgets/reviewList";
 import ReviewFilter from "@/entities/review/ui/reviewFilter/ReviewFilter";
 
-const ReviewList = () => {
+const Main = () => {
   return (
     <div>
       <ReviewFilter />
-      <ReviewItem />
+      <ReviewList />
     </div>
   );
 };
 
-export default ReviewList;
+export default Main;

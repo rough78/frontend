@@ -1,0 +1,9 @@
+@use "/src/app/styles/abstracts/mixins";
+@use "/src/app/styles/abstracts/variables" as var;
+
+.reviewList {
+  .reviewList__item {
+    padding: 24px 16px;
+    border-bottom: 1px solid var.$semantic-border-primary;
+  }
+}

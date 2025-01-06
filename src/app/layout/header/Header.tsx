@@ -5,9 +5,10 @@ import backIcon from '@shared/assets/images/common/back.svg';
 interface HeaderProps {
   showBackButton?: boolean;
   title?: string;
+  rightElement?: React.ReactNode;
 }
 
-const Header = ({ showBackButton = true, title }: HeaderProps) => {
+const Header = ({ showBackButton = true, title, rightElement }: HeaderProps) => {
   const navigate = useNavigate();
 
   return (
@@ -22,6 +23,11 @@ const Header = ({ showBackButton = true, title }: HeaderProps) => {
           </button>
         )}
         {title && <h1 className={styles.title}>{title}</h1>}
+        {rightElement && (
+          <div className={styles.rightElement}>
+            {rightElement}
+          </div>
+        )}
       </div>
     </header>
   );

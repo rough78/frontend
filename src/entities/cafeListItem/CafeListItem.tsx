@@ -1,36 +1,20 @@
-import { useNavigate } from 'react-router-dom';
-import { useReviewDraftStore } from '@shared/store/useReviewDraftStore';
 import type { ICafeDescription } from '@shared/api/cafe/types';
 import styles from "./CafeListItem.module.scss";
 import defaultProfile from "@shared/assets/images/cafe/profile.svg";
 
-type CafeListItemProps = ICafeDescription;
+interface CafeListItemProps extends ICafeDescription {
+  onSelect: () => void;
+}
 
 const CafeListItem = ({
   name,
   address,
   profileImg,
-  ...cafeInfo
+  onSelect,
 }: CafeListItemProps) => {
-  const navigate = useNavigate();
-  const { updateDraft } = useReviewDraftStore();
-
-  // 검색에서 카페 선택 시 카페 정보를 Draft에 저장하고 리뷰 작성 페이지로 이동
-  const handleClick = () => {
-    updateDraft({ 
-      cafe: { 
-        name, 
-        address, 
-        profileImg, 
-        ...cafeInfo 
-      } 
-    });
-    navigate('/review/write');
-  };
-
   return (
     <li className={styles.cafeItem}>
-      <a onClick={handleClick} className={styles.cafeItem__link}>
+      <a onClick={onSelect} className={styles.cafeItem__link}>
         <div className={styles.cafeItem__imageWrapper}>
           <img
             src={profileImg || defaultProfile}

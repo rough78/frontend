@@ -1,6 +1,16 @@
 @use '@shared/ui/input/Input.module.scss';
 @use '@app/styles/abstracts/variables' as var;
 
+$bottom-nav-height: 34px;
+$button-height: 56px;
+$spacing: 16px;
+
+.container {
+  padding-bottom: calc(#{$bottom-nav-height} + #{$button-height});
+  position: relative;
+  z-index: 1;
+}
+
 .visitDateLabel {
   color: #121212;
 }
@@ -58,5 +68,37 @@
 
   &:focus {
     outline: none;
+  }
+}
+
+.buttonOverlay {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(56px + 34px);
+  background-color: white;
+  z-index: 2;
+}
+
+.submitButton {
+  position: fixed;
+  left: 16px;
+  right: 16px;
+  bottom: 34px;
+  height: 56px;
+  padding: 12px;
+  background-color: #FF8922;
+  color: white;
+  border: none;
+  border-radius: 16px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 600;
+  z-index: 3;
+  
+  &:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
   }
 }

@@ -65,9 +65,9 @@ const WriteReview = () => {
   }
 
   return (
-    <div>
+    <div className={styles.container}>
       <div className="selected-cafe">
-        <CafeListItem {...draft.cafe} />
+        <CafeListItem {...draft.cafe} onSelect={() => {}} />
       </div>
       <InputWrapper label="언제 방문했나요?" className={styles.visitDateLabel}>
         <DatePicker value={draft.visitDate} onChange={handleDateChange} />
@@ -130,6 +130,15 @@ const WriteReview = () => {
           className={styles.reviewTextarea}
         />
       </InputWrapper>
+      
+      <div className={styles.buttonOverlay} />
+      <button 
+        className={styles.submitButton}
+        onClick={() => {/* TODO: 리뷰 제출 로직 */}}
+        disabled={!draft.visitDate || !draft.rating}
+      >
+        작성 완료
+      </button>
     </div>
   );
 };

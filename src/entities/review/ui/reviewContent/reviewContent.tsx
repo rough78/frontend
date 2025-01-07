@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styles from "./ReviewContent.module.scss";
+import chevronDown from "@shared/assets/images/chevron-down.svg";
 
 const reviewContent = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -20,7 +21,7 @@ const reviewContent = () => {
         <button onClick={toggleExpand} className={styles.toggleButton}>
           {isExpanded ? "접기" : "더보기"}
           <img
-            src="/src/shared/assets/images/chevron-down.svg"
+            src={chevronDown}  // import한 이미지 사용
             alt="content-toggle-button"
             className={isExpanded ? styles.imgRotated : styles.imgNormal}
           />

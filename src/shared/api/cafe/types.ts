@@ -4,6 +4,7 @@ interface ICoordinate {
 }
 
 export interface ICafeDescription {
+    readonly id: string
     readonly image?: string[]
     readonly name: string
     readonly location: ICoordinate

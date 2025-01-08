@@ -27,6 +27,7 @@ export const AppRouter = () => {
             showHeader={false}
             showFooter={false}
             showBackButton={false}
+            showWriteButton={false}
             headerTitle="로그인"
           >
             <Login />

@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { useSearchParams, useLocation, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { CafeList } from "@widgets/cafeList";
 import { SearchBar } from "@features/search/ui/SearchBar";
 import { searchCafes } from "@shared/api/cafe/cafeSearch";
 import { useReviewDraftStore } from "@shared/store/useReviewDraftStore";
+import { useNavigationStore } from "@shared/store/useNavigationStore";
 import type { ICafeDescription } from "@shared/api/cafe/types";
 import styles from "./styles/CafeSearch.module.scss";
 
@@ -13,16 +14,16 @@ const CafeSearch = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const location = useLocation();
   const navigate = useNavigate();
   const { updateDraft } = useReviewDraftStore();
-  const isFromFooter = location.state?.from === 'footer';
+  const { returnPath, setReturnPath, isFromFooter, setIsFromFooter } = useNavigationStore();
 
   const handleCafeSelect = (cafe: ICafeDescription) => {
     if (isFromFooter) {
-      // state를 제거하기 위해 replace: true 옵션 사용
-      navigate(`/cafe/${cafe.id}`, { replace: true });
+      setIsFromFooter(false); // cleanup
+      navigate(`/cafe/${cafe.id}`);
     } else {
+      setReturnPath(returnPath || "/"); // 이전 경로가 없으면 홈으로
       updateDraft({ 
         cafe: {
           id: cafe.id,

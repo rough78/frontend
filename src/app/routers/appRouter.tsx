@@ -88,6 +88,7 @@ export const AppRouter = () => {
               showHeader={true}
               showFooter={false}
               showBackButton={true}
+              showWriteButton={false}
               headerTitle="리뷰 작성"
             >
               <WriteReview />

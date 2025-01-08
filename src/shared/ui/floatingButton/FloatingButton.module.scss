@@ -1,6 +1,6 @@
 .floatingButton {
     position: fixed;
-    right: 16px;
+    right: max(16px, calc((100% - 600px) / 2 + 16px));
     bottom: 80px;
     z-index: 100;
     background: none;
@@ -12,4 +12,4 @@
       width: 76px;
       height: 76px;
     }
-  }
+}

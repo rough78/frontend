@@ -11,7 +11,8 @@ export const SearchBar = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (value.trim()) {
-      navigate(`/search?query=${encodeURIComponent(value.trim())}`);
+      // replace: true 옵션을 추가하여 히스토리 누적 방지
+      navigate(`/search?query=${encodeURIComponent(value.trim())}`, { replace: true });
     }
   };
 
@@ -39,4 +40,4 @@ export const SearchBar = () => {
       </div>
     </form>
   );
-}; 
+};

@@ -2,12 +2,14 @@ import styles from './MainLayout.module.scss';
 import { ReactNode } from "react";
 import Header from "../header/Header";
 import Footer from "../footer/Footer";
+import FloatingButton from "@shared/ui/floatingButton/FloatingButton";
 
 interface MainLayoutProps {
   children: ReactNode;
   showHeader?: boolean;
   showFooter?: boolean;
   showBackButton?: boolean;
+  showWriteButton?: boolean;
   headerTitle?: string;
   rightElement?: React.ReactNode;
 }
@@ -17,6 +19,7 @@ const MainLayout = ({
   showHeader = true, 
   showFooter = true, 
   showBackButton = true,
+  showWriteButton = true,
   headerTitle = '',
   rightElement
 }: MainLayoutProps) => {
@@ -31,6 +34,7 @@ const MainLayout = ({
       )}
       <main className={`${styles.mainContent} ${showHeader ? styles.withHeader : ''}`}>
         {children}
+        {showWriteButton && <FloatingButton />}
       </main>
       {showFooter && <Footer />}
     </div>

@@ -4,14 +4,16 @@ import type { ICafeDescription } from "@shared/api/cafe/types";
 
 interface CafeListProps {
   cafeInfo: ICafeDescription[];
+  onCafeSelect: (cafe: ICafeDescription) => void;
 }
 
-export const CafeList = ({ cafeInfo }: CafeListProps) => (
+export const CafeList = ({ cafeInfo, onCafeSelect }: CafeListProps) => (
   <ul className={styles.cafeList}>
     {cafeInfo.map((cafe) => (
       <CafeItem
-        key={cafe.name}
+        key={cafe.id}
         {...cafe}
+        onSelect={() => onCafeSelect(cafe)}
       />
     ))}
   </ul>

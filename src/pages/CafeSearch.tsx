@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation, useNavigate } from "react-router-dom";
 import { CafeList } from "@widgets/cafeList";
 import { SearchBar } from "@features/search/ui/SearchBar";
 import { searchCafes } from "@shared/api/cafe/cafeSearch";
+import { useReviewDraftStore } from "@shared/store/useReviewDraftStore";
 import type { ICafeDescription } from "@shared/api/cafe/types";
 import styles from "./styles/CafeSearch.module.scss";
 
@@ -12,25 +13,50 @@ const CafeSearch = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const query = searchParams.get('query');
-    if (query) {
-      const fetchCafes = async () => {
-        try {
-          setError(null);
-          setIsLoading(true);
-          const response = await searchCafes(query);
-          setCafes(response);
-        } catch (error) {
-          setError('검색 중 오류가 발생했습니다.');
-          console.error('Failed to fetch cafes:', error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { updateDraft } = useReviewDraftStore();
+  const isFromFooter = location.state?.from === 'footer';
 
-      fetchCafes();
+  const handleCafeSelect = (cafe: ICafeDescription) => {
+    if (isFromFooter) {
+      // state를 제거하기 위해 replace: true 옵션 사용
+      navigate(`/cafe/${cafe.id}`, { replace: true });
+    } else {
+      updateDraft({ 
+        cafe: {
+          id: cafe.id,
+          name: cafe.name,
+          address: cafe.address,
+          location: cafe.location,
+          instaLink: cafe.instaLink,
+          isBookmark: cafe.isBookmark,
+          avgStar: cafe.avgStar,
+          profileImg: cafe.profileImg,
+        } 
+      });
+      navigate('/review/write');
     }
+  };
+
+  useEffect(() => {
+    const fetchCafes = async () => {
+      const query = searchParams.get('query');
+      if (!query) return; // 검색어가 없으면 API 호출하지 않음
+      
+      setIsLoading(true);
+      setError(null);
+      try {
+        const result = await searchCafes(query);
+        setCafes(result);
+      } catch (err) {
+        setError('카페 검색 중 오류가 발생했습니다.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCafes();
   }, [searchParams]);
 
   return (
@@ -50,7 +76,7 @@ const CafeSearch = () => {
           <p>검색 결과가 없습니다.</p>
         </div>
       ) : (
-        <CafeList cafeInfo={cafes} />
+        <CafeList cafeInfo={cafes} onCafeSelect={handleCafeSelect} />
       )}
     </div>
   );

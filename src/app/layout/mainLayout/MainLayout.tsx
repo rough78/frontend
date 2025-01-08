@@ -12,6 +12,7 @@ interface MainLayoutProps {
   showWriteButton?: boolean;
   headerTitle?: string;
   rightElement?: React.ReactNode;
+  bgColor?: string;
 }
 
 const MainLayout = ({
@@ -21,7 +22,8 @@ const MainLayout = ({
   showBackButton = true,
   showWriteButton = true,
   headerTitle = "",
-  rightElement
+  rightElement,
+  bgColor = "#fff",
 }: MainLayoutProps) => {
   return (
     <div className={styles.mainLayout}>
@@ -30,6 +32,7 @@ const MainLayout = ({
           title={headerTitle}
           showBackButton={showBackButton}
           rightElement={rightElement}
+          bgColor={bgColor}
         />
       )}
       <main className={`${styles.mainContent} ${showHeader ? styles.withHeader : ''}`}>

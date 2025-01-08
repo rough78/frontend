@@ -1,4 +1,4 @@
-import styles from './MainLayout.module.scss';
+import styles from "./MainLayout.module.scss";
 import { ReactNode } from "react";
 import Header from "../header/Header";
 import Footer from "../footer/Footer";
@@ -12,26 +12,24 @@ interface MainLayoutProps {
   rightElement?: React.ReactNode;
 }
 
-const MainLayout = ({ 
-  children, 
-  showHeader = true, 
-  showFooter = true, 
+const MainLayout = ({
+  children,
+  showHeader = true,
+  showFooter = true,
   showBackButton = true,
-  headerTitle = '',
-  rightElement
+  headerTitle = "",
+  rightElement,
 }: MainLayoutProps) => {
   return (
-    <div>
+    <div className={styles.mainLayout}>
       {showHeader && (
-        <Header 
+        <Header
           title={headerTitle}
           showBackButton={showBackButton}
           rightElement={rightElement}
         />
       )}
-      <main className={`${styles.mainContent} ${showHeader ? styles.withHeader : ''}`}>
-        {children}
-      </main>
+      <main>{children}</main>
       {showFooter && <Footer />}
     </div>
   );

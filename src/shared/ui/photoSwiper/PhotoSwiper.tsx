@@ -1,5 +1,6 @@
 // Import Swiper React components
 import { Swiper, SwiperSlide } from "swiper/react";
+import Chips from "../chips/Chips";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
@@ -24,17 +25,20 @@ const PhotoSwiper: FC<PhotoSwiperProps> = () => {
       onSlideChange={() => console.log("slide change")}
       onSwiper={(swiper) => console.log(swiper)}
     >
-      <SwiperSlide>
-        <img src="https://picsum.photos/200/300" alt="random" />
+      <SwiperSlide className={styles.swiperSlide}>
+        <div className={styles.chipsWrap}>
+          <Chips />
+        </div>
       </SwiperSlide>
-      <SwiperSlide>
-        <img src="https://picsum.photos/200/300" alt="random" />
+      <SwiperSlide className={styles.swiperSlide}>
+        <div className={styles.chipsWrap}>
+          <Chips />
+        </div>
       </SwiperSlide>
-      <SwiperSlide>
-        <img src="https://picsum.photos/200/300" alt="random" />
-      </SwiperSlide>
-      <SwiperSlide>
-        <img src="https://picsum.photos/200/300" alt="random" />
+      <SwiperSlide className={styles.swiperSlide}>
+        <div className={styles.chipsWrap}>
+          <Chips />
+        </div>
       </SwiperSlide>
     </Swiper>
   );

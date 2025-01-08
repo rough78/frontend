@@ -21,12 +21,12 @@ export default defineConfig(({ mode }) => ({
   },
   server: {
     https: {
-      key: process.env.SSL_KEY
-        ? Buffer.from(process.env.SSL_KEY, "base64")
-        : fs.readFileSync(path.resolve(__dirname, "localhost-key.pem")),
-      cert: process.env.SSL_CERT
-        ? Buffer.from(process.env.SSL_CERT, "base64")
-        : fs.readFileSync(path.resolve(__dirname, "localhost.pem")),
+      key: fs.readFileSync(
+        process.env.SSL_KEY_PATH || path.resolve(__dirname, "localhost-key.pem")
+      ),
+      cert: fs.readFileSync(
+        process.env.SSL_CERT_PATH || path.resolve(__dirname, "localhost.pem")
+      ),
     },
     proxy: {
       "/api": {

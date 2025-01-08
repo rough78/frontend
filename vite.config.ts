@@ -5,7 +5,7 @@ import fs from 'fs'
 import path from 'path'
 
 // https://vite.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react()],
   base: '/',
   resolve: {
@@ -26,28 +26,22 @@ export default defineConfig({
     },
     proxy: {
       '/api': {
-        target: 'https://packetbreeze.com',
+        target: mode === 'development' ? 'https://packetbreeze.com:8443' : 'https://packetbreeze.com',
         changeOrigin: true,
         secure: true,
         configure: (proxy, _options) => {
           proxy.on('proxyReq', (proxyReq, req) => {
-            // 모든 쿠키를 전달
             if (req.headers.cookie) {
               proxyReq.setHeader('Cookie', req.headers.cookie);
             }
-            
-            // 인증 헤더가 있다면 전달
             if (req.headers.authorization) {
               proxyReq.setHeader('Authorization', req.headers.authorization);
             }
-
-            // CORS 헤더 설정
             proxyReq.setHeader('Access-Control-Allow-Credentials', 'true');
             proxyReq.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
           });
 
           proxy.on('proxyRes', (proxyRes, req) => {
-            // 응답 헤더에 CORS 설정 추가
             proxyRes.headers['Access-Control-Allow-Credentials'] = 'true';
             proxyRes.headers['Access-Control-Allow-Origin'] = req.headers.origin || '*';
           });
@@ -57,10 +51,6 @@ export default defineConfig({
   },
   preview: {
     port: 5173,
-    https: {
-      key: fs.readFileSync(path.resolve(__dirname, 'localhost-key.pem')),
-      cert: fs.readFileSync(path.resolve(__dirname, 'localhost.pem')),
-    },
     proxy: {
       '/api': {
         target: 'https://packetbreeze.com',
@@ -68,23 +58,17 @@ export default defineConfig({
         secure: true,
         configure: (proxy, _options) => {
           proxy.on('proxyReq', (proxyReq, req) => {
-            // 모든 쿠키를 전달
             if (req.headers.cookie) {
               proxyReq.setHeader('Cookie', req.headers.cookie);
             }
-            
-            // 인증 헤더가 있다면 전달
             if (req.headers.authorization) {
               proxyReq.setHeader('Authorization', req.headers.authorization);
             }
-
-            // CORS 헤더 설정
             proxyReq.setHeader('Access-Control-Allow-Credentials', 'true');
             proxyReq.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
           });
 
           proxy.on('proxyRes', (proxyRes, req) => {
-            // 응답 헤더에 CORS 설정 추가
             proxyRes.headers['Access-Control-Allow-Credentials'] = 'true';
             proxyRes.headers['Access-Control-Allow-Origin'] = req.headers.origin || '*';
           });
@@ -92,4 +76,4 @@ export default defineConfig({
       }
     }
   },
-});
+}));

@@ -10,6 +10,7 @@ interface MainLayoutProps {
   showBackButton?: boolean;
   headerTitle?: string;
   rightElement?: React.ReactNode;
+  bgColor?: string;
 }
 
 const MainLayout = ({
@@ -19,6 +20,7 @@ const MainLayout = ({
   showBackButton = true,
   headerTitle = "",
   rightElement,
+  bgColor = "#fff",
 }: MainLayoutProps) => {
   return (
     <div className={styles.mainLayout}>
@@ -27,6 +29,7 @@ const MainLayout = ({
           title={headerTitle}
           showBackButton={showBackButton}
           rightElement={rightElement}
+          bgColor={bgColor}
         />
       )}
       <main>{children}</main>

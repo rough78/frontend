@@ -22,7 +22,6 @@ const MyPage = () => {
   }, []);
   return (
     <div>
-      <div style={{ height: "48px", backgroundColor: "#F9F8F6" }}></div>
       <ProfileHeader isScrolled={isScrolled} />
       <FilterBtn />
       <ReviewList />

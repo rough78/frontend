@@ -115,8 +115,8 @@ export const AppRouter = () => {
             <MainLayout
               showHeader={true}
               showFooter={true}
-              showBackButton={true}
-              headerTitle="마이페이지"
+              showBackButton={false}
+              bgColor="rgb(249, 248, 246)"
             >
               <MyPage />
             </MainLayout>

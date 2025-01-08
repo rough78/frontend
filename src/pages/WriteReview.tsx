@@ -12,12 +12,29 @@ const TAGS = {
   menu: [
     { id: 1, content: "원두를 판매해요" },
     { id: 2, content: "커피가 맛있어요" },
+    { id: 3, content: "디저트를 판매해요" },
+    { id: 4, content: "핸드드립 커피가 있어요" },
+    { id: 5, content: "매장에서 직접 로스팅 해요" },
+    { id: 6, content: "시그니처 메뉴가 있어요" },
+    { id: 7, content: "케이크가 맛있어요" },
+    { id: 8, content: "브런치 메뉴가 있어요" },
+    { id: 9, content: "커피 향이 좋아요" },
+    { id: 10, content: "메뉴가 다양해요" }
   ],
   interior: [
     { id: 1, content: "작업하기 좋아요" },
     { id: 2, content: "공부하기 좋아요" },
     { id: 3, content: "분위기가 좋아요" },
-  ],
+    { id: 4, content: "야외석이 있어요" },
+    { id: 5, content: "매장이 넓어요" },
+    { id: 6, content: "룸이 있어요" },
+    { id: 7, content: "창가 자리가 많아요" },
+    { id: 8, content: "인스타 감성이에요" },
+    { id: 9, content: "식물이 많아요" },
+    { id: 10, content: "채광이 좋아요" },
+    { id: 11, content: "조용해요" },
+    { id: 12, content: "음악이 좋아요" }
+  ]
 };
 
 const WriteReview = () => {

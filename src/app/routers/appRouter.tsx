@@ -15,7 +15,7 @@ import CafeInfo from "@/pages/CafeInfo";
 import MyPage from "@/pages/MyPage";
 import { ProtectedRoute } from "@app/routers/ProtectedRoute";
 import styles from "@app/layout/header/Header.module.scss";
-import { OAuthRedirect }from '@app/auth/OAuthRedirect'
+import { OAuthRedirect } from "@app/auth/OAuthRedirect";
 
 export const AppRouter = () => {
   const routes = createRoutesFromElements(
@@ -47,10 +47,10 @@ export const AppRouter = () => {
           index
           element={
             <MainLayout
-              showHeader={false}
+              showHeader={true}
               showFooter={true}
               showBackButton={false}
-              headerTitle="리뷰 목록"
+              headerTitle="BrewScape"
             >
               <Main />
             </MainLayout>

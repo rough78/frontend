@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+import { useNavigationStore } from '@shared/store/useNavigationStore';
 import { StarRating } from "@widgets/starRating";
 import { DatePicker } from "@widgets/datePicker";
 import { useReviewDraftStore } from "@shared/store/useReviewDraftStore";
@@ -38,6 +40,8 @@ const TAGS = {
 };
 
 const WriteReview = () => {
+  const navigate = useNavigate();
+  const returnPath = useNavigationStore((state) => state.returnPath);
   const { draft, updateDraft, clearDraft } = useReviewDraftStore();
 
   useEffect(() => {
@@ -50,6 +54,15 @@ const WriteReview = () => {
       clearDraft();
     }
   }, [clearDraft]);
+
+  const handleSubmit = () => {
+    // TODO: API 호출
+    if (returnPath) {
+      navigate(returnPath, { replace: true });
+    } else {
+      navigate('/', { replace: true });
+    }
+  };
 
   const handleDateChange = (date: string) => {
     updateDraft({ visitDate: date });
@@ -151,7 +164,7 @@ const WriteReview = () => {
       <div className={styles.buttonOverlay} />
       <button 
         className={styles.submitButton}
-        onClick={() => {/* TODO: 리뷰 제출 로직 */}}
+        onClick={handleSubmit}
         disabled={!draft.visitDate || !draft.rating}
       >
         작성 완료

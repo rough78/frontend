@@ -1,7 +1,6 @@
 import { useState } from "react";
 import calendarIcon from "@shared/assets/images/calendar/calendar.svg";
 import BottomSheet from "@shared/ui/bottomSheet/BottomSheet";
-import { InputWrapper } from "@shared/ui/input/Input";
 import styles from "./DatePicker.module.scss";
 
 interface DatePickerProps {
@@ -66,7 +65,7 @@ const DatePicker = ({ value, onChange }: DatePickerProps) => {
 
   const handleConfirm = () => {
     if (tempSelectedDate) {
-      const formattedDate = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(tempSelectedDate).padStart(2, '0')}`;
+      const formattedDate = `${currentYear}-${String(currentMonth).padStart(2, "0")}-${String(tempSelectedDate).padStart(2, "0")}`;
       onChange(formattedDate);
       setIsOpen(false);
     }
@@ -74,30 +73,35 @@ const DatePicker = ({ value, onChange }: DatePickerProps) => {
 
   return (
     <>
-      <InputWrapper>
-        <div className={styles.inputContainer} onClick={() => setIsOpen(true)}>
-          <input
-            type="text"
-            value={value}
-            readOnly
-            className={styles.dateInput}
-            placeholder="방문하신 날짜를 선택해주세요."
-          />
-          <img src={calendarIcon} className={styles.calendarIcon} alt="달력" />
-        </div>
-      </InputWrapper>
+      <div
+        className={styles.inputContainer}
+        onClick={() => setIsOpen(true)}
+      >
+        <input
+          type="text"
+          value={value}
+          readOnly
+          className={styles.dateInput}
+          placeholder="방문하신 날짜를 선택해주세요."
+        />
+        <img src={calendarIcon} className={styles.calendarIcon} alt="달력" />
+      </div>
 
       <BottomSheet isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <div className={styles.bottomSheetContent}>
           <div className={styles.calendarHeader}>
             <button onClick={() => handleMonthChange(-1)}>&lt;</button>
-            <h2>{currentYear}년 {currentMonth}월</h2>
+            <h2>
+              {currentYear}년 {currentMonth}월
+            </h2>
             <button onClick={() => handleMonthChange(1)}>&gt;</button>
           </div>
           <div className={styles.calendar}>
             <div className={styles.weekdays}>
-              {['일', '월', '화', '수', '목', '금', '토'].map(day => (
-                <div key={day} className={styles.weekday}>{day}</div>
+              {["일", "월", "화", "수", "목", "금", "토"].map((day) => (
+                <div key={day} className={styles.weekday}>
+                  {day}
+                </div>
               ))}
             </div>
             <div className={styles.days}>
@@ -105,16 +109,20 @@ const DatePicker = ({ value, onChange }: DatePickerProps) => {
                 <button
                   key={index}
                   className={`${styles.day} 
-                    ${tempSelectedDate === dateObj.day && dateObj.isCurrentMonth ? styles.selected : ''} 
-                    ${!dateObj.isCurrentMonth ? styles.empty : ''}`}
-                  onClick={() => dateObj.isCurrentMonth && dateObj.day && handleDateSelect(dateObj.day)}
+                    ${tempSelectedDate === dateObj.day && dateObj.isCurrentMonth ? styles.selected : ""} 
+                    ${!dateObj.isCurrentMonth ? styles.empty : ""}`}
+                  onClick={() =>
+                    dateObj.isCurrentMonth &&
+                    dateObj.day &&
+                    handleDateSelect(dateObj.day)
+                  }
                   disabled={!dateObj.isCurrentMonth || !dateObj.day}
                 >
-                  {dateObj.day || ''}
+                  {dateObj.day || ""}
                 </button>
               ))}
             </div>
-            <button 
+            <button
               className={styles.confirmButton}
               onClick={handleConfirm}
               disabled={!tempSelectedDate}

@@ -7,7 +7,8 @@ import googleLogo from "@shared/assets/images/social-icons/google-logo.svg";
 import facebookLogo from "@shared/assets/images/social-icons/facebook-logo.svg";
 import { useAuthStore } from "@app/auth/useAuthStore";
 import axios from "axios";
-import styles from "@/shared/ui/button/ui/Button.module.scss";
+import buttonStyles from "@/shared/ui/button/ui/Button.module.scss";
+import loginStyles from "./styles/Login.module.scss";
 import { useEffect } from "react";
 
 axios.defaults.withCredentials = true;
@@ -19,7 +20,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/');
+      navigate("/");
     }
   }, [isAuthenticated, navigate]);
 
@@ -27,37 +28,39 @@ const Login = () => {
     try {
       await login(provider);
     } catch (error) {
-      console.error('로그인 실패:', error);
+      console.error("로그인 실패:", error);
     }
   };
 
   return (
-    <>
+    <div className={loginStyles.loginWrap}>
       <LogoWrap>
         <Logo />
       </LogoWrap>
-      <Button
-        className={`${styles.loginBtn} ${styles.naverBtn}`}
-        text="네이버로 시작하기"
-        imgUrl={naverLogo}
-        altText="네이버 로그인"
-        onClick={() => handleLogin('naver')}
-      />
-      <Button
-        className={`${styles.loginBtn} ${styles.googleBtn}`}
-        text="구글로 시작하기"
-        imgUrl={googleLogo}
-        altText="구글 로그인"
-        onClick={() => handleLogin('google')}
-      />
-      <Button
-        className={`${styles.loginBtn} ${styles.faceBtn}`}
-        text="페이스북으로 시작하기"
-        imgUrl={facebookLogo}
-        altText="페이스북 로그인"
-        onClick={() => handleLogin('facebook')}
-      />
-    </>
+      <div className={buttonStyles.btnWrap}>
+        <Button
+          className={`${buttonStyles.loginBtn} ${buttonStyles.naverBtn}`}
+          text="네이버로 시작하기"
+          imgUrl={naverLogo}
+          altText="네이버 로그인"
+          onClick={() => handleLogin("naver")}
+        />
+        <Button
+          className={`${buttonStyles.loginBtn} ${buttonStyles.googleBtn}`}
+          text="구글로 시작하기"
+          imgUrl={googleLogo}
+          altText="구글 로그인"
+          onClick={() => handleLogin("google")}
+        />
+        <Button
+          className={`${buttonStyles.loginBtn} ${buttonStyles.faceBtn}`}
+          text="페이스북으로 시작하기"
+          imgUrl={facebookLogo}
+          altText="페이스북 로그인"
+          onClick={() => handleLogin("facebook")}
+        />
+      </div>
+    </div>
   );
 };
 

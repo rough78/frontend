@@ -4,7 +4,7 @@ interface ICoordinate {
 }
 
 export interface ICafeDescription {
-    readonly id: string
+    readonly id: number
     readonly image?: string[]
     readonly name: string
     readonly location: ICoordinate
@@ -14,3 +14,15 @@ export interface ICafeDescription {
     readonly address: string
     readonly profileImg: string
 }
+
+export interface INaverLocalApiResponse {
+    title: string;
+    link: string;
+    category: string;
+    description: string;
+    telephone: string;
+    address: string;
+    roadAddress: string;
+    mapx: string;
+    mapy: string;
+  }

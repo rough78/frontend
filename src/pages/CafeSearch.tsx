@@ -41,15 +41,15 @@ const CafeSearch = () => {
   };
 
   const fetchCafes = async () => {
-    const query = searchParams.get('query');
-    if (!query) return;
+    const name = searchParams.get('name');
+    if (!name) return;
         
     setIsLoading(true);
     setError(null);
     try {
       // Call searchCafes which transforms the Naver API response 
       // into ICafeDescription[] format
-      const result = await searchCafes(query);
+      const result = await searchCafes(name);
       setCafes(result);
       console.log('Cafes:', result);
     } catch (err) {

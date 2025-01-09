@@ -4,10 +4,10 @@ import { dummyCafes } from './mockData';
 
 const isDevelopment = import.meta.env.DEV;
 
-export const searchCafes = async (query: string): Promise<ICafeDescription[]> => {
+export const searchCafes = async (name: string): Promise<ICafeDescription[]> => {
   try {
     const response = await apiInstance.get<{ items: any[] }>('/api/cafes/search', {
-      params: { name: query }
+      params: { name }
     });
     
     // Transform Naver API response to match ICafeDescription format
@@ -28,10 +28,6 @@ export const searchCafes = async (query: string): Promise<ICafeDescription[]> =>
       return cafes;
     }
 
-    if (isDevelopment) {
-      console.log('개발 환경: 더미 데이터를 반환합니다.');
-      return dummyCafes;
-    }
     return [];
   } catch (error) {
     console.error('카페 검색 중 오류 발생:', error);

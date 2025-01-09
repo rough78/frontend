@@ -47,8 +47,6 @@ const CafeSearch = () => {
     setIsLoading(true);
     setError(null);
     try {
-      // Call searchCafes which transforms the Naver API response 
-      // into ICafeDescription[] format
       const result = await searchCafes(name);
       setCafes(result);
       console.log('Cafes:', result);
@@ -59,7 +57,6 @@ const CafeSearch = () => {
     }
   };
 
-  // Use useEffect to trigger search when query changes
   useEffect(() => {
     fetchCafes();
   }, [searchParams]);

@@ -12,7 +12,7 @@ export const authHandlers = [
     // const hasRefreshToken = cookieHeader.includes("refresh=");
 
     if (!cookies.access || !cookies.refresh) {
-      return new HttpResponse(null, { 
+      return new HttpResponse(null, {
         status: 401,
         headers: {
           "Access-Control-Allow-Origin": "https://localhost:5173",

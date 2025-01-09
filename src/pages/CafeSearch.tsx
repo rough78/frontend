@@ -40,23 +40,27 @@ const CafeSearch = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchCafes = async () => {
-      const query = searchParams.get('query');
-      if (!query) return; // 검색어가 없으면 API 호출하지 않음
-      
-      setIsLoading(true);
-      setError(null);
-      try {
-        const result = await searchCafes(query);
-        setCafes(result);
-      } catch (err) {
-        setError('카페 검색 중 오류가 발생했습니다.');
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchCafes = async () => {
+    const query = searchParams.get('query');
+    if (!query) return;
+        
+    setIsLoading(true);
+    setError(null);
+    try {
+      // Call searchCafes which transforms the Naver API response 
+      // into ICafeDescription[] format
+      const result = await searchCafes(query);
+      setCafes(result);
+      console.log('Cafes:', result);
+    } catch (err) {
+      setError('카페 검색 중 오류가 발생했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  // Use useEffect to trigger search when query changes
+  useEffect(() => {
     fetchCafes();
   }, [searchParams]);
 

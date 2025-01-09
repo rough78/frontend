@@ -1,28 +1,26 @@
-import type { ICafeDescription } from '@shared/api/cafe/types';
+import type { ICafeDescription, INaverLocalApiResponse } from '@shared/api/cafe/types';
 import { apiInstance } from '@shared/api/base';
 import { dummyCafes } from './mockData';
+import { CafeMapper } from '@shared/api/cafe/mapper/cafeMapper';
 
 const isDevelopment = import.meta.env.DEV;
 
-export const searchCafes = async (query: string): Promise<ICafeDescription[]> => {
+export const searchCafes = async (name: string): Promise<ICafeDescription[]> => {
   try {
-    const response = await apiInstance.get<{ data: ICafeDescription[] }>('search', {
-      params: { query }
+    const response = await apiInstance.get<{ items: INaverLocalApiResponse[] }>('/api/cafes/search', {
+      params: { name }
     });
     
-    if (!response.data || response.data.length === 0) {
-      if (isDevelopment) {
-        console.log('개발 환경: 더미 데이터를 반환합니다.');
-        return dummyCafes;
-      }
-      return [];
+    if (response.items && response.items.length > 0) {
+      return response.items.map((item, index) => ({
+        ...CafeMapper.toICafeDescription(item),
+        id: index + 1
+      }));
     }
-    
-    return response.data;
+    return [];
   } catch (error) {
     console.error('카페 검색 중 오류 발생:', error);
     if (isDevelopment) {
-      console.log('개발 환경: 오류 발생으로 더미 데이터를 반환합니다.');
       return dummyCafes;
     }
     throw error;

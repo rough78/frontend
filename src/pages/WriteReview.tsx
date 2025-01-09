@@ -9,33 +9,35 @@ import CafeListItem from "@entities/cafeListItem/CafeListItem";
 import { InputWrapper } from "@shared/ui/input/Input";
 import { Textarea } from "@shared/ui/textarea";
 import styles from "./styles/WriteReview.module.scss";
+import { useApi } from '@shared/api/hooks/useApi';
+import { ReviewRequest, ReviewResponse } from '@shared/api/reviews/types';
 
 const TAGS = {
   menu: [
-    { id: 1, content: "원두를 판매해요" },
-    { id: 2, content: "커피가 맛있어요" },
-    { id: 3, content: "디저트를 판매해요" },
-    { id: 4, content: "핸드드립 커피가 있어요" },
-    { id: 5, content: "매장에서 직접 로스팅 해요" },
-    { id: 6, content: "시그니처 메뉴가 있어요" },
-    { id: 7, content: "케이크가 맛있어요" },
-    { id: 8, content: "브런치 메뉴가 있어요" },
-    { id: 9, content: "커피 향이 좋아요" },
-    { id: 10, content: "메뉴가 다양해요" }
+    { id: 1, description: "원두를 판매해요" },
+    { id: 2, description: "커피가 맛있어요" },
+    { id: 3, description: "디저트를 판매해요" },
+    { id: 4, description: "핸드드립 커피가 있어요" },
+    { id: 5, description: "매장에서 직접 로스팅 해요" },
+    { id: 6, description: "시그니처 메뉴가 있어요" },
+    { id: 7, description: "케이크가 맛있어요" },
+    { id: 8, description: "브런치 메뉴가 있어요" },
+    { id: 9, description: "커피 향이 좋아요" },
+    { id: 10, description: "메뉴가 다양해요" }
   ],
   interior: [
-    { id: 1, content: "작업하기 좋아요" },
-    { id: 2, content: "공부하기 좋아요" },
-    { id: 3, content: "분위기가 좋아요" },
-    { id: 4, content: "야외석이 있어요" },
-    { id: 5, content: "매장이 넓어요" },
-    { id: 6, content: "룸이 있어요" },
-    { id: 7, content: "창가 자리가 많아요" },
-    { id: 8, content: "인스타 감성이에요" },
-    { id: 9, content: "식물이 많아요" },
-    { id: 10, content: "채광이 좋아요" },
-    { id: 11, content: "조용해요" },
-    { id: 12, content: "음악이 좋아요" }
+    { id: 1, description: "작업하기 좋아요" },
+    { id: 2, description: "공부하기 좋아요" },
+    { id: 3, description: "분위기가 좋아요" },
+    { id: 4, description: "야외석이 있어요" },
+    { id: 5, description: "매장이 넓어요" },
+    { id: 6, description: "룸이 있어요" },
+    { id: 7, description: "창가 자리가 많아요" },
+    { id: 8, description: "인스타 감성이에요" },
+    { id: 9, description: "식물이 많아요" },
+    { id: 10, description: "채광이 좋아요" },
+    { id: 11, description: "조용해요" },
+    { id: 12, description: "음악이 좋아요" }
   ]
 };
 
@@ -43,6 +45,7 @@ const WriteReview = () => {
   const navigate = useNavigate();
   const returnPath = useNavigationStore((state) => state.returnPath);
   const { draft, updateDraft, clearDraft } = useReviewDraftStore();
+  const { post, isLoading } = useApi<ReviewResponse>();
 
   useEffect(() => {
     if (!localStorage.getItem("review-draft")) {
@@ -55,12 +58,37 @@ const WriteReview = () => {
     }
   }, [clearDraft]);
 
-  const handleSubmit = () => {
-    // TODO: API 호출
-    if (returnPath) {
-      navigate(returnPath, { replace: true });
-    } else {
-      navigate('/', { replace: true });
+  const handleSubmit = async () => {
+    try {
+      const request: ReviewRequest = {
+        cafeId: draft.cafe!.id,
+        rating: draft.rating,
+        visitDate: draft.visitDate,
+        content: draft.content || '',
+        imageIds: [], 
+        tags: {
+          menu: draft.tags.menu.map(tagId => ({
+            id: tagId,
+            description: TAGS.menu.find(t => t.id === tagId)?.description ?? ''
+          })),
+          interior: draft.tags.interior.map(tagId => ({
+            id: tagId,
+            description: TAGS.interior.find(t => t.id === tagId)?.description ?? ''
+          }))
+        }
+      };
+
+      await post('/api/reviews', request, {}, {
+        onSuccess: () => {
+          clearDraft();
+          navigate(returnPath || '/', { replace: true });
+        },
+        onError: (error) => {
+          console.error('리뷰 작성 실패:', error);
+        }
+      });
+    } catch (error) {
+      console.error('리뷰 작성 중 오류 발생:', error);
     }
   };
 
@@ -94,6 +122,14 @@ const WriteReview = () => {
     );
   }
 
+  const isValidForm = () => {
+    return (
+      draft.rating > 0 &&
+      draft.visitDate &&
+      draft.content?.trim()
+    );
+  };
+
   return (
     <div className={styles.container}>
       <div className="selected-cafe">
@@ -119,7 +155,7 @@ const WriteReview = () => {
               {TAGS.menu.map((tag) => (
                 <Tag
                   key={tag.id}
-                  content={tag.content}
+                  content={tag.description}
                   isActive={draft.tags?.menu?.includes(tag.id) || false}
                   onClick={() => handleTagClick("menu", tag.id)}
                 />
@@ -132,7 +168,7 @@ const WriteReview = () => {
               {TAGS.interior.map((tag) => (
                 <Tag
                   key={tag.id}
-                  content={tag.content}
+                  content={tag.description}
                   isActive={draft.tags?.interior?.includes(tag.id) || false}
                   onClick={() => handleTagClick("interior", tag.id)}
                 />
@@ -165,9 +201,9 @@ const WriteReview = () => {
       <button 
         className={styles.submitButton}
         onClick={handleSubmit}
-        disabled={!draft.visitDate || !draft.rating}
+        disabled={!isValidForm() || isLoading}
       >
-        작성 완료
+        {isLoading ? '작성 중...' : '작성 완료'}
       </button>
     </div>
   );

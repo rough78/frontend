@@ -71,6 +71,15 @@ $spacing: 32px;
   }
 }
 
+.photoCount {
+  color: var.$semantic-text-icon-secondary;
+  font-size: 12px;
+  font-weight: 140;
+  display: flex;
+  justify-content: flex-end;
+  margin: 4px 0;
+}
+
 .buttonOverlay {
   position: fixed;
   left: 0;

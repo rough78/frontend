@@ -1,0 +1,74 @@
+$color-primary: #3498db;
+$color-danger: #e74c3c;
+$color-gray: #8e8e8e;
+$color-border: #ddd;
+$color-white: #fff;
+$color-black: #000;
+
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+
+$font-size-sm: 12px;
+$font-size-md: 14px;
+$font-size-lg: 16px;
+$font-size-xl: 18px;
+
+$transition-fast: 0.2s ease;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin hover-opacity {
+  opacity: 1;
+  transition: opacity $transition-fast;
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+// Styles
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  min-width: 300px; // Add minimum width
+  width: 100%; // Ensure container takes full available width
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-md;
+
+  h2 {
+    font-size: $font-size-xl;
+    font-weight: 600;
+    color: $color-black;
+  }
+}
+
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 60px); // Fix the column width
+  gap: $spacing-xs;
+  padding: $spacing-md 0;
+  justify-content: start; // Align items to the start
+  grid-auto-flow: dense;
+}
+
+.guideText {
+  font-size: $font-size-sm;
+  color: $color-gray;
+  margin-top: $spacing-md;
+}

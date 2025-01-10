@@ -37,26 +37,14 @@ class ApiInstance {
         const isNaverApi = endpoint.startsWith('/v1/search')
         const axiosInstance = isNaverApi ? this.naverAxios : this.axios
         
-        // 기본 옵션 설정
         const finalOptions: AxiosRequestConfig = {
             headers: {
                 'Content-Type': 'application/json',
                 ...options.headers
             },
-            withCredentials: true,
+            withCredentials: !isNaverApi,  // Naver API가 아닐 때만 true
             ...options
         }
-    
-        // naver API인 경우만 withCredentials false 설정
-        if (isNaverApi) {
-            finalOptions.withCredentials = false
-        }
-    
-        console.log("Request options:", {
-            endpoint,
-            withCredentials: finalOptions.withCredentials,
-            headers: finalOptions.headers
-        });
     
         const response: AxiosResponse<T> = await axiosInstance.get(endpoint, finalOptions)
         return response.data
@@ -68,6 +56,52 @@ class ApiInstance {
         options: AxiosRequestConfig = {}
     ): Promise<T> {
         const response: AxiosResponse<T> = await this.axios.post(
+            endpoint,
+            data,
+            {
+                ...options,
+                withCredentials: true
+            }
+        )
+        return response.data
+    }
+
+    async put<T>(
+        endpoint: string,
+        data?: any,
+        options: AxiosRequestConfig = {}
+    ): Promise<T> {
+        const response: AxiosResponse<T> = await this.axios.put(
+            endpoint,
+            data,
+            {
+                ...options,
+                withCredentials: true
+            }
+        )
+        return response.data
+    }
+
+    async delete<T>(
+        endpoint: string,
+        options: AxiosRequestConfig = {}
+    ): Promise<T> {
+        const response: AxiosResponse<T> = await this.axios.delete(
+            endpoint,
+            {
+                ...options,
+                withCredentials: true
+            }
+        )
+        return response.data
+    }
+
+    async patch<T>(
+        endpoint: string,
+        data?: any,
+        options: AxiosRequestConfig = {}
+    ): Promise<T> {
+        const response: AxiosResponse<T> = await this.axios.patch(
             endpoint,
             data,
             {

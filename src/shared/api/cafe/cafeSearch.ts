@@ -1,28 +1,63 @@
-import type { ICafeDescription, INaverLocalApiResponse } from '@shared/api/cafe/types';
-import { apiInstance } from '@shared/api/base';
+import { useApi, ApiError } from "@shared/api/hooks/useApi";
+import type { INaverLocalApiResponse, ICafeDescription } from '@shared/api/cafe/types';
 import { dummyCafes } from './mockData';
 import { CafeMapper } from '@shared/api/cafe/mapper/cafeMapper';
 
 const isDevelopment = import.meta.env.DEV;
 
-export const searchCafes = async (name: string): Promise<ICafeDescription[]> => {
-  try {
-    const response = await apiInstance.get<{ items: INaverLocalApiResponse[] }>('/api/cafes/search', {
-      params: { name }
-    });
-    
-    if (response.items && response.items.length > 0) {
-      return response.items.map((item, index) => ({
-        ...CafeMapper.toICafeDescription(item),
-        id: index + 1
-      }));
+interface SearchResponse {
+  items: INaverLocalApiResponse[]
+}
+
+export interface CafeSearchHook {
+  cafes: ICafeDescription[]
+  isLoading: boolean
+  error: ApiError | null
+  searchByName: (name: string | null) => Promise<ICafeDescription[]>
+}
+
+export const useCafeSearch = (): CafeSearchHook => {
+  const { 
+    data, 
+    isLoading, 
+    error, 
+    get 
+  } = useApi<ICafeDescription[]>();
+
+  const searchByName = async (name: string | null) => {
+    if (!name) {
+      return [];
     }
-    return [];
-  } catch (error) {
-    console.error('카페 검색 중 오류 발생:', error);
-    if (isDevelopment) {
-      return dummyCafes;
+
+    try {
+      const response = await get<SearchResponse>(
+        '/api/cafes/search',
+        {
+          params: { name }
+        }
+      );
+
+      if (response?.items) {
+        return response.items.map((item, index) => ({
+          ...CafeMapper.toICafeDescription(item),
+          id: index + 1
+        }));
+      }
+
+      return [];
+    } catch (error) {
+      console.error('카페 검색 중 오류 발생:', error);
+      if (isDevelopment) {
+        return dummyCafes;
+      }
+      throw error;
     }
-    throw error;
-  }
+  };
+
+  return {
+    cafes: data || [],
+    isLoading,
+    error,
+    searchByName
+  };
 };

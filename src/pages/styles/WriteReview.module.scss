@@ -9,19 +9,19 @@ $spacing: 32px;
   padding-bottom: calc(#{$bottom-nav-height} + #{$button-height} + #{$spacing});
   position: relative;
   z-index: 1;
-}
 
-.visitDateLabel {
-  color: #121212;
-}
+  .visitDateLabel {
+    color: #121212;
+  }
 
-.tagContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding: 16px;
-  background-color: #F9F8F6;
-  border-radius: 8px;
+  .tagContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+    background-color: #F9F8F6;
+    border-radius: 8px;
+  }
 }
 
 .tagSection {

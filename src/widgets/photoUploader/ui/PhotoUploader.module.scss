@@ -62,7 +62,6 @@ $transition-fast: 0.2s ease;
   display: grid;
   grid-template-columns: repeat(auto-fill, 60px); // Fix the column width
   gap: $spacing-xs;
-  padding: $spacing-md 0;
   justify-content: start; // Align items to the start
   grid-auto-flow: dense;
 }

@@ -1,15 +1,17 @@
 import React, { useRef } from "react";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, ImagePlus } from "lucide-react";
 import styles from "./UploadButton.module.scss";
 
 interface UploadButtonProps {
   onFileSelect: (files: FileList) => void;
   disabled?: boolean;
+  hasImages?: boolean;
 }
 
 export const UploadButton: React.FC<UploadButtonProps> = ({
   onFileSelect,
   disabled,
+  hasImages = false,
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -25,7 +27,11 @@ export const UploadButton: React.FC<UploadButtonProps> = ({
         className={styles.uploadButton}
         aria-label="이미지 업로드"
       >
-        <PlusCircle className={styles.uploadIcon} />
+        {hasImages ? (
+          <ImagePlus className={styles.uploadIcon} />
+        ) : (
+          <PlusCircle className={styles.uploadIcon} />
+        )}
       </button>
       <label htmlFor="photoUpload" className={styles.fileInput}>
         <input

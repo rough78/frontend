@@ -36,7 +36,10 @@ export const PhotoUploader: React.FC = () => {
     <div className={styles.container}>
       <div className={styles.imageGrid}>
         {images.length < config.maxCount && (
-          <UploadButton onFileSelect={handleFileSelect} />
+          <UploadButton 
+            onFileSelect={handleFileSelect} 
+            hasImages={images.length > 0}
+          />
         )}
         {images.map((image) => (
           <PhotoThumbnail

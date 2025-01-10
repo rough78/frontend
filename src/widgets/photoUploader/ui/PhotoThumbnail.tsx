@@ -13,19 +13,20 @@ export const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
   onDelete,
 }) => {
   return (
-    <div className={styles.thumbnailContainer}>
+    <div 
+      className={styles.thumbnailContainer}
+      onClick={() => onDelete(image.id)}
+      role="button"
+      tabIndex={0}
+    >
       <img
         src={image.previewUrl}
         alt="업로드된 이미지"
         className={styles.image}
       />
-      <button
-        onClick={() => onDelete(image.id)}
-        className={styles.deleteButton}
-        aria-label="이미지 삭제"
-      >
+      <div className={styles.deleteButton} aria-hidden="true">
         <TrashIcon />
-      </button>
+      </div>
     </div>
   );
 };

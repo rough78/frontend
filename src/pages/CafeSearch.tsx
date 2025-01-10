@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { CafeList } from "@widgets/cafeList";
 import { SearchBar } from "@features/search/ui/SearchBar";
-import { searchCafes } from "@shared/api/cafe/cafeSearch";
+import { useCafeSearch } from "@shared/api/cafe/cafeSearch";
 import { useReviewDraftStore } from "@shared/store/useReviewDraftStore";
 import { useNavigationStore } from "@shared/store/useNavigationStore";
 import type { ICafeDescription } from "@shared/api/cafe/types";
@@ -10,20 +10,18 @@ import styles from "./styles/CafeSearch.module.scss";
 
 const CafeSearch = () => {
   const [searchParams] = useSearchParams();
-  const [cafes, setCafes] = useState<ICafeDescription[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
   const navigate = useNavigate();
   const { updateDraft } = useReviewDraftStore();
   const { returnPath, setReturnPath, isFromFooter, setIsFromFooter } = useNavigationStore();
+  const { searchByName, isLoading, error } = useCafeSearch();
+  const [cafes, setCafes] = useState<ICafeDescription[]>([]);
 
   const handleCafeSelect = (cafe: ICafeDescription) => {
     if (isFromFooter) {
-      setIsFromFooter(false); // cleanup
+      setIsFromFooter(false);
       navigate(`/cafe/${cafe.id}`);
     } else {
-      setReturnPath(returnPath || "/"); // 이전 경로가 없으면 홈으로
+      setReturnPath(returnPath || "/");
       updateDraft({ 
         cafe: {
           id: cafe.id,
@@ -40,26 +38,10 @@ const CafeSearch = () => {
     }
   };
 
-  const fetchCafes = async () => {
-    const name = searchParams.get('name');
-    if (!name) return;
-        
-    setIsLoading(true);
-    setError(null);
-    try {
-      const result = await searchCafes(name);
-      setCafes(result);
-      console.log('Cafes:', result);
-    } catch (err) {
-      setError('카페 검색 중 오류가 발생했습니다.');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchCafes();
-  }, [searchParams]);
+    const name = searchParams.get('name');
+    searchByName(name).then(setCafes);
+  }, [searchParams]); // searchByName 의존성 제거
 
   return (
     <div className={styles.searchPage}>
@@ -71,7 +53,7 @@ const CafeSearch = () => {
         </div>
       ) : error ? (
         <div className={styles.errorContainer}>
-          <p>{error}</p>
+          <p>카페 검색 중 오류가 발생했습니다.</p>
         </div>
       ) : cafes.length === 0 ? (
         <div className={styles.noResults}>

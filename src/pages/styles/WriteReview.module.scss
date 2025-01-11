@@ -19,7 +19,7 @@ $spacing: 32px;
     flex-direction: column;
     gap: 16px;
     padding: 16px;
-    background-color: #F9F8F6;
+    // background-color: #F9F8F6;
     border-radius: 8px;
   }
 }
@@ -69,6 +69,15 @@ $spacing: 32px;
   &:focus {
     outline: none;
   }
+}
+
+.photoCount {
+  color: var.$semantic-text-icon-secondary;
+  font-size: 12px;
+  font-weight: 140;
+  display: flex;
+  justify-content: flex-end;
+  margin: 4px 0;
 }
 
 .buttonOverlay {

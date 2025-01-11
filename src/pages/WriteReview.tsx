@@ -3,6 +3,7 @@ import { useNavigationStore } from '@shared/store/useNavigationStore';
 import { StarRating } from "@widgets/starRating";
 import { DatePicker } from "@widgets/datePicker";
 import { useReviewDraftStore } from "@shared/store/useReviewDraftStore";
+import { usePhotoUploaderStore } from '@shared/store/usePhotoUploaderStore';
 import { useEffect } from "react";
 import { Tag } from "@shared/ui/tag";
 import CafeListItem from "@entities/cafeListItem/CafeListItem";
@@ -11,6 +12,7 @@ import { Textarea } from "@shared/ui/textarea";
 import styles from "./styles/WriteReview.module.scss";
 import { useApi } from '@shared/api/hooks/useApi';
 import { ReviewRequest, ReviewResponse } from '@shared/api/reviews/types';
+import { PhotoUploader } from "@widgets/photoUploader";
 
 const TAGS = {
   menu: [
@@ -45,6 +47,7 @@ const WriteReview = () => {
   const navigate = useNavigate();
   const returnPath = useNavigationStore((state) => state.returnPath);
   const { draft, updateDraft, clearDraft } = useReviewDraftStore();
+  const { images, config } = usePhotoUploaderStore();
   const { post, isLoading } = useApi<ReviewResponse>();
 
   useEffect(() => {
@@ -196,7 +199,21 @@ const WriteReview = () => {
           className={styles.reviewTextarea}
         />
       </InputWrapper>
-      
+
+      <InputWrapper
+        label={
+          <div className={styles.reviewLabelContainer}>
+            <span>사진 첨부</span>
+            <span className={styles.photoCount}>
+              {images.length} / {config.maxCount}장
+            </span>
+          </div>
+        }
+        className={styles.visitDateLabel}
+      >
+        <PhotoUploader />
+      </InputWrapper>
+
       <div className={styles.buttonOverlay} />
       <button 
         className={styles.submitButton}

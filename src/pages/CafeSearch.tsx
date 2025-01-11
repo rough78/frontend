@@ -16,11 +16,18 @@ const CafeSearch = () => {
   const { searchByName, isLoading, error } = useCafeSearch();
   const [cafes, setCafes] = useState<ICafeDescription[]>([]);
 
+  useEffect(() => {
+    return () => {
+      setIsFromFooter(false);
+    };
+  }, []);
+
   const handleCafeSelect = (cafe: ICafeDescription) => {
     if (isFromFooter) {
       setIsFromFooter(false);
       navigate(`/cafe/${cafe.id}`);
     } else {
+      setIsFromFooter(false);
       setReturnPath(returnPath || "/");
       updateDraft({ 
         cafe: {

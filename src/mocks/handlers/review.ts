@@ -1,25 +1,36 @@
 import { http, HttpResponse } from "msw";
-import type { ReviewRequest, ReviewResponse } from "@shared/api/reviews/types";
+import { IndexedDBReviewStorage } from "../storage/ReviewStorage";
+import type { ReviewRequest } from "@shared/api/reviews/types";
+
+const reviewStorage = new IndexedDBReviewStorage();
 
 export const reviewHandlers = [
   http.post('/api/reviews', async ({ request }) => {
-    const reviewRequest = await request.json() as ReviewRequest;
-
-    // 새 리뷰 응답 생성
-    const reviewResponse: ReviewResponse = {
-      id: Math.floor(Math.random() * 10000), // 임의의 ID 생성
-      content: reviewRequest.content,
-      rating: reviewRequest.rating,
-      visitDate: reviewRequest.visitDate,
-      cafeId: reviewRequest.cafeId
-    };
-
-    return HttpResponse.json(reviewResponse, {
-      status: 201,
-      headers: {
-        'Access-Control-Allow-Origin': 'https://localhost:5173',
-        'Access-Control-Allow-Credentials': 'true'
+    try {
+      const reviewRequest = await request.json() as ReviewRequest;
+      
+      if (!reviewRequest.cafeId || !reviewRequest.rating || !reviewRequest.visitDate) {
+        return new HttpResponse(null, { 
+          status: 400,
+          statusText: 'Bad Request: Missing required fields' 
+        });
       }
-    });
+
+      const response = await reviewStorage.save(reviewRequest);
+      return HttpResponse.json(response, { status: 201 });
+
+    } catch (error) {
+      console.error('Review creation failed:', error);
+      return new HttpResponse(null, { status: 500 });
+    }
+  }),
+
+  http.get('/api/reviews/cafe/:cafeId', async ({ params }) => {
+    try {
+      const reviews = await reviewStorage.findByCafeId(Number(params.cafeId));
+      return HttpResponse.json(reviews);
+    } catch (error) {
+      return new HttpResponse(null, { status: 500 });
+    }
   })
 ];

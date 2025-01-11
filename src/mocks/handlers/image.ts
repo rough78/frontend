@@ -1,4 +1,4 @@
-import { http, HttpResponse } from "msw";
+import { http, HttpResponse, delay } from "msw";
 
 // Store uploaded images in memory
 const imageStorage = new Map<string, File>();
@@ -14,6 +14,8 @@ export const imageHandlers = [
 
     // Store the file
     imageStorage.set(imageId, file);
+
+    await delay(1000);
 
     return HttpResponse.json(
       { imageId }, 

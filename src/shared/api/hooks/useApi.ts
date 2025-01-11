@@ -111,10 +111,22 @@ export function useApi<T>(initialState?: T) {
     return request<R>('post', endpoint, { ...config, data }, apiOptions)
   }, [request])
 
+  const remove = useCallback(<R = T>(
+    endpoint: string,
+    config?: {
+      params?: unknown
+      headers?: Record<string, string>
+    } & Omit<AxiosRequestConfig, 'data' | 'params' | 'headers' | 'method'>,
+    apiOptions?: UseApiOptions<R>
+  ) => {
+    return request<R>('delete', endpoint, config, apiOptions)
+  }, [request])
+
   return {
     ...state,
     request,
     get,
     post,
+    remove
   }
 }

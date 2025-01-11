@@ -15,6 +15,7 @@ export interface PhotoUploaderStore {
   removeImage: (id: string) => Promise<void>;
   setConfig: (config: Partial<PhotoUploaderConfig>) => void;
   cleanup: () => void;
+  loadInitialImages: (imageIds: string[]) => void; // New method
 }
 
 export function createPhotoUploaderStore({
@@ -97,6 +98,16 @@ export function createPhotoUploaderStore({
         }
       });
       set({ images: [] });
+    },
+
+    loadInitialImages: (imageIds: string[]) => {
+      const initialImages = imageIds.map(id => ({
+        id,
+        previewUrl: getUrl(id),
+        uploadedUrl: getUrl(id),
+        file: null as any,
+      }));
+      set({ images: initialImages });
     },
   }));
 }

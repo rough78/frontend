@@ -212,6 +212,7 @@ const WriteReview = () => {
         className={styles.visitDateLabel}
       >
         <PhotoUploader 
+          initialImageIds={draft.imageIds}
           onImageUploaded={(imageId: string) => {
             updateDraft({
               imageIds: [...(draft.imageIds || []), imageId]

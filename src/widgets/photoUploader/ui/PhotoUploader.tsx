@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { usePhotoUploaderStore } from "@shared/store/usePhotoUploaderStore";
 import { PhotoThumbnail } from "./PhotoThumbnail";
 import { UploadButton } from "./UploadButton";
@@ -7,33 +7,43 @@ import styles from "./PhotoUploader.module.scss";
 interface PhotoUploaderProps {
   onImageUploaded?: (imageId: string) => void;
   onImageRemoved?: (imageId: string) => void;
+  initialImageIds?: string[];
 }
 
 export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
   onImageUploaded,
-  onImageRemoved
+  onImageRemoved,
+  initialImageIds = [],
 }) => {
-  const { images, config, addImages, removeImage, cleanup } = usePhotoUploaderStore();
+  const { images, config, addImages, removeImage, cleanup, loadInitialImages } =
+    usePhotoUploaderStore();
 
+  useEffect(() => {
+    if (initialImageIds.length > 0) {
+      loadInitialImages(initialImageIds);
+    }
+  }, [initialImageIds, loadInitialImages]);
+
+  // 컴포넌트 언마운트 시 cleanup
   React.useEffect(() => {
     return () => {
       cleanup();
     };
   }, [cleanup]);
 
-const handleFileSelect = async (files: FileList) => {
-  const { error, newImages } = await addImages(Array.from(files));
+  const handleFileSelect = async (files: FileList) => {
+    const { error, newImages } = await addImages(Array.from(files));
 
-  if (error) {
-    alert(error);
-  } else {
-    // 새로 추가된 이미지를 기준으로 콜백 호출
-    // 필요하다면 여러 장을 업로드했을 때 여러 장을 모두 콜백으로 보낼 수도 있음
-    for (const image of newImages) {
-      onImageUploaded?.(image.id);
+    if (error) {
+      alert(error);
+    } else {
+      // 새로 추가된 이미지를 기준으로 콜백 호출
+      // 필요하다면 여러 장을 업로드했을 때 여러 장을 모두 콜백으로 보낼 수도 있음
+      for (const image of newImages) {
+        onImageUploaded?.(image.id);
+      }
     }
-  }
-};
+  };
 
   const handleDeleteImage = async (id: string) => {
     if (!confirm("이미지를 삭제하시겠습니까?")) return;
@@ -51,8 +61,8 @@ const handleFileSelect = async (files: FileList) => {
     <div className={styles.container}>
       <div className={styles.imageGrid}>
         {images.length < config.maxCount && (
-          <UploadButton 
-            onFileSelect={handleFileSelect} 
+          <UploadButton
+            onFileSelect={handleFileSelect}
             hasImages={images.length > 0}
           />
         )}

@@ -11,4 +11,10 @@ body {
   ul {
     list-style: none;
   }
+
+  input {
+    &:focus {
+      outline: none; // 기본 포커스 아웃라인 제거
+    }
+  }
 }

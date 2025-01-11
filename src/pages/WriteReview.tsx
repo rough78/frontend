@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
-import { useNavigationStore } from '@shared/store/useNavigationStore';
+import { useNavigate } from "react-router-dom";
+import { useNavigationStore } from "@shared/store/useNavigationStore";
 import { StarRating } from "@widgets/starRating";
 import { DatePicker } from "@widgets/datePicker";
 import { useReviewDraftStore } from "@shared/store/useReviewDraftStore";
@@ -21,7 +21,7 @@ const TAGS = {
     { id: 7, content: "케이크가 맛있어요" },
     { id: 8, content: "브런치 메뉴가 있어요" },
     { id: 9, content: "커피 향이 좋아요" },
-    { id: 10, content: "메뉴가 다양해요" }
+    { id: 10, content: "메뉴가 다양해요" },
   ],
   interior: [
     { id: 1, content: "작업하기 좋아요" },
@@ -35,8 +35,8 @@ const TAGS = {
     { id: 9, content: "식물이 많아요" },
     { id: 10, content: "채광이 좋아요" },
     { id: 11, content: "조용해요" },
-    { id: 12, content: "음악이 좋아요" }
-  ]
+    { id: 12, content: "음악이 좋아요" },
+  ],
 };
 
 const WriteReview = () => {
@@ -60,7 +60,7 @@ const WriteReview = () => {
     if (returnPath) {
       navigate(returnPath, { replace: true });
     } else {
-      navigate('/', { replace: true });
+      navigate("/", { replace: true });
     }
   };
 
@@ -160,9 +160,9 @@ const WriteReview = () => {
           className={styles.reviewTextarea}
         />
       </InputWrapper>
-      
+
       <div className={styles.buttonOverlay} />
-      <button 
+      <button
         className={styles.submitButton}
         onClick={handleSubmit}
         disabled={!draft.visitDate || !draft.rating}

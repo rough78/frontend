@@ -1,5 +1,5 @@
 import React from "react";
-import { TrashIcon } from "lucide-react";
+import DeleteIcon from "@shared/assets/images/photo-uploader/delete.svg";
 import { UploadedImage } from "../types";
 import styles from "./PhotoThumbnail.module.scss";
 
@@ -13,7 +13,7 @@ export const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
   onDelete,
 }) => {
   return (
-    <div 
+    <div
       className={styles.thumbnailContainer}
       onClick={() => onDelete(image.id)}
       role="button"
@@ -25,7 +25,7 @@ export const PhotoThumbnail: React.FC<PhotoThumbnailProps> = ({
         className={styles.image}
       />
       <div className={styles.deleteButton} aria-hidden="true">
-        <TrashIcon />
+        <img src={DeleteIcon} alt="" />
       </div>
     </div>
   );

@@ -50,10 +50,10 @@ export const PhotoUploader: React.FC = () => {
         ))}
       </div>
 
-      <p className={styles.guideText}>
+      {/* <p className={styles.guideText}>
         * JPG, PNG 파일만 업로드 가능합니다. (최대{" "}
         {config.maxSize / 1024 / 1024}MB)
-      </p>
+      </p> */}
     </div>
   );
 };

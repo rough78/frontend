@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
-import { PlusCircle, ImagePlus } from "lucide-react";
+import AddIcon from "@shared/assets/images/photo-uploader/add.svg";
+import CameraIcon from "@shared/assets/images/photo-uploader/camera.svg";
 import styles from "./UploadButton.module.scss";
 
 interface UploadButtonProps {
@@ -28,9 +29,9 @@ export const UploadButton: React.FC<UploadButtonProps> = ({
         aria-label="이미지 업로드"
       >
         {hasImages ? (
-          <ImagePlus className={styles.uploadIcon} />
+          <img src={AddIcon} alt="" className={styles.uploadIcon} />
         ) : (
-          <PlusCircle className={styles.uploadIcon} />
+          <img src={CameraIcon} alt="" className={styles.uploadIcon} />
         )}
       </button>
       <label htmlFor="photoUpload" className={styles.fileInput}>

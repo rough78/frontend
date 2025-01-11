@@ -3,10 +3,15 @@ import { UploadedImage, PhotoUploaderConfig } from "@widgets/photoUploader/types
 import { DEFAULT_CONFIG } from "@widgets/photoUploader/lib/constants";
 import { validateFile } from "@widgets/photoUploader/lib/validation";
 
+interface AddImagesResult {
+  error: string | null;
+  newImages: UploadedImage[];
+}
+
 export interface PhotoUploaderStore {
   images: UploadedImage[];
   config: PhotoUploaderConfig;
-  addImages: (files: File[]) => Promise<string | null>;
+  addImages: (files: File[]) => Promise<AddImagesResult>;
   removeImage: (id: string) => Promise<void>;
   setConfig: (config: Partial<PhotoUploaderConfig>) => void;
   cleanup: () => void;
@@ -25,15 +30,24 @@ export function createPhotoUploaderStore({
     images: [],
     config: DEFAULT_CONFIG,
 
-    addImages: async (files) => {
+    addImages: async (files: File[]): Promise<AddImagesResult> => {
       const { images, config } = get();
+
+      // 1) 파일 수 체크
       if (images.length + files.length > config.maxCount) {
-        return `최대 ${config.maxCount}장까지만 업로드 가능합니다.`;
+        return {
+          error: `최대 ${config.maxCount}장까지만 업로드 가능합니다.`,
+          newImages: [],
+        };
       }
+
+      // 2) 파일 Validation
       for (const file of files) {
         const error = validateFile(file, config);
-        if (error) return error;
+        if (error) return { error, newImages: [] };
       }
+
+      // 3) 실제 업로드
       const newImages = await Promise.all(
         files.map(async (file) => {
           const imageId = await upload(file);
@@ -45,8 +59,12 @@ export function createPhotoUploaderStore({
           };
         })
       );
+
+      // 4) zustand 상태 업데이트
       set({ images: [...images, ...newImages] });
-      return null;
+
+      // 5) 새로 생성된 이미지 정보(들)을 함께 반환
+      return { error: null, newImages };
     },
 
     removeImage: async (id) => {

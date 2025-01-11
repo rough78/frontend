@@ -4,9 +4,16 @@ import { PhotoThumbnail } from "./PhotoThumbnail";
 import { UploadButton } from "./UploadButton";
 import styles from "./PhotoUploader.module.scss";
 
-export const PhotoUploader: React.FC = () => {
-  const { images, config, addImages, removeImage, cleanup } =
-    usePhotoUploaderStore();
+interface PhotoUploaderProps {
+  onImageUploaded?: (imageId: string) => void;
+  onImageRemoved?: (imageId: string) => void;
+}
+
+export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
+  onImageUploaded,
+  onImageRemoved
+}) => {
+  const { images, config, addImages, removeImage, cleanup } = usePhotoUploaderStore();
 
   React.useEffect(() => {
     return () => {
@@ -14,18 +21,26 @@ export const PhotoUploader: React.FC = () => {
     };
   }, [cleanup]);
 
-  const handleFileSelect = async (files: FileList) => {
-    const error = await addImages(Array.from(files));
-    if (error) {
-      alert(error);
+const handleFileSelect = async (files: FileList) => {
+  const { error, newImages } = await addImages(Array.from(files));
+
+  if (error) {
+    alert(error);
+  } else {
+    // 새로 추가된 이미지를 기준으로 콜백 호출
+    // 필요하다면 여러 장을 업로드했을 때 여러 장을 모두 콜백으로 보낼 수도 있음
+    for (const image of newImages) {
+      onImageUploaded?.(image.id);
     }
-  };
+  }
+};
 
   const handleDeleteImage = async (id: string) => {
     if (!confirm("이미지를 삭제하시겠습니까?")) return;
 
     try {
       await removeImage(id);
+      onImageRemoved?.(id);
     } catch (error) {
       alert("이미지 삭제에 실패했습니다.");
       console.error("Delete error:", error);

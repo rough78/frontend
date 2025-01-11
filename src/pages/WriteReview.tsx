@@ -211,7 +211,18 @@ const WriteReview = () => {
         }
         className={styles.visitDateLabel}
       >
-        <PhotoUploader />
+        <PhotoUploader 
+          onImageUploaded={(imageId: string) => {
+            updateDraft({
+              imageIds: [...(draft.imageIds || []), imageId]
+            });
+          }}
+          onImageRemoved={(imageId: string) => {
+            updateDraft({
+              imageIds: draft.imageIds?.filter(id => id !== imageId) || []
+            });
+          }}
+        />
       </InputWrapper>
 
       <div className={styles.buttonOverlay} />

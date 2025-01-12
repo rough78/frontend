@@ -1,7 +1,11 @@
 import { create } from "zustand";
-import { UploadedImage, PhotoUploaderConfig } from "@widgets/photoUploader/types";
+import {
+  UploadedImage,
+  PhotoUploaderConfig,
+} from "@widgets/photoUploader/types";
 import { DEFAULT_CONFIG } from "@widgets/photoUploader/lib/constants";
 import { validateFile } from "@widgets/photoUploader/lib/validation";
+import { resizeImage } from "@widgets/photoUploader/lib/imageProcessing";
 
 interface AddImagesResult {
   error: string | null;
@@ -34,7 +38,7 @@ export function createPhotoUploaderStore({
     addImages: async (files: File[]): Promise<AddImagesResult> => {
       const { images, config } = get();
 
-      // 1) 파일 수 체크
+      // 파일 수 체크
       if (images.length + files.length > config.maxCount) {
         return {
           error: `최대 ${config.maxCount}장까지만 업로드 가능합니다.`,
@@ -42,30 +46,46 @@ export function createPhotoUploaderStore({
         };
       }
 
-      // 2) 파일 Validation
-      for (const file of files) {
-        const error = validateFile(file, config);
-        if (error) return { error, newImages: [] };
+      // 파일 Validation & 리사이징
+      try {
+        const processedFiles = await Promise.all(
+          files.map(async (file) => {
+            const error = validateFile(file, config);
+            if (error) throw new Error(error);
+
+            // 이미지 리사이징 및 압축
+            const resized = await resizeImage(
+              file,
+              config.maxDimension,
+              config.quality
+            );
+            return new File([resized], file.name, {
+              type: "image/jpeg",
+            });
+          })
+        );
+
+        // 업로드 처리
+        const newImages = await Promise.all(
+          processedFiles.map(async (file) => {
+            const imageId = await upload(file);
+            return {
+              id: imageId,
+              file,
+              previewUrl: URL.createObjectURL(file),
+              uploadedUrl: getUrl(imageId),
+            };
+          })
+        );
+
+        set({ images: [...images, ...newImages] });
+        return { error: null, newImages };
+      } catch (error) {
+        return {
+          error: error instanceof Error ? error.message : "업로드 실패",
+          newImages: [],
+        };
       }
-
-      // 3) 실제 업로드
-      const newImages = await Promise.all(
-        files.map(async (file) => {
-          const imageId = await upload(file);
-          return {
-            id: imageId,
-            file,
-            previewUrl: URL.createObjectURL(file),
-            uploadedUrl: getUrl(imageId),
-          };
-        })
-      );
-
-      // 4) zustand 상태 업데이트
-      set({ images: [...images, ...newImages] });
-
-      // 5) 새로 생성된 이미지 정보(들)을 함께 반환
-      return { error: null, newImages };
     },
 
     removeImage: async (id) => {
@@ -101,7 +121,7 @@ export function createPhotoUploaderStore({
     },
 
     loadInitialImages: (imageIds: string[]) => {
-      const initialImages = imageIds.map(id => ({
+      const initialImages = imageIds.map((id) => ({
         id,
         previewUrl: getUrl(id),
         uploadedUrl: getUrl(id),

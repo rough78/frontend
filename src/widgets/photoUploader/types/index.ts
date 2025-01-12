@@ -8,5 +8,7 @@ export interface UploadedImage {
 export interface PhotoUploaderConfig {
   maxCount: number;
   maxSize: number;
+  maxDimension: number;
+  quality: number;
   allowedTypes: string[];
 }

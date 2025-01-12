@@ -1,39 +1,25 @@
 import { http, HttpResponse, delay } from "msw";
+import { IndexedDBImageStorage } from "../storage/ImageStorage";
 
-// Store uploaded images in memory
-const imageStorage = new Map<string, File>();
+const imageStorage = new IndexedDBImageStorage();
 
 export const imageHandlers = [
-  // 이미지 업로드 핸들러
   http.post("/api/images/", async ({ request }) => {
     const formData = await request.formData();
     const file = formData.get("file") as File;
-    
-    // 임의의 이미지 ID 생성
     const imageId = `image_${Math.random().toString(36).substring(2)}`;
 
-    // Store the file
-    imageStorage.set(imageId, file);
-
     await delay(1000);
+    
+    await imageStorage.save(imageId, file);
 
-    return HttpResponse.json(
-      { imageId }, 
-      {
-        status: 201,
-        headers: {
-          "Access-Control-Allow-Origin": "https://localhost:5173",
-          "Access-Control-Allow-Credentials": "true"
-        }
-      }
-    );
+    return HttpResponse.json({ imageId }, { status: 201 });
   }),
 
   http.get("/api/images/:imageId", async ({ params }) => {
-    const { imageId } = params;
-    const storedImage = imageStorage.get(imageId as string);
-
-    if (!storedImage) {
+    const file = await imageStorage.find(params.imageId as string);
+    
+    if (!file) {
       // Create a default 100x100 pink placeholder image
       const canvas = new OffscreenCanvas(100, 100);
       const ctx = canvas.getContext('2d');
@@ -54,28 +40,17 @@ export const imageHandlers = [
       });
     }
 
-    return new HttpResponse(storedImage, {
+    return new HttpResponse(file, {
       status: 200,
       headers: {
-        'Content-Type': storedImage.type,
+        'Content-Type': file.type,
         'Cache-Control': 'public, max-age=31536000'
       }
     });
   }),
 
-  // 이미지 삭제 핸들러
-  http.delete("/api/images/review/:imageId", ({ params }) => {
-    const { imageId } = params;
-    imageStorage.delete(imageId as string);
-    return HttpResponse.json(
-      { success: true },
-      {
-        status: 200,
-        headers: {
-          "Access-Control-Allow-Origin": "https://localhost:5173",
-          "Access-Control-Allow-Credentials": "true"
-        }
-      }
-    );
+  http.delete("/api/images/review/:imageId", async ({ params }) => {
+    await imageStorage.delete(params.imageId as string);
+    return HttpResponse.json({ success: true }, { status: 200 });
   })
 ];

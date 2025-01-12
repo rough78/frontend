@@ -20,7 +20,7 @@ export const imageHandlers = [
     const file = await imageStorage.find(params.imageId as string);
     
     if (!file) {
-      // Create a default 100x100 pink placeholder image
+      // 이미지 불러오기에 실패했을 경우
       const canvas = new OffscreenCanvas(100, 100);
       const ctx = canvas.getContext('2d');
       if (ctx) {

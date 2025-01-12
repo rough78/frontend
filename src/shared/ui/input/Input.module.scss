@@ -1,4 +1,4 @@
-@use '@app/styles/abstracts/variables' as var;
+@use "@app/styles/abstracts/variables" as var;
 
 .inputContainer {
   width: 100%;
@@ -38,7 +38,7 @@
   padding: 8px;
   padding-left: 32px;
   border-radius: 8px;
-  background-color: #F9F8F6;
+  background-color: #f9f8f6;
   color: #374151;
   outline: none;
   border: none;
@@ -48,6 +48,6 @@
   }
 
   &::placeholder {
-    color: #9CA3AF;
+    color: #9ca3af;
   }
-} 
+}

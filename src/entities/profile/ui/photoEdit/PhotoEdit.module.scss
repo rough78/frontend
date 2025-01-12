@@ -1,0 +1,24 @@
+@use "/src/app/styles/abstracts/mixins";
+@use "/src/app/styles/abstracts/variables" as var;
+
+.photoEditWrap {
+  height: 176px;
+  background-color: var.$primitive-gray-gray50;
+
+  display: flex;
+  justify-content: center;
+  // align-items: center;
+  .photoEditBox {
+    margin: 12px 0 0;
+    height: 132px;
+    position: relative;
+    .photoEditBox__profile {
+      width: 132px;
+    }
+    .photoEditBox__profile--edit {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+  }
+}

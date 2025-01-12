@@ -8,12 +8,12 @@ const MyPage = () => {
 
   useEffect(() => {
     const handleScroll = throttle(() => {
-      if (window.scrollY > 60) {
+      if (window.scrollY > 50) {
         setIsScrolled(true);
       } else {
         setIsScrolled(false);
       }
-    }, 100);
+    }, 250);
     window.addEventListener("scroll", handleScroll);
 
     return () => {

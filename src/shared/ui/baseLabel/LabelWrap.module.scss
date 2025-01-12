@@ -1,0 +1,21 @@
+@use "/src/app/styles/abstracts/mixins";
+@use "/src/app/styles/abstracts/variables" as var;
+
+.labelWrap {
+  display: flex;
+  justify-content: space-between;
+  label {
+    @include mixins.apply-text-style(b1_bold);
+  }
+  .label__right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    @include mixins.apply-text-style(b2_regular);
+    color: var.$semantic-text-icon-secondary;
+    .label__right--current {
+      color: var.$semantic-text-icon-primary;
+    }
+  }
+}

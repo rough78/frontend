@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
-import { useNavigationStore } from '@shared/store/useNavigationStore';
+import { useNavigate } from "react-router-dom";
+import { useNavigationStore } from "@shared/store/useNavigationStore";
 import { StarRating } from "@widgets/starRating";
 import { DatePicker } from "@widgets/datePicker";
 import { useReviewDraftStore } from "@shared/store/useReviewDraftStore";
@@ -221,7 +221,7 @@ const WriteReview = () => {
       </InputWrapper>
 
       <div className={styles.buttonOverlay} />
-      <button 
+      <button
         className={styles.submitButton}
         onClick={handleSubmit}
         disabled={!isValidForm() || isLoading}

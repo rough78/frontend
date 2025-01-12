@@ -1,0 +1,30 @@
+@use "/src/app/styles/abstracts/mixins";
+@use "/src/app/styles/abstracts/variables" as var;
+
+.profileBtnWrap {
+  width: 100%;
+  padding: 0 16px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  position: absolute;
+  bottom: 24px;
+
+  .profileBtn--logout {
+    height: 56px;
+    border-radius: var.$radius-radius-lg;
+
+    background-color: var.$primitive-gray-gray100;
+    color: var.$semantic-text-icon-secondary;
+    @include mixins.apply-text-style(b1_regular);
+  }
+
+  .profileBtn--delete {
+    background-color: transparent;
+    color: var.$primitive-gray-gray400;
+    @include mixins.apply-text-style(b2_regular);
+    text-decoration: underline;
+  }
+}

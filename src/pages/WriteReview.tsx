@@ -10,7 +10,7 @@ import CafeListItem from "@entities/cafeListItem/CafeListItem";
 import { InputWrapper } from "@shared/ui/input/Input";
 import { Textarea } from "@shared/ui/textarea";
 import styles from "./styles/WriteReview.module.scss";
-import { useApi } from '@shared/api/hooks/useApi';
+import { useReviewApi } from '@shared/api/reviews/reviewApi';
 import { ReviewRequest, ReviewResponse } from '@shared/api/reviews/types';
 import { PhotoUploader } from "@widgets/photoUploader";
 
@@ -48,7 +48,7 @@ const WriteReview = () => {
   const returnPath = useNavigationStore((state) => state.returnPath);
   const { draft, updateDraft, clearDraft } = useReviewDraftStore();
   const { images, config } = usePhotoUploaderStore();
-  const { post, isLoading } = useApi<ReviewResponse>();
+  const { createReview, isLoading } = useReviewApi();
 
   useEffect(() => {
     if (!localStorage.getItem("review-draft")) {
@@ -62,26 +62,20 @@ const WriteReview = () => {
   }, [clearDraft]);
 
   const handleSubmit = async () => {
-    try {
-      const request: ReviewRequest = {
-        cafeId: draft.cafe!.id,
-        rating: draft.rating,
-        visitDate: draft.visitDate,
-        content: draft.content || '',
-        imageIds: [], 
-        tags: {
-          menu: draft.tags.menu.map(tagId => ({
-            id: tagId,
-            description: TAGS.menu.find(t => t.id === tagId)?.description ?? ''
-          })),
-          interior: draft.tags.interior.map(tagId => ({
-            id: tagId,
-            description: TAGS.interior.find(t => t.id === tagId)?.description ?? ''
-          }))
-        }
-      };
+    const request: ReviewRequest = {
+      cafeId: draft.cafe!.id,
+      rating: draft.rating,
+      visitDate: draft.visitDate,
+      content: draft.content || '',
+      imageIds: draft.imageIds || [], 
+      tags: {
+        menu: draft.tags.menu.map(tagId => ({ id: tagId })),
+        interior: draft.tags.interior.map(tagId => ({ id: tagId }))
+      }
+    };
 
-      await post('/api/reviews', request, {}, {
+    try {
+      await createReview(request, {
         onSuccess: () => {
           clearDraft();
           navigate(returnPath || '/', { replace: true });
@@ -211,7 +205,19 @@ const WriteReview = () => {
         }
         className={styles.visitDateLabel}
       >
-        <PhotoUploader />
+        <PhotoUploader 
+          initialImageIds={draft.imageIds}
+          onImageUploaded={(imageId: string) => {
+            updateDraft({
+              imageIds: [...(draft.imageIds || []), imageId]
+            });
+          }}
+          onImageRemoved={(imageId: string) => {
+            updateDraft({
+              imageIds: draft.imageIds?.filter(id => id !== imageId) || []
+            });
+          }}
+        />
       </InputWrapper>
 
       <div className={styles.buttonOverlay} />

@@ -11,9 +11,9 @@ export interface ReviewRequest {
   rating: number;
   visitDate: string;
   content: string;
-  imageIds: number[];
+  imageIds: string[];
   tags: {
-    menu: Array<{ id: number; description: string }>;
-    interior: Array<{ id: number; description: string }>;
+    menu: Array<{ id: number }>;
+    interior: Array<{ id: number }>;
   };
 }

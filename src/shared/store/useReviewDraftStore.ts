@@ -7,6 +7,7 @@ interface ReviewDraft {
   rating: number;
   visitDate: string;
   content?: string;
+  imageIds: string[];
   tags: {
     menu: number[];
     interior: number[];
@@ -24,6 +25,7 @@ const initialDraft: ReviewDraft = {
   rating: 0,
   visitDate: '',
   content: '',
+  imageIds: [],
   tags: {
     menu: [],
     interior: []
@@ -49,4 +51,4 @@ export const useReviewDraftStore = create<ReviewDraftStore>()(
       storage: createJSONStorage(() => localStorage),
     }
   )
-); 
+);

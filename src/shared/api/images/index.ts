@@ -1,8 +1,9 @@
 import { useCallback, useMemo } from "react";
 import { useApi } from "@shared/api/hooks/useApi";
+import { API_URL } from '../base';
 import type { ImageApiResponse, ImageUploadResponse, ImageDeleteResponse } from "./types";
 
-const BASE_URL = "/api/images";
+const BASE_URL = `${API_URL}/api/images`;
 
 export const useImageApi = () => {
   const { post, remove } = useApi<ImageApiResponse>();
@@ -12,7 +13,7 @@ export const useImageApi = () => {
       const formData = new FormData();
       formData.append("file", file);
       const response = await post<ImageUploadResponse>(
-        `${BASE_URL}/`, 
+        `${BASE_URL}`, 
         formData,
         {
           headers: {

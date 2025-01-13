@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "dev:remote": "vite --host --mode remote",
     "dev": "vite --host",
     "server": "tsx watch server/index.ts",
     "both": "concurrently \"npm run dev\" \"npm run server\"",

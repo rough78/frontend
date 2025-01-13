@@ -1,9 +1,6 @@
 import { useApi, ApiError } from "@shared/api/hooks/useApi";
 import type { INaverLocalApiResponse, ICafeDescription } from '@shared/api/cafe/types';
-import { dummyCafes } from './mockData';
 import { CafeMapper } from '@shared/api/cafe/mapper/cafeMapper';
-
-const isDevelopment = import.meta.env.DEV;
 
 interface SearchResponse {
   items: INaverLocalApiResponse[]
@@ -47,9 +44,6 @@ export const useCafeSearch = (): CafeSearchHook => {
       return [];
     } catch (error) {
       console.error('카페 검색 중 오류 발생:', error);
-      if (isDevelopment) {
-        return dummyCafes;
-      }
       throw error;
     }
   };

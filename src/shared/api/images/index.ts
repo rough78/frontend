@@ -13,7 +13,7 @@ export const useImageApi = () => {
       const formData = new FormData();
       formData.append("file", file);
       const response = await post<ImageUploadResponse>(
-        `${BASE_URL}/`, 
+        `${BASE_URL}`, 
         formData,
         {
           headers: {

@@ -12,7 +12,7 @@ export const useReviewApi = () => {
     }
   ) => {
     try {
-      const response = await post('/api/reviews', request, {}, {
+      const response = await post('/api/reviews/', request, {}, {
         onSuccess: options?.onSuccess,
         onError: options?.onError
       });

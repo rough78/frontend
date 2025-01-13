@@ -1,0 +1,37 @@
+@use "/src/app/styles/abstracts/mixins";
+@use "/src/app/styles/abstracts/variables" as var;
+
+.reviewMore {
+  position: absolute;
+  right: 0;
+  bottom: -80px;
+  z-index: 101;
+  box-shadow: -1px 2px 20px 0px rgba(0, 0, 0, 0.12);
+  -webkit-box-shadow: -1px 2px 20px 0px rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: -1px 2px 20px 0px rgba(0, 0, 0, 0.12);
+  border-radius: var.$radius-radius-md;
+
+  .reviewMore__btn {
+    padding: 0;
+    width: 64px;
+    height: 40px;
+
+    border-top-left-radius: var.$radius-radius-md;
+    border-top-right-radius: var.$radius-radius-md;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+
+    @include mixins.apply-text-style(b2_regular);
+    background-color: #fff;
+    color: var.$primitive-gray-gray900;
+    &--delete {
+      color: var.$primitive-system-error;
+
+      border-top: 1px solid var.$semantic-border-primary;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      border-bottom-left-radius: var.$radius-radius-md;
+      border-bottom-right-radius: var.$radius-radius-md;
+    }
+  }
+}

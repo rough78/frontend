@@ -1,13 +1,13 @@
-import { ChangeEvent } from 'react';
-import styles from './Textarea.module.scss';
-import type { TextareaProps } from '../types/types';
+import { ChangeEvent } from "react";
+import styles from "./Textarea.module.scss";
+import type { TextareaProps } from "../types/types";
 
 const Textarea = ({
   value,
   onChange,
   maxLength = 200,
   placeholder,
-  className
+  className,
 }: TextareaProps) => {
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     onChange(e.target.value);

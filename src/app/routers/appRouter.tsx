@@ -13,9 +13,12 @@ import CafeSearch from "@/pages/CafeSearch";
 import WriteReview from "@/pages/WriteReview";
 import CafeInfo from "@/pages/CafeInfo";
 import MyPage from "@/pages/MyPage";
+import MyPageEdit from "@/pages/MyPageEdit";
 import { ProtectedRoute } from "@app/routers/ProtectedRoute";
 import styles from "@app/layout/header/Header.module.scss";
 import { OAuthRedirect } from "@app/auth/OAuthRedirect";
+import Button from "@/shared/ui/button/ui/Button";
+import edit from "@shared/assets/images/profile/edit.svg";
 
 export const AppRouter = () => {
   const routes = createRoutesFromElements(
@@ -119,11 +122,43 @@ export const AppRouter = () => {
               showFooter={true}
               showBackButton={false}
               bgColor="rgb(249, 248, 246)"
+              rightElement={
+                <Button
+                  className="imgBtn"
+                  imgUrl={edit}
+                  altText="프로필 수정"
+                />
+              }
             >
               <MyPage />
             </MainLayout>
           }
           handle={{ crumb: <Link to="/mypage">마이페이지</Link> }}
+        />
+        <Route
+          path="mypage/edit"
+          element={
+            <MainLayout
+              showHeader={true}
+              showFooter={true}
+              showBackButton={true}
+              showWriteButton={false}
+              bgColor="rgb(249, 248, 246)"
+              rightElement={
+                <button
+                  className={styles.completeButton}
+                  onClick={() => {
+                    /* 이벤트 처리 */
+                  }}
+                >
+                  완료
+                </button>
+              }
+            >
+              <MyPageEdit />
+            </MainLayout>
+          }
+          handle={{ crumb: <Link to="/mypage/edit">마이페이지 수정</Link> }}
         />
       </Route>
     </Route>

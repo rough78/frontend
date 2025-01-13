@@ -2,6 +2,7 @@
   box-sizing: border-box;
   font-family: "Pretendard", sans-serif;
 }
+
 body {
   letter-spacing: -0.02em;
   p {
@@ -11,4 +12,20 @@ body {
   ul {
     list-style: none;
   }
+
+  input {
+    &:focus {
+      outline: none; // 기본 포커스 아웃라인 제거
+    }
+  }
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  width: 3px;
+  background-color: #767676;
+  border-radius: 10px;
 }

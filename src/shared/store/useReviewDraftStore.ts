@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import type { ICafeDescription } from '@shared/api/cafe/types';
 
 interface ReviewDraft {
+  id?: number;
   cafe: ICafeDescription | null;
   rating: number;
   visitDate: string;
@@ -12,6 +13,7 @@ interface ReviewDraft {
     menu: number[];
     interior: number[];
   };
+
 }
 
 interface ReviewDraftStore {
@@ -21,6 +23,7 @@ interface ReviewDraftStore {
 }
 
 const initialDraft: ReviewDraft = {
+  id: undefined,
   cafe: null,
   rating: 0,
   visitDate: '',
@@ -29,7 +32,7 @@ const initialDraft: ReviewDraft = {
   tags: {
     menu: [],
     interior: []
-  }
+  },
 };
 
 export const useReviewDraftStore = create<ReviewDraftStore>()(

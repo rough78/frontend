@@ -13,35 +13,8 @@ import styles from "./styles/WriteReview.module.scss";
 import { useReviewApi } from '@shared/api/reviews/reviewApi';
 import { ReviewRequest, ReviewResponse } from '@shared/api/reviews/types';
 import { PhotoUploader } from "@widgets/photoUploader";
-
-const TAGS = {
-  menu: [
-    { id: 1, description: "원두를 판매해요" },
-    { id: 2, description: "커피가 맛있어요" },
-    { id: 3, description: "디저트를 판매해요" },
-    { id: 4, description: "핸드드립 커피가 있어요" },
-    { id: 5, description: "매장에서 직접 로스팅 해요" },
-    { id: 6, description: "시그니처 메뉴가 있어요" },
-    { id: 7, description: "케이크가 맛있어요" },
-    { id: 8, description: "브런치 메뉴가 있어요" },
-    { id: 9, description: "커피 향이 좋아요" },
-    { id: 10, description: "메뉴가 다양해요" }
-  ],
-  interior: [
-    { id: 1, description: "작업하기 좋아요" },
-    { id: 2, description: "공부하기 좋아요" },
-    { id: 3, description: "분위기가 좋아요" },
-    { id: 4, description: "야외석이 있어요" },
-    { id: 5, description: "매장이 넓어요" },
-    { id: 6, description: "룸이 있어요" },
-    { id: 7, description: "창가 자리가 많아요" },
-    { id: 8, description: "인스타 감성이에요" },
-    { id: 9, description: "식물이 많아요" },
-    { id: 10, description: "채광이 좋아요" },
-    { id: 11, description: "조용해요" },
-    { id: 12, description: "음악이 좋아요" }
-  ]
-};
+import { useCafeApi } from "@/shared/api/cafe/cafe";
+import { TAGS } from "@/constants/tags";
 
 const WriteReview = () => {
   const navigate = useNavigate();
@@ -49,6 +22,7 @@ const WriteReview = () => {
   const { draft, updateDraft, clearDraft } = useReviewDraftStore();
   const { images, config } = usePhotoUploaderStore();
   const { createReview, isLoading } = useReviewApi();
+  const { checkCafeExists, saveCafe } = useCafeApi();
 
   useEffect(() => {
     if (!localStorage.getItem("review-draft")) {
@@ -62,31 +36,69 @@ const WriteReview = () => {
   }, [clearDraft]);
 
   const handleSubmit = async () => {
-    const request: ReviewRequest = {
-      cafeId: draft.cafe!.id,
-      rating: draft.rating,
-      visitDate: draft.visitDate,
-      content: draft.content || '',
-      imageIds: draft.imageIds || [], 
-      tags: {
-        menu: draft.tags.menu.map(tagId => ({ id: tagId })),
-        interior: draft.tags.interior.map(tagId => ({ id: tagId }))
-      }
-    };
-
     try {
-      await createReview(request, {
-        onSuccess: () => {
-          clearDraft();
-          navigate(returnPath || '/', { replace: true });
-        },
-        onError: (error) => {
-          console.error('리뷰 작성 실패:', error);
+      if (!(await validateCafeExists())) {
+        const saveResponse = await saveCafe({
+          title: draft.cafe!.name,
+          category: draft.cafe!.category,
+          mapx: draft.cafe!.mapx,
+          mapy: draft.cafe!.mapy,
+          address: draft.cafe!.address,
+          roadAddress: draft.cafe!.roadAddress,
+          link: draft.cafe!.link,
+        });
+
+        if (saveResponse.cafeId) {
+          draft.cafe!.id = saveResponse.cafeId;
+        } else {
+          console.error('카페 저장 실패');
+          return;
         }
-      });
+      }
+
+      const request = createReviewRequest();
+      await submitReview(request);
     } catch (error) {
       console.error('리뷰 작성 중 오류 발생:', error);
     }
+  };
+
+  const validateCafeExists = async () => {
+    const { exist } = await checkCafeExists({
+      name: draft.cafe!.name,
+      mapx: draft.cafe!.mapx,
+      mapy: draft.cafe!.mapy
+    });
+
+    if (!exist) {
+      console.error('카페가 존재하지 않습니다');
+      return false;
+    }
+    return true;
+  };
+
+  const createReviewRequest = (): ReviewRequest => ({
+    cafeId: draft.cafe!.id,
+    rating: draft.rating,
+    visitDate: draft.visitDate,
+    content: draft.content || '',
+    imageIds: draft.imageIds || [],
+    tags: {
+      menu: draft.tags.menu.map(tagId => ({ id: tagId })),
+      interior: draft.tags.interior.map(tagId => ({ id: tagId }))
+    }
+  });
+
+  const submitReview = async (request: ReviewRequest) => {
+    await createReview(request, {
+      onSuccess: () => {
+        clearDraft();
+        navigate(returnPath || '/', { replace: true });
+      },
+      onError: (error) => {
+        console.error('리뷰 작성 실패:', error);
+      }
+    });
   };
 
   const handleDateChange = (date: string) => {

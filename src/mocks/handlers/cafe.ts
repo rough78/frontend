@@ -8,8 +8,8 @@ export const cafeHandlers = [
     const searchName = url.searchParams.get("name")?.toLowerCase();
 
     const filteredCafes = dummyCafes
-      .filter(cafe => cafe.name.toLowerCase().includes(searchName || ""))
-      .map(cafe => CafeMapper.toNaverApiFormat(cafe));
+      .filter(cafe => (cafe.title ?? "").toLowerCase().includes(searchName || ""))
+      .map(cafe => CafeMapper.toICafeDescription(cafe));
 
     return HttpResponse.json({ items: filteredCafes });
   })

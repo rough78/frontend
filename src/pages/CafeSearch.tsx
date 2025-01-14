@@ -27,12 +27,17 @@ const CafeSearch = () => {
         cafe: {
           id: cafe.id,
           name: cafe.name,
+          category: cafe.category,
+          isClosedDown: cafe.isClosedDown,
           address: cafe.address,
-          location: cafe.location,
-          instaLink: cafe.instaLink,
+          roadAddress: cafe.roadAddress,
+          mapx: cafe.mapx,
+          mapy: cafe.mapy,
+          link: cafe.link,
           isBookmark: cafe.isBookmark,
           avgStar: cafe.avgStar,
           profileImg: cafe.profileImg,
+          image: cafe.image
         } 
       });
       navigate('/review/write');

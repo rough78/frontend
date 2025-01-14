@@ -5,13 +5,15 @@ export class CafeMapper {
   static toICafeDescription(naverResponse: INaverLocalApiResponse): ICafeDescription {
     return {
       id: 0,
-      name: this.sanitizeTitle(naverResponse.title),
-      address: naverResponse.roadAddress || naverResponse.address,
-      location: {
-        latitude: this.convertNaverCoordinate(naverResponse.mapy),
-        longitude: this.convertNaverCoordinate(naverResponse.mapx)
-      },
-      instaLink: naverResponse.link || '',
+      name: this.sanitizeTitle(naverResponse.title || ''),
+      category: naverResponse.category || "카페",
+      isClosedDown: false,
+      address: naverResponse.address || '',
+      roadAddress: naverResponse.roadAddress || '',
+      mapx: naverResponse.mapx || '',
+      mapy: naverResponse.mapy || '',
+      link: naverResponse.link || '',
+      image: [],
       isBookmark: false,
       avgStar: 0,
       profileImg: ''
@@ -21,11 +23,11 @@ export class CafeMapper {
   static toNaverApiFormat(cafe: ICafeDescription): Partial<INaverLocalApiResponse> {
     return {
       title: cafe.name,
-      link: cafe.instaLink,
+      link: cafe.link,
       address: cafe.address,
-      roadAddress: cafe.address,
-      mapx: String(cafe.location.longitude * 1e7),
-      mapy: String(cafe.location.latitude * 1e7)
+      roadAddress: cafe.roadAddress,
+      mapx: cafe.mapx,
+      mapy: cafe.mapy
     };
   }
 

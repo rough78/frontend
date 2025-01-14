@@ -1,68 +1,85 @@
-import type { ICafeDescription } from './types';
+import type { INaverLocalApiResponse } from "./types";
 
-export const dummyCafes: ICafeDescription[] = [
+export const dummyCafes: INaverLocalApiResponse[] = [
   {
-    id: 1,
-    name: "로우키",
-    address: "서울 성동구 연무장 3길 6 (성수동 2가)",
-    location: {
-      latitude: 37.5464,
-      longitude: 127.0149
-    },
-    instaLink: "",
-    isBookmark: false,
-    avgStar: 4.5,
-    profileImg: ""
+    title: "<b>로우키</b>",
+    link: "https://smartstore.naver.com/lowkeycoffee",
+    category: "카페,디저트>카페",
+    address: "서울특별시 성동구 성수동2가 302-16 1층, B1층",
+    roadAddress: "서울특별시 성동구 연무장3길 6 1층, B1층",
+    mapx: "1270515894",
+    mapy: "375442014",
   },
   {
-    id: 2,
-    name: "로우키커피 헤이그라운드점",
-    address: "서울 성동구 뚝섬로 14길 5 (성수동 1가)",
-    location: {
-      latitude: 37.5464,
-      longitude: 127.0149
-    },
-    instaLink: "",
-    isBookmark: false,
-    avgStar: 4.3,
-    profileImg: ""
+    title: "<b>로우키</b> 연희점",
+    link: "",
+    category: "음식점>카페,디저트",
+    address: "서울특별시 서대문구 연희동 433-8",
+    roadAddress: "서울특별시 서대문구 연희로11가길 48-4",
+    mapx: "1269276284",
+    mapy: "375668087",
   },
   {
-    id: 3,
-    name: "로우키 연희점",
-    address: "서울 서대문구 연희로 11가길 42 (연희동)",
-    location: {
-      latitude: 37.5740,
-      longitude: 126.9149
-    },
-    instaLink: "https://instagram.com/lowkey.yeonhui",
-    isBookmark: false,
-    avgStar: 4.4,
-    profileImg: ""
+    title: "<b>로우키</b>",
+    link: "https://www.instagram.com/lowkey_coffee",
+    category: "카페,디저트>카페",
+    address: "서울특별시 성동구 성수동1가 22-8 1층",
+    roadAddress: "서울특별시 성동구 뚝섬로1나길 5 1층",
+    mapx: "1270477787",
+    mapy: "375444719",
   },
   {
-    id: 4,
-    name: "로우키 송정점",
-    address: "서울 성동구 송정 6길 5 (송정동)",
-    location: {
-      latitude: 37.5464,
-      longitude: 127.0149
-    },
-    instaLink: "https://instagram.com/lowkey.songjeong",
-    isBookmark: false,
-    avgStar: 4.2,
-    profileImg: ""
+    title: "<b>로우키</b>",
+    link: "",
+    category: "음식점>카페,디저트",
+    address: "서울특별시 성동구 송정동 66-160",
+    roadAddress: "서울특별시 성동구 송정6길 5",
+    mapx: "1270652142",
+    mapy: "375494383",
   },
   {
-    id: 5,
-    name: "로우키 성수점",
-    address: "서울 성동구 성수이로 12길 8 (성수동 2가)",
-    location: {
-      latitude: 37.5472,
-      longitude: 127.0533
-    },
-    instaLink: "https://instagram.com/lowkey.seongsu",
-    isBookmark: false,
-    avgStar: 4.6,
-    profileImg: ""
-  }];
+    title: "<b>스타벅스</b> 당산역사거리점",
+    link: "http://www.starbucks.co.kr/",
+    category: "카페,디저트>카페",
+    address: "서울특별시 영등포구 당산동5가 16-7",
+    roadAddress: "서울특별시 영등포구 양평로 47 (당산동5가)",
+    mapx: "1269011252",
+    mapy: "375340120",
+  },
+  {
+    title: "<b>스타벅스 영등포</b>구청역점",
+    link: "http://www.starbucks.co.kr/",
+    category: "카페,디저트>카페",
+    address: "서울특별시 영등포구 당산동3가 393",
+    roadAddress: "서울특별시 영등포구 국회대로 558",
+    mapx: "1268960800",
+    mapy: "375278900",
+  },
+  {
+    title: "<b>스타벅스 영등포</b>본동점",
+    link: "http://www.starbucks.co.kr/",
+    category: "카페,디저트>카페",
+    address: "서울특별시 영등포구 영등포동3가 2-21",
+    roadAddress: "서울특별시 영등포구 영등포로 254 (영등포동3가)",
+    mapx: "1269095590",
+    mapy: "375187130",
+  },
+  {
+    title: "<b>스타벅스</b> 신풍역점",
+    link: "http://www.starbucks.co.kr/",
+    category: "카페,디저트>카페",
+    address: "서울특별시 영등포구 신길동 424-3",
+    roadAddress: "서울특별시 영등포구 신풍로 23 (신길동)",
+    mapx: "1269084383",
+    mapy: "375003468",
+  },
+  {
+    title: "<b>스타벅스</b> 여의도IFC몰(L1)R점",
+    link: "http://www.starbucks.co.kr/",
+    category: "카페,디저트>카페",
+    address: "서울특별시 영등포구 여의도동 23",
+    roadAddress: "서울특별시 영등포구 국제금융로 10 (여의도동) 지하1층 178호",
+    mapx: "1269260392",
+    mapy: "375254113",
+  },
+];

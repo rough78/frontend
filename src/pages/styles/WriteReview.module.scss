@@ -73,9 +73,11 @@ $spacing: 32px;
 
 .buttonOverlay {
   position: fixed;
-  left: 0;
-  right: 0;
+  left: 50%;
   bottom: 0;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 590px;
   height: calc(#{$bottom-nav-height} + #{$button-height} + #{$spacing});
   background: white;
   background: linear-gradient(
@@ -90,11 +92,15 @@ $spacing: 32px;
 
 .submitButton {
   position: fixed;
-  left: 16px;
-  right: 16px;
+  left: 50%;
   bottom: 34px;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 600px;
   height: 56px;
-  padding: 12px;
+  padding-left: 16px;
+  padding-right: 16px;
+  box-sizing: border-box;
   background-color: #FF8922;
   color: white;
   border: none;
@@ -103,6 +109,10 @@ $spacing: 32px;
   cursor: pointer;
   font-weight: 600;
   z-index: 3;
+
+  @media screen and (min-width: 600px) {
+    width: calc(600px - 32px);
+  }
   
   &:disabled {
     background-color: #ccc;

@@ -1,9 +1,18 @@
+export interface TagCategory {
+  menu: Array<{ id: number }>;
+  interior: Array<{ id: number }>;
+}
+
 export interface ReviewResponse {
-  id: number;
-  content: string;
+  reviewId: number;
+  content: string; 
   rating: number;
   visitDate: string;
+  imageIds: string[];
+  tags: TagCategory;
   cafeId: number;
+  userId: number;
+  createdAt: string;
 }
 
 export interface ReviewRequest {

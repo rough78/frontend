@@ -91,9 +91,10 @@ const WriteReview = () => {
 
   const submitReview = async (request: ReviewRequest) => {
     await createReview(request, {
-      onSuccess: () => {
+      onSuccess: (response: ReviewResponse) => {
         clearDraft();
         navigate(returnPath || '/', { replace: true });
+        console.log('리뷰 작성 성공:', response);
       },
       onError: (error) => {
         console.error('리뷰 작성 실패:', error);

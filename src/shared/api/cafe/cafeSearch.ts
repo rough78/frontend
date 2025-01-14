@@ -35,10 +35,12 @@ export const useCafeSearch = (): CafeSearchHook => {
       );
 
       if (response?.items) {
-        return response.items.map((item, index) => ({
-          ...CafeMapper.toICafeDescription(item),
-          id: index + 1
-        }));
+        return response.items
+          .filter(item => item.category?.includes("카페"))
+          .map((item, index) => ({
+            ...CafeMapper.toICafeDescription(item),
+            id: index + 1
+          }));
       }
 
       return [];

@@ -4,7 +4,7 @@ import { IndexedDBImageStorage } from "../storage/ImageStorage";
 const imageStorage = new IndexedDBImageStorage();
 
 export const imageHandlers = [
-  http.post("/api/images/", async ({ request }) => {
+  http.post("/api/images", async ({ request }) => {
     const formData = await request.formData();
     const file = formData.get("file") as File;
     const imageId = `image_${Math.random().toString(36).substring(2)}`;

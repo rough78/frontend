@@ -19,7 +19,7 @@ export interface PhotoUploaderStore {
   removeImage: (id: string) => Promise<void>;
   setConfig: (config: Partial<PhotoUploaderConfig>) => void;
   cleanup: () => void;
-  loadInitialImages: (imageIds: string[]) => void; // New method
+  loadInitialImages: (imageIds: string[]) => void;
 }
 
 export function createPhotoUploaderStore({
@@ -29,7 +29,7 @@ export function createPhotoUploaderStore({
 }: {
   upload: (file: File) => Promise<string>;
   remove: (imageId: string) => Promise<void>;
-  getUrl: (imageId: string) => string;
+  getUrl: (imageId: string) => Promise<string>;
 }) {
   return create<PhotoUploaderStore>((set, get) => ({
     images: [],
@@ -69,11 +69,12 @@ export function createPhotoUploaderStore({
         const newImages = await Promise.all(
           processedFiles.map(async (file) => {
             const imageId = await upload(file);
+            const uploadedUrl = await getUrl(imageId);
             return {
               id: imageId,
               file,
               previewUrl: URL.createObjectURL(file),
-              uploadedUrl: getUrl(imageId),
+              uploadedUrl,
             };
           })
         );
@@ -120,13 +121,15 @@ export function createPhotoUploaderStore({
       set({ images: [] });
     },
 
-    loadInitialImages: (imageIds: string[]) => {
-      const initialImages = imageIds.map((id) => ({
-        id,
-        previewUrl: getUrl(id),
-        uploadedUrl: getUrl(id),
-        file: null as any,
-      }));
+    loadInitialImages: async (imageIds: string[]) => {
+      const initialImages = await Promise.all(
+        imageIds.map(async (id) => ({
+          id,
+          previewUrl: await getUrl(id),
+          uploadedUrl: await getUrl(id),
+          file: null as any,
+        }))
+      );
       set({ images: initialImages });
     },
   }));

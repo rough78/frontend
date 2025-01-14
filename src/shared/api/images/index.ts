@@ -6,7 +6,7 @@ import type { ImageApiResponse, ImageUploadResponse, ImageDeleteResponse } from 
 const BASE_URL = `${API_URL}/api/images`;
 
 export const useImageApi = () => {
-  const { post, remove } = useApi<ImageApiResponse>();
+  const { post, remove, get } = useApi<ImageApiResponse>();
 
   const upload = useCallback(async (file: File): Promise<string> => {
     try {
@@ -31,9 +31,10 @@ export const useImageApi = () => {
     await remove<ImageDeleteResponse>(`${BASE_URL}/review/${imageId}`);
   }, [remove]);
 
-  const getUrl = useCallback((imageId: string): string => {
-    return `${BASE_URL}/${imageId}`;
-  }, []);
+  const getUrl = useCallback(async (imageId: string): Promise<string> => {
+    const response = await get<{ url: string }>(`${BASE_URL}/${imageId}`);
+    return response.url;
+  }, [get]);
 
   return useMemo(() => ({
     upload,

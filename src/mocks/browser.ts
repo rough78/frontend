@@ -11,3 +11,13 @@ worker.events.on("request:start", ({ request }) => {
 worker.events.on("response:mocked", ({ response }) => {
   console.log("MSW response headers:", response.headers);
 });
+
+// Start the worker with configuration
+await worker.start({
+  onUnhandledRequest: 'bypass',
+  serviceWorker: {
+    options: {},
+    url: '/mockServiceWorker.js'
+  },
+  waitUntilReady: true
+});

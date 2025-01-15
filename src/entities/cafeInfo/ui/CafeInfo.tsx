@@ -2,6 +2,7 @@ import PhotoSwiper from "@shared/ui/photoSwiper/PhotoSwiper.tsx";
 import { StarRatingCafeInfo } from "@widgets/starRatingCafeInfo";
 import CafeInfoItem from "./CafeInfoItem";
 import styles from "./CafeInfo.module.scss";
+import { StarIcon } from "@widgets/starRating/ui/StarIcon";
 
 const CafeInfo = () => {
   return (
@@ -27,6 +28,14 @@ const CafeInfo = () => {
             <span className={styles.score}>5.0</span>
           </div>
         </div>
+      </div>
+      <div className={styles.noRatingContainer}>
+        <StarIcon
+          filled={false}
+          onClick={() => {}}
+          onMouseEnter={() => {}}
+          onMouseLeave={() => {}}
+        />
       </div>
     </div>
   );

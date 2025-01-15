@@ -69,4 +69,19 @@
   background-color: #F9F8F6;
   border-radius: 8px;
   padding: 20px 52px;
+  position: relative;
+}
+
+.noRatingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 16px;
+  padding: 0 16px;
+
+  // 작동하지 않음음
+  // :global(.star) {
+  //   width: 120px;
+  //   height: 120px;
+  // }
 }

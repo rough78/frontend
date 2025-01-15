@@ -4,7 +4,7 @@ import styles from './StarRating.module.scss';
 
 interface StarRatingProps {
   value: number;
-  onChange: (rating: number) => void;
+  onChange?: (rating: number) => void;
 }
 
 const StarRating = ({ value, onChange }: StarRatingProps) => {
@@ -16,7 +16,7 @@ const StarRating = ({ value, onChange }: StarRatingProps) => {
         <StarIcon
           key={star}
           filled={star <= (hover || value)}
-          onClick={() => onChange(star)}
+          onClick={() => onChange?.(star)}
           onMouseEnter={() => setHover(star)}
           onMouseLeave={() => setHover(0)}
         />

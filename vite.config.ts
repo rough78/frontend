@@ -46,7 +46,7 @@ export default defineConfig(({ mode }) => {
       },
       proxy: {
         "/api": {
-          target: isRemote ? "https://packetbreeze.com:8443" : "https://127.0.0.1",
+          target: isRemote ? env.VITE_API_URL : "https://127.0.0.1",
           changeOrigin: true,
           secure: true,
           configure: (proxy, _options) => {
@@ -77,7 +77,7 @@ export default defineConfig(({ mode }) => {
       port: 5173,
       proxy: {
         "/api": {
-          target: "https://packetbreeze.com:8443",
+          target: env.VITE_API_URL,
           changeOrigin: true,
           secure: true,
           configure: (proxy, _options) => {

@@ -25,8 +25,9 @@ const WriteReview = () => {
   const { checkCafeExists, saveCafe } = useCafeApi();
 
   useEffect(() => {
-    if (!localStorage.getItem("review-draft")) {
-      clearDraft();
+    // draft를 카페정보 제외 무조건 초기화(임시) draft를 서버에 저장하기로 결정함
+    if (localStorage.getItem("review-draft")) {
+      clearDraft(['cafe']);
       return;
     }
 

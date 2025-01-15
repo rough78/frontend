@@ -46,7 +46,7 @@ export default defineConfig(({ mode }) => {
       },
       proxy: {
         "/api": {
-          target: isRemote ? env.VITE_API_URL : "https://127.0.0.1",
+          target: isRemote ? env.VITE_API_URL : "",
           changeOrigin: true,
           secure: true,
           configure: (proxy, _options) => {

@@ -3,50 +3,31 @@ import { useNavigationStore } from "@shared/store/useNavigationStore";
 import { StarRating } from "@widgets/starRating";
 import { DatePicker } from "@widgets/datePicker";
 import { useReviewDraftStore } from "@shared/store/useReviewDraftStore";
+import { usePhotoUploaderStore } from '@shared/store/usePhotoUploaderStore';
 import { useEffect } from "react";
 import { Tag } from "@shared/ui/tag";
 import CafeListItem from "@entities/cafeListItem/CafeListItem";
 import { InputWrapper } from "@shared/ui/input/Input";
 import { Textarea } from "@shared/ui/textarea";
 import styles from "./styles/WriteReview.module.scss";
-
-const TAGS = {
-  menu: [
-    { id: 1, content: "원두를 판매해요" },
-    { id: 2, content: "커피가 맛있어요" },
-    { id: 3, content: "디저트를 판매해요" },
-    { id: 4, content: "핸드드립 커피가 있어요" },
-    { id: 5, content: "매장에서 직접 로스팅 해요" },
-    { id: 6, content: "시그니처 메뉴가 있어요" },
-    { id: 7, content: "케이크가 맛있어요" },
-    { id: 8, content: "브런치 메뉴가 있어요" },
-    { id: 9, content: "커피 향이 좋아요" },
-    { id: 10, content: "메뉴가 다양해요" },
-  ],
-  interior: [
-    { id: 1, content: "작업하기 좋아요" },
-    { id: 2, content: "공부하기 좋아요" },
-    { id: 3, content: "분위기가 좋아요" },
-    { id: 4, content: "야외석이 있어요" },
-    { id: 5, content: "매장이 넓어요" },
-    { id: 6, content: "룸이 있어요" },
-    { id: 7, content: "창가 자리가 많아요" },
-    { id: 8, content: "인스타 감성이에요" },
-    { id: 9, content: "식물이 많아요" },
-    { id: 10, content: "채광이 좋아요" },
-    { id: 11, content: "조용해요" },
-    { id: 12, content: "음악이 좋아요" },
-  ],
-};
+import { useReviewApi } from '@shared/api/reviews/reviewApi';
+import { ReviewRequest, ReviewResponse } from '@shared/api/reviews/types';
+import { PhotoUploader } from "@widgets/photoUploader";
+import { useCafeApi } from "@/shared/api/cafe/cafe";
+import { TAGS } from "@/constants/tags";
 
 const WriteReview = () => {
   const navigate = useNavigate();
   const returnPath = useNavigationStore((state) => state.returnPath);
   const { draft, updateDraft, clearDraft } = useReviewDraftStore();
+  const { images, config } = usePhotoUploaderStore();
+  const { createReview, isLoading } = useReviewApi();
+  const { checkCafeExists, saveCafe } = useCafeApi();
 
   useEffect(() => {
-    if (!localStorage.getItem("review-draft")) {
-      clearDraft();
+    // draft를 카페정보 제외 무조건 초기화(임시) draft를 서버에 저장하기로 결정함
+    if (localStorage.getItem("review-draft")) {
+      clearDraft(['cafe']);
       return;
     }
 
@@ -55,13 +36,71 @@ const WriteReview = () => {
     }
   }, [clearDraft]);
 
-  const handleSubmit = () => {
-    // TODO: API 호출
-    if (returnPath) {
-      navigate(returnPath, { replace: true });
-    } else {
-      navigate("/", { replace: true });
+  const handleSubmit = async () => {
+    try {
+      if (!(await validateCafeExists())) {
+        const saveResponse = await saveCafe({
+          title: draft.cafe!.name,
+          category: draft.cafe!.category,
+          mapx: draft.cafe!.mapx,
+          mapy: draft.cafe!.mapy,
+          address: draft.cafe!.address,
+          roadAddress: draft.cafe!.roadAddress,
+          link: draft.cafe!.link,
+        });
+
+        if (saveResponse.cafeId) {
+          draft.cafe!.id = saveResponse.cafeId;
+        } else {
+          console.error('카페 저장 실패');
+          return;
+        }
+      }
+
+      const request = createReviewRequest();
+      await submitReview(request);
+    } catch (error) {
+      console.error('리뷰 작성 중 오류 발생:', error);
     }
+  };
+
+  const validateCafeExists = async () => {
+    const { exist } = await checkCafeExists({
+      name: draft.cafe!.name,
+      mapx: draft.cafe!.mapx,
+      mapy: draft.cafe!.mapy
+    });
+
+    if (!exist) {
+      console.error('카페가 존재하지 않습니다');
+      return false;
+    }
+    return true;
+  };
+
+  const createReviewRequest = (): ReviewRequest => ({
+    cafeId: draft.cafe!.id,
+    rating: draft.rating,
+    visitDate: draft.visitDate,
+    content: draft.content || '',
+    imageIds: draft.imageIds || [],
+    tags: {
+      menu: draft.tags.menu.map(tagId => ({ id: tagId })),
+      interior: draft.tags.interior.map(tagId => ({ id: tagId }))
+    }
+  });
+
+  const submitReview = async (request: ReviewRequest) => {
+    await createReview(request, {
+      onSuccess: (response: ReviewResponse) => {
+        clearDraft();
+        navigate(returnPath || '/', { replace: true });
+        console.log('리뷰 작성 성공:', response);
+      },
+      onError: (error) => {
+        console.error('리뷰 작성 실패:', error);
+      }
+    });
   };
 
   const handleDateChange = (date: string) => {
@@ -94,6 +133,14 @@ const WriteReview = () => {
     );
   }
 
+  const isValidForm = () => {
+    return (
+      draft.rating > 0 &&
+      draft.visitDate &&
+      draft.content?.trim()
+    );
+  };
+
   return (
     <div className={styles.container}>
       <div className="selected-cafe">
@@ -119,7 +166,7 @@ const WriteReview = () => {
               {TAGS.menu.map((tag) => (
                 <Tag
                   key={tag.id}
-                  content={tag.content}
+                  content={tag.description}
                   isActive={draft.tags?.menu?.includes(tag.id) || false}
                   onClick={() => handleTagClick("menu", tag.id)}
                 />
@@ -132,7 +179,7 @@ const WriteReview = () => {
               {TAGS.interior.map((tag) => (
                 <Tag
                   key={tag.id}
-                  content={tag.content}
+                  content={tag.description}
                   isActive={draft.tags?.interior?.includes(tag.id) || false}
                   onClick={() => handleTagClick("interior", tag.id)}
                 />
@@ -161,13 +208,39 @@ const WriteReview = () => {
         />
       </InputWrapper>
 
+      <InputWrapper
+        label={
+          <div className={styles.reviewLabelContainer}>
+            <span>사진 첨부</span>
+            <span className={styles.photoCount}>
+              {images.length} / {config.maxCount}장
+            </span>
+          </div>
+        }
+        className={styles.visitDateLabel}
+      >
+        <PhotoUploader 
+          initialImageIds={draft.imageIds}
+          onImageUploaded={(imageId: string) => {
+            updateDraft({
+              imageIds: [...(draft.imageIds || []), imageId]
+            });
+          }}
+          onImageRemoved={(imageId: string) => {
+            updateDraft({
+              imageIds: draft.imageIds?.filter(id => id !== imageId) || []
+            });
+          }}
+        />
+      </InputWrapper>
+
       <div className={styles.buttonOverlay} />
       <button
         className={styles.submitButton}
         onClick={handleSubmit}
-        disabled={!draft.visitDate || !draft.rating}
+        disabled={!isValidForm() || isLoading}
       >
-        작성 완료
+        {isLoading ? '작성 중...' : '작성 완료'}
       </button>
     </div>
   );

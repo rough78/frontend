@@ -1,4 +1,5 @@
 @use "@app/styles/abstracts/mixins";
+@use "/src/app/styles/abstracts/variables" as var;
 
 .header {
   position: sticky;
@@ -65,5 +66,8 @@
     @include mixins.apply-text-style(b1_bold);
     background: none;
     border: none;
+    &--color {
+      color: var.$semantic-text-icon-brand;
+    }
   }
 }

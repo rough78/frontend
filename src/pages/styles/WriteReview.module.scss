@@ -130,6 +130,10 @@ $spacing: 32px;
 }
 
 .starRatingStars {
+  --stars-gap: 8px;
+  --stars-background: #f9f8f6;
+  --stars-border-radius: 8px;
+  --stars-height: 80px;
   gap: 8px;
   width: 100%;
   height: 80px;

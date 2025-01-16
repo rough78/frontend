@@ -1,17 +1,29 @@
-@use "/src/app/styles/abstracts/mixins";
+@use "@app/styles/abstracts/mixins";
 @use "@app/styles/abstracts/_variables" as *;
 
 .container {
+  --star-rating-gap: 4px;
+  --star-rating-width: 100%;
+  --stars-gap: 0px;
+  --stars-background: transparent;
+  --stars-border-radius: 0px;
+  --stars-height: auto;
+  --stars-justify: center;
+  
   display: flex;
   align-items: center;
-  gap: 4px;
-  width: 100%;
+  gap: var(--star-rating-gap);
+  width: var(--star-rating-width);
 }
 
 .stars {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: var(--stars-justify);
+  gap: var(--stars-gap);
+  background: var(--stars-background);
+  border-radius: var(--stars-border-radius);
+  height: var(--stars-height);
 }
 
 .star {

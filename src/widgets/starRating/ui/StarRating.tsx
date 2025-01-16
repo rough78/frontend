@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import clsx from 'clsx';
 import { StarIcon } from './StarIcon';
 import styles from './StarRating.module.scss';
 
@@ -7,8 +8,8 @@ interface StarRatingProps {
   onChange?: (rating: number) => void;
   showRatingText?: boolean;
   size?: number;
-  className?: string;
-  starsClassName?: string;
+  rootClassName?: string;
+  starsContainerClassName?: string;
 }
 
 export const StarRating = ({
@@ -16,15 +17,15 @@ export const StarRating = ({
   onChange,
   showRatingText = false,
   size = 36,
-  className,
-  starsClassName
+  rootClassName,
+  starsContainerClassName
 }: StarRatingProps) => {
   const [hover, setHover] = useState(0);
   const isInteractive = !!onChange;
 
   return (
-    <div className={`${styles.container} ${className}`}>
-      <div className={`${styles.stars} ${starsClassName}`}>
+    <div className={clsx(styles.container, rootClassName)}>
+      <div className={clsx(styles.stars, starsContainerClassName)}>
         {[1, 2, 3, 4, 5].map((star) => (
           <StarIcon
             key={star}

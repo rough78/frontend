@@ -152,7 +152,7 @@ const WriteReview = () => {
         <StarRating
           value={draft.rating}
           onChange={handleRatingChange}
-          starsClassName={styles.starRatingStars}
+          starsContainerClassName={styles.starRatingStars}
         />
       </InputWrapper>
       <InputWrapper

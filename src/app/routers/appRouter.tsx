@@ -146,7 +146,7 @@ export const AppRouter = () => {
               bgColor="rgb(249, 248, 246)"
               rightElement={
                 <button
-                  className={styles.completeButton}
+                  className={`${styles.completeButton} ${styles["completeButton--color"]}`}
                   onClick={() => {
                     /* 이벤트 처리 */
                   }}

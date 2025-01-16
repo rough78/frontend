@@ -2,14 +2,16 @@ import { useState } from "react";
 import styles from "./ProfilForm.module.scss";
 import Input from "@/shared/ui/baseInput/Input";
 import LabelWrap from "@/shared/ui/baseLabel/LabelWrap";
+import Textarea from "@/shared/ui/baseTextarea/Textarea";
 
 interface ProfileInputSectionProps {
   label: string;
   placeholder: string;
   maxLength: number;
   showRight: boolean;
-  showInput: boolean;
+  showInput?: boolean;
   showSocialAccount: boolean;
+  showTextarea?: boolean;
   socialAccount?: string;
 }
 
@@ -19,12 +21,15 @@ const ProfileInputSection = ({
   maxLength,
   showRight,
   showInput,
+  showTextarea,
   showSocialAccount,
   socialAccount,
 }: ProfileInputSectionProps) => {
   const [inputValue, setInputValue] = useState("");
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const value = event.target.value;
 
     if (value.length <= maxLength) {
@@ -44,6 +49,13 @@ const ProfileInputSection = ({
       />
       {showInput && (
         <Input
+          placeholder={placeholder}
+          value={inputValue}
+          onChange={handleInputChange}
+        />
+      )}
+      {showTextarea && (
+        <Textarea
           placeholder={placeholder}
           value={inputValue}
           onChange={handleInputChange}

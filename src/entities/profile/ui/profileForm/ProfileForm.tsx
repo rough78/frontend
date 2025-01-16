@@ -16,7 +16,7 @@ const ProfileForm = () => {
       <ProfileInputSection
         label="닉네임"
         placeholder="닉네임"
-        maxLength={10}
+        maxLength={20}
         showInput={true}
         showRight={true}
         showSocialAccount={false}
@@ -24,10 +24,10 @@ const ProfileForm = () => {
       <ProfileInputSection
         label="소개"
         placeholder="소개말을 적어주세요."
-        maxLength={20}
-        showInput={true}
+        maxLength={50}
         showRight={true}
         showSocialAccount={false}
+        showTextarea={true}
       />
     </div>
   );

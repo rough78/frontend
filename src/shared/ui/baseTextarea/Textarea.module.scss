@@ -1,0 +1,23 @@
+@use "/src/app/styles/abstracts/mixins";
+@use "/src/app/styles/abstracts/variables" as var;
+
+.textarea {
+  width: 100%;
+  height: 82px;
+  margin: 10px 0 0;
+  padding: 8px 12px;
+
+  border: 1px solid var.$semantic-border-secondary;
+  border-radius: var.$radius-radius-md;
+  resize: none;
+  color: var.$semantic-text-icon-primary;
+  @include mixins.apply-text-style(b1_regular);
+
+  &:focus {
+    outline: none;
+  }
+
+  &::placeholder {
+    color: var.$primitive-secondary-brown400;
+  }
+}

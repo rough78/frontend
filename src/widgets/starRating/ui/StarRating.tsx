@@ -10,6 +10,7 @@ interface StarRatingProps {
   size?: number;
   rootClassName?: string;
   starsContainerClassName?: string;
+  ratingTextClassName?: string;  // Add this line
 }
 
 export const StarRating = ({
@@ -18,7 +19,8 @@ export const StarRating = ({
   showRatingText = false,
   size = 36,
   rootClassName,
-  starsContainerClassName
+  starsContainerClassName,
+  ratingTextClassName
 }: StarRatingProps) => {
   const [hover, setHover] = useState(0);
   const isInteractive = !!onChange;
@@ -38,7 +40,7 @@ export const StarRating = ({
         ))}
       </div>
       {showRatingText && (
-        <p className={styles.ratingText}>{value.toFixed(1)}</p>
+        <p className={clsx(styles.ratingText, ratingTextClassName)}>{value.toFixed(1)}</p>
       )}
     </div>
   );

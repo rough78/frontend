@@ -1,0 +1,87 @@
+@use "@app/styles/abstracts/mixins";
+@use "@app/styles/abstracts/variables" as var;
+
+.photoSwiperOverride {
+  :global(.swiper) {
+    border-radius: 0;
+
+    :global(.swiper-slide) {
+      height: 212px;
+      border-radius: 0;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    img {
+      border-radius: 0;
+    }
+  }
+
+  margin-top: 8px;
+}
+
+.divider {
+  height: 8px;
+  background-color: var.$primitive-gray-gray100;
+}
+
+.ratingWrapper {
+  padding: 0 16px;
+  margin-top: 16px;
+}
+
+.ratingHeader {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.ratingLabel {
+  display: block;
+  @include mixins.apply-text-style(b1_bold);
+}
+
+.reviewCount {
+  @include mixins.apply-text-style(b2_regular);
+  color: var.$semantic-text-icon-secondary;
+}
+
+.ratingScore {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.score {
+  @include mixins.apply-text-style(t1_bold);
+  color: var.$semantic-text-icon-brand;
+}
+
+.ratingScoreContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 80px;
+  background-color: #F9F8F6;
+  border-radius: 8px;
+  padding: 20px 52px;
+  position: relative;
+}
+
+.noRatingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 16px;
+  padding: 0 16px;
+
+  // 작동하지 않음음
+  // :global(.star) {
+  //   width: 120px;
+  //   height: 120px;
+  // }
+}

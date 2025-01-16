@@ -1,0 +1,1 @@
+export { default as StarRatingCafeInfo } from './ui/StarRatingCafeInfo';

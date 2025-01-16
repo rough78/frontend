@@ -2,6 +2,8 @@ import { useState, useRef, useEffect } from "react";
 import styles from "./ReviewerInfo.module.scss";
 import SimpleStarRating from "@/widgets/simpleStarRating/ui/SimpleStarRating";
 import ReviewMore from "../reviewMore/ReviewMore";
+import profileIcon from "@shared/assets/images/profile.svg";
+import moreIcon from "@shared/assets/images/more.svg";
 
 const ReviewerInfo = () => {
   const [showReviewMore, setShowReviewMore] = useState<boolean>(false);
@@ -31,7 +33,7 @@ const ReviewerInfo = () => {
     <div className={styles.reviewerInfo}>
       <img
         className={styles.reviewerInfo__profilePicture}
-        src="src/shared/assets/images/profile.svg"
+        src={profileIcon}
         alt="프로필"
       />
       <div className={styles.reviewerInfo__details}>
@@ -46,7 +48,7 @@ const ReviewerInfo = () => {
       <div ref={reviewMoreRef} className={styles.reviewerInfo__moreWrapper}>
         <img
           className={styles.reviewerInfo__moreIcon}
-          src="src/shared/assets/images/more.svg"
+          src={moreIcon}
           alt="더보기 아이콘"
           onClick={toggleReviewMore}
         />

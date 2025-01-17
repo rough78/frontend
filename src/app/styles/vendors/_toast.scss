@@ -1,0 +1,27 @@
+@use "/src/app/styles/abstracts/mixins";
+@use "/src/app/styles/abstracts/variables" as var;
+
+.Toastify__toast {
+  width: 343px;
+  padding: 12px 16px;
+  background-color: var.$primitive-secondary-brown800;
+  border-radius: var.$radius-radius-md;
+  @include mixins.apply-text-style(b1_bold);
+  color: #fff;
+
+  .toast-content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .toast-content-left {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .toast-link {
+    background-color: transparent;
+    color: var.$semantic-text-icon-brand;
+    @include mixins.apply-text-style(b1_bold);
+  }
+}

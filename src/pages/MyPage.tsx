@@ -3,6 +3,7 @@ import { throttle } from "lodash";
 import { ProfileHeader, FilterBtn } from "@/entities/profile/ui";
 import { ReviewList } from "@/widgets/reviewList";
 import Modal from "@/shared/ui/modal/Modal";
+import Toast from "@/shared/ui/toast/Toast";
 
 const MyPage = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -49,6 +50,26 @@ const MyPage = () => {
           className: "modal-btn modal-btn-no",
         }}
       />
+
+      <Toast
+        icon={true}
+        message="리뷰 작성이 완료되었습니다"
+        linkTo="/search"
+        linkText="보러가기"
+      />
+      {/* <Toast icon={true} message="임시 저장이 완료되었어요" />
+      <Toast
+        icon={true}
+        message="카페가 스크랩되었어요"
+        linkTo="/search"
+        linkText="보러가기"
+      />
+      <Toast
+        icon={false}
+        message="이 카페 리뷰를 작성하시겠습니까?"
+        linkTo="/search"
+        linkText="작성하러 가기"
+      /> */}
     </div>
   );
 };

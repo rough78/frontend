@@ -3,15 +3,15 @@ import { useNavigationStore } from "@shared/store/useNavigationStore";
 import { StarRating } from "@widgets/starRating";
 import { DatePicker } from "@widgets/datePicker";
 import { useReviewDraftStore } from "@shared/store/useReviewDraftStore";
-import { usePhotoUploaderStore } from '@shared/store/usePhotoUploaderStore';
+import { usePhotoUploaderStore } from "@shared/store/usePhotoUploaderStore";
 import { useEffect } from "react";
 import { Tag } from "@shared/ui/tag";
 import CafeListItem from "@entities/cafeListItem/CafeListItem";
 import { InputWrapper } from "@shared/ui/input/Input";
 import { Textarea } from "@shared/ui/textarea";
 import styles from "./styles/WriteReview.module.scss";
-import { useReviewApi } from '@shared/api/reviews/reviewApi';
-import { ReviewRequest, ReviewResponse } from '@shared/api/reviews/types';
+import { useReviewApi } from "@shared/api/reviews/reviewApi";
+import { ReviewRequest, ReviewResponse } from "@shared/api/reviews/types";
 import { PhotoUploader } from "@widgets/photoUploader";
 import { useCafeApi } from "@/shared/api/cafe/cafe";
 import { TAGS } from "@/constants/tags";
@@ -27,7 +27,7 @@ const WriteReview = () => {
   useEffect(() => {
     // draft를 카페정보 제외 무조건 초기화(임시) draft를 서버에 저장하기로 결정함
     if (localStorage.getItem("review-draft")) {
-      clearDraft(['cafe']);
+      clearDraft(["cafe"]);
       return;
     }
 
@@ -52,7 +52,7 @@ const WriteReview = () => {
         if (saveResponse.cafeId) {
           draft.cafe!.id = saveResponse.cafeId;
         } else {
-          console.error('카페 저장 실패');
+          console.error("카페 저장 실패");
           return;
         }
       }
@@ -60,7 +60,7 @@ const WriteReview = () => {
       const request = createReviewRequest();
       await submitReview(request);
     } catch (error) {
-      console.error('리뷰 작성 중 오류 발생:', error);
+      console.error("리뷰 작성 중 오류 발생:", error);
     }
   };
 
@@ -68,11 +68,11 @@ const WriteReview = () => {
     const { exist } = await checkCafeExists({
       name: draft.cafe!.name,
       mapx: draft.cafe!.mapx,
-      mapy: draft.cafe!.mapy
+      mapy: draft.cafe!.mapy,
     });
 
     if (!exist) {
-      console.error('카페가 존재하지 않습니다');
+      console.error("카페가 존재하지 않습니다");
       return false;
     }
     return true;
@@ -82,24 +82,24 @@ const WriteReview = () => {
     cafeId: draft.cafe!.id,
     rating: draft.rating,
     visitDate: draft.visitDate,
-    content: draft.content || '',
+    content: draft.content || "",
     imageIds: draft.imageIds || [],
     tags: {
-      menu: draft.tags.menu.map(tagId => ({ id: tagId })),
-      interior: draft.tags.interior.map(tagId => ({ id: tagId }))
-    }
+      menu: draft.tags.menu.map((tagId) => ({ id: tagId })),
+      interior: draft.tags.interior.map((tagId) => ({ id: tagId })),
+    },
   });
 
   const submitReview = async (request: ReviewRequest) => {
     await createReview(request, {
       onSuccess: (response: ReviewResponse) => {
         clearDraft();
-        navigate(returnPath || '/', { replace: true });
-        console.log('리뷰 작성 성공:', response);
+        navigate(returnPath || "/", { replace: true });
+        console.log("리뷰 작성 성공:", response);
       },
       onError: (error) => {
-        console.error('리뷰 작성 실패:', error);
-      }
+        console.error("리뷰 작성 실패:", error);
+      },
     });
   };
 
@@ -134,11 +134,7 @@ const WriteReview = () => {
   }
 
   const isValidForm = () => {
-    return (
-      draft.rating > 0 &&
-      draft.visitDate &&
-      draft.content?.trim()
-    );
+    return draft.rating > 0 && draft.visitDate && draft.content?.trim();
   };
 
   return (
@@ -153,7 +149,11 @@ const WriteReview = () => {
         label={`${draft.cafe.name} 어땠나요?`}
         className={styles.visitDateLabel}
       >
-        <StarRating value={draft.rating} onChange={handleRatingChange} />
+        <StarRating
+          value={draft.rating}
+          onChange={handleRatingChange}
+          starsContainerClassName={styles.starRatingStars}
+        />
       </InputWrapper>
       <InputWrapper
         label="구체적으로 알려주세요."
@@ -219,16 +219,16 @@ const WriteReview = () => {
         }
         className={styles.visitDateLabel}
       >
-        <PhotoUploader 
+        <PhotoUploader
           initialImageIds={draft.imageIds}
           onImageUploaded={(imageId: string) => {
             updateDraft({
-              imageIds: [...(draft.imageIds || []), imageId]
+              imageIds: [...(draft.imageIds || []), imageId],
             });
           }}
           onImageRemoved={(imageId: string) => {
             updateDraft({
-              imageIds: draft.imageIds?.filter(id => id !== imageId) || []
+              imageIds: draft.imageIds?.filter((id) => id !== imageId) || [],
             });
           }}
         />
@@ -240,7 +240,7 @@ const WriteReview = () => {
         onClick={handleSubmit}
         disabled={!isValidForm() || isLoading}
       >
-        {isLoading ? '작성 중...' : '작성 완료'}
+        {isLoading ? "작성 중..." : "작성 완료"}
       </button>
     </div>
   );

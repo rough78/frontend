@@ -1,0 +1,45 @@
+@use "@app/styles/abstracts/mixins";
+@use "@app/styles/abstracts/variables" as var;
+
+.cafeInfoItem {
+  padding: 16px;
+
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  &__info {
+    line-height: 140%;
+  }
+
+  &__name {
+    color: var.$semantic-text-icon-primary;
+    @include mixins.apply-text-style(t2_bold);
+  }
+
+  &__address {
+    color: var.$semantic-text-icon-secondary;
+    @include mixins.apply-text-style(b2_regular);
+    margin-bottom: 16px;
+  }
+
+  &__instagram {
+    color: var.$semantic-text-icon-secondary;
+    @include mixins.apply-text-style(b2_regular);
+    text-decoration: underline;
+  }
+
+  &__bookmark {
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}

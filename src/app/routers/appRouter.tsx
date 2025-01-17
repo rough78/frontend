@@ -105,8 +105,9 @@ export const AppRouter = () => {
           element={
             <MainLayout
               showHeader={true}
-              showFooter={true}
+              showFooter={false}
               showBackButton={true}
+              showWriteButton={false}
               headerTitle="카페 정보"
             >
               <CafeInfo />

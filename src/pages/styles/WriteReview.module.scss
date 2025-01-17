@@ -1,5 +1,5 @@
-@use '@shared/ui/input/Input.module.scss';
-@use '@app/styles/abstracts/variables' as var;
+@use "@shared/ui/input/Input.module.scss";
+@use "@app/styles/abstracts/variables" as var;
 
 $bottom-nav-height: 34px;
 $button-height: 56px;
@@ -110,7 +110,7 @@ $spacing: 32px;
   padding-left: 16px;
   padding-right: 16px;
   box-sizing: border-box;
-  background-color: #FF8922;
+  background-color: #ff8922;
   color: white;
   border: none;
   border-radius: 16px;
@@ -122,9 +122,21 @@ $spacing: 32px;
   @media screen and (min-width: 600px) {
     width: calc(600px - 32px);
   }
-  
+
   &:disabled {
     background-color: #ccc;
     cursor: not-allowed;
   }
+}
+
+.starRatingStars {
+  --stars-gap: 8px;
+  --stars-background: #f9f8f6;
+  --stars-border-radius: 8px;
+  --stars-height: 80px;
+  gap: 8px;
+  width: 100%;
+  height: 80px;
+  background-color: #f9f8f6;
+  border-radius: 8px;
 }

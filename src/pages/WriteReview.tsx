@@ -167,6 +167,8 @@ const WriteReview = () => {
                 <Tag
                   key={tag.id}
                   content={tag.description}
+                  defaultIcon={tag.defaultIcon}
+                  activeIcon={tag.activeIcon}
                   isActive={draft.tags?.menu?.includes(tag.id) || false}
                   onClick={() => handleTagClick("menu", tag.id)}
                 />
@@ -180,6 +182,8 @@ const WriteReview = () => {
                 <Tag
                   key={tag.id}
                   content={tag.description}
+                  defaultIcon={tag.defaultIcon}
+                  activeIcon={tag.activeIcon}
                   isActive={draft.tags?.interior?.includes(tag.id) || false}
                   onClick={() => handleTagClick("interior", tag.id)}
                 />

@@ -59,13 +59,13 @@
     align-items: center;
     margin-top: 60px;
     padding: 0 16px;
-    gap: 16px;
 
     img {
       margin-bottom: 8px;
     }
 
     .noRatingText {
+      margin-top: 20px;
       text-align: center;
 
       &__main {
@@ -81,6 +81,7 @@
     }
 
     .writeReviewButton {
+      margin-top: 16px;
       width: 117px;
       height: 40px;
       background-color: var.$semantic-background-button-default;

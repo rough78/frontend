@@ -1,10 +1,9 @@
-import StarEmpty from "@shared/assets/images/star-rating/star.svg";
-import StarFilled from "@shared/assets/images/star-rating/star-filled.svg";
 import styles from "./Tag.module.scss";
 import type { TagProps } from "../types/types";
 
-const Tag = ({ content, icon, isActive, onClick }: TagProps) => {
-  const defaultIcon = isActive ? StarFilled : StarEmpty;
+const Tag = ({ content, defaultIcon, activeIcon, isActive, onClick }: TagProps) => {
+  const iconPath = isActive ? activeIcon : defaultIcon;
+  const iconSrc = new URL(`/src/shared/assets/images/tag-icon/${iconPath}`, import.meta.url).href;
 
   return (
     <button
@@ -13,7 +12,7 @@ const Tag = ({ content, icon, isActive, onClick }: TagProps) => {
       type="button"
     >
       <img
-        src={icon || defaultIcon}
+        src={iconSrc}
         alt="태그 아이콘"
         className={styles.icon}
       />

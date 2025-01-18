@@ -3,9 +3,9 @@ import { useApi } from "@shared/api/hooks/useApi";
 import { API_URL } from '../base';
 import type { ImageApiResponse, ImageUploadResponse, ImageDeleteResponse } from "./types";
 
-const BASE_URL = `${API_URL}/api/images`;
+const BASE_URL = `${API_URL}/api/images/review`;
 
-export const useImageApi = () => {
+export const useReviewImageApi = () => {
   const { post, remove } = useApi<ImageApiResponse>();
 
   const upload = useCallback(async (file: File): Promise<string> => {
@@ -28,7 +28,7 @@ export const useImageApi = () => {
   }, [post]);
 
   const removeImage = useCallback(async (imageId: string): Promise<void> => {
-    await remove<ImageDeleteResponse>(`${BASE_URL}/review/${imageId}`);
+    await remove<ImageDeleteResponse>(`${BASE_URL}/${imageId}`);
   }, [remove]);
 
   const getUrl = useCallback((imageId: string): string => {

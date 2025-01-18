@@ -31,3 +31,14 @@ export interface INaverLocalApiResponse {
     mapx?: string;
     mapy?: string;
 }
+
+export interface ICafeApiResponse {
+  cafeName: string;
+  address: string;
+  roadAddress: string;
+  mapx: string;
+  mapy: string;
+  link: string;
+  avgRating: number;
+  _closed_down: boolean;
+}

@@ -1,7 +1,7 @@
+import type { ICafeDescription, ICafeApiResponse } from './types';
 import { useApi, ApiError } from "@shared/api/hooks/useApi";
-import type { ICafeDescription } from './types'
 
-const BASE_URL = '/api/cafes'
+const BASE_URL = '/api/cafes';
 
 interface IsExistCafeResponse {
   cafeId: number
@@ -35,6 +35,24 @@ export interface CafeApiHook {
   saveCafe: (params: SaveCafeRequest) => Promise<SaveCafeResponse>
 }
 
+const mapCafeApiResponse = (response: ICafeApiResponse): ICafeDescription => {
+  return {
+    id: 0,
+    name: response.cafeName,
+    category: "카페",
+    isClosedDown: response._closed_down,
+    address: response.address,
+    roadAddress: response.roadAddress,
+    mapx: response.mapx,
+    mapy: response.mapy,
+    link: response.link,
+    isBookmark: false,
+    avgStar: response.avgRating,
+    profileImg: '',
+    image: []
+  };
+};
+
 export const useCafeApi = (): CafeApiHook => {
   const {
     data: cafe,
@@ -46,8 +64,8 @@ export const useCafeApi = (): CafeApiHook => {
 
   const getCafe = async (cafeId: string): Promise<ICafeDescription> => {
     try {
-      const response = await get<ICafeDescription>(`${BASE_URL}/${cafeId}`);
-      return response;
+      const response = await get<ICafeApiResponse>(`${BASE_URL}/${cafeId}`);
+      return mapCafeApiResponse(response);
     } catch (error) {
       console.error('카페 정보 조회 중 오류 발생:', error);
       throw error;

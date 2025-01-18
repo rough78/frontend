@@ -14,7 +14,7 @@ import { useReviewApi } from "@shared/api/reviews/reviewApi";
 import { ReviewRequest, ReviewResponse } from "@shared/api/reviews/types";
 import { PhotoUploader } from "@widgets/photoUploader";
 import { useCafeApi } from "@/shared/api/cafe/cafe";
-import { TAGS } from "@/constants/tags";
+import { TAGS } from "@shared/constants/tags";
 
 const WriteReview = () => {
   const navigate = useNavigate();

@@ -26,3 +26,21 @@ export interface ReviewRequest {
     interior: Array<{ id: number }>;
   };
 }
+
+export interface ShowCafeReviewRequest {
+  page?: number;
+  size?: number;
+  sort?: string;
+}
+
+export interface ShowReviewResponse {
+  reviewId: number;
+  content: string;
+  rating: number;
+  visitDate: string;
+  imageIds: string[];
+  tagIds: number[];
+  cafeId: number;
+  userId: number;
+  createdAt: string;
+}

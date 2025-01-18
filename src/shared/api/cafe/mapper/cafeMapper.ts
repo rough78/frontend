@@ -13,7 +13,7 @@ export class CafeMapper {
       mapx: naverResponse.mapx || '',
       mapy: naverResponse.mapy || '',
       link: naverResponse.link || '',
-      image: [],
+      imageIds: [],
       isBookmark: false,
       avgStar: 0,
       profileImg: ''

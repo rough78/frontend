@@ -6,6 +6,14 @@ import type {
   ShowReviewResponse,
 } from "./types";
 
+export interface ShowReviewListRequest {
+  sort?: string;
+  limit?: number;
+  timestamp?: string;
+  tagIds?: number[];
+  rating?: number;
+}
+
 export const useReviewApi = () => {
   const { post, get, isLoading, error } = useApi<ReviewResponse>();
 
@@ -57,9 +65,36 @@ export const useReviewApi = () => {
     }
   };
 
+  const getReviewList = async (
+    params: ShowReviewListRequest = {
+      sort: "NEW",
+      limit: 10
+    },
+    options?: {
+      onSuccess?: (response: ShowReviewResponse[]) => void;
+      onError?: (error: any) => void;
+    }
+  ) => {
+    try {
+      const response = await get<ShowReviewResponse[]>(
+        `/api/reviews/list`,
+        { params },
+        {
+          onSuccess: options?.onSuccess,
+          onError: options?.onError,
+        }
+      );
+      return response;
+    } catch (error) {
+      console.error("리뷰 목록 조회 중 오류 발생:", error);
+      throw error;
+    }
+  };
+
   return {
     createReview,
     getCafeReviews,
+    getReviewList,
     isLoading,
     error,
   };

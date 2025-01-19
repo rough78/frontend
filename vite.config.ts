@@ -20,11 +20,13 @@ export default defineConfig(({ mode }) => {
     base: isProduction ? '/prod/' : '/',
     define: {
       __APP_MODE__: JSON.stringify(mode),
+      'import.meta.env.VITE_APP_REMOTE': JSON.stringify(isRemote),
+      'import.meta.env.MODE': JSON.stringify(mode)
     },
     build: {
       sourcemap: !isProduction,
       minify: isProduction,
-      outDir: isProduction ? 'dist' : 'dist-dev'
+      outDir: 'dist'
     },
     resolve: {
       alias: {

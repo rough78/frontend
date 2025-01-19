@@ -15,7 +15,6 @@ interface PhotoSwiperProps {
 const PhotoSwiper: FC<PhotoSwiperProps> = ({ imageIds, showChips = true }) => {
   const { getUrl } = useReviewImageApi();
 
-  // If no imageIds, don't render anything
   if (!imageIds || imageIds.length === 0) {
     return null;
   }

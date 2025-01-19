@@ -28,7 +28,7 @@ const ReviewList = () => {
     <ul className={styles.reviewList}>
       {reviews.map(review => (
         <li key={review.reviewId} className={styles.reviewList__item}>
-          <ReviewItem review={review} />
+          <ReviewItem review={review} showChips={true} />
         </li>
       ))}
     </ul>

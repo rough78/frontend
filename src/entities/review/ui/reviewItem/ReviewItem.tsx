@@ -6,9 +6,10 @@ import type { ShowReviewResponse } from "@shared/api/reviews/types";
 
 interface ReviewItemProps {
   review: ShowReviewResponse;
+  showChips?: boolean;
 }
 
-const ReviewItem = ({ review }: ReviewItemProps) => {
+const ReviewItem = ({ review, showChips = false }: ReviewItemProps) => {
   return (
     <div>
       <ReviewerInfo
@@ -17,7 +18,7 @@ const ReviewItem = ({ review }: ReviewItemProps) => {
         rating={review.rating}
         isProfileImageExist={review.isProfileImageExist}
       />
-      <PhotoSwiper imageIds={(review.imageIds || []).map(id => id.toString())} showChips={false} />
+      <PhotoSwiper imageIds={(review.imageIds || []).map(id => id.toString())} showChips={showChips} />
       <ReviewContent content={review.content} />
       <ReviewTagList tagIds={review.tagIds} />
     </div>

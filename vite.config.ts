@@ -48,7 +48,7 @@ export default defineConfig(({ mode }) => {
       } : undefined,
       proxy: {
         "/api": {
-          target: isRemote ? env.VITE_API_URL : "",
+          target: isRemote || isProduction ? env.VITE_API_URL : "",
           changeOrigin: true,
           secure: true,
           configure: (proxy, _options) => {

@@ -6,6 +6,7 @@ import styles from "./ReviewList.module.scss";
 
 const ReviewList = () => {
   const [reviews, setReviews] = useState<ShowReviewResponse[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { getCafeReviews } = useReviewApi();
 
   useEffect(() => {
@@ -16,22 +17,33 @@ const ReviewList = () => {
           size: 10,
           sort: "latest"
         });
-        setReviews(response);
+        setReviews(response || []); // Ensure it's always an array
       } catch (error) {
         console.error("Failed to fetch reviews:", error);
+        setReviews([]); // Set empty array on error
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchReviews();
   }, []);
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <ul className={styles.reviewList}>
-      {reviews.map(review => (
-        <li key={review.reviewId} className={styles.reviewList__item}>
-          <ReviewItem review={review} />
-        </li>
-      ))}
+      {reviews && reviews.length > 0 ? (
+        reviews.map(review => (
+          <li key={review.reviewId} className={styles.reviewList__item}>
+            <ReviewItem review={review} />
+          </li>
+        ))
+      ) : (
+        <li>No reviews found</li>
+      )}
     </ul>
   );
 };

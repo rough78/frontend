@@ -38,14 +38,14 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
-      https: {
+      https: !isProduction ? {
         key: process.env.SSL_KEY_PATH 
           ? fs.readFileSync(process.env.SSL_KEY_PATH)
           : fs.readFileSync(path.resolve(__dirname, "localhost-key.pem")),
         cert: process.env.SSL_CERT_PATH 
           ? fs.readFileSync(process.env.SSL_CERT_PATH)
           : fs.readFileSync(path.resolve(__dirname, "localhost.pem")),
-      },
+      } : undefined,
       proxy: {
         "/api": {
           target: isRemote ? env.VITE_API_URL : "",

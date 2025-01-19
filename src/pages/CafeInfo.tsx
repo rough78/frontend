@@ -112,11 +112,13 @@ const CafeInfo = () => {
       </div>
       
       {reviews.length > 0 ? (
-        <div className={styles.reviewList}>
+        <ul className={styles.reviewList}>
           {reviews.map((review) => (
-            <ReviewItem key={review.reviewId} review={review} />
+            <li key={review.reviewId} className={styles.reviewList__item}>
+              <ReviewItem review={review} />
+            </li>
           ))}
-        </div>
+        </ul>
       ) : (
         <div className={styles.noRatingContainer}>
           <img src={NoReview} alt="No Review" />

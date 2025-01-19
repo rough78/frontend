@@ -102,3 +102,10 @@
     background-color: #f9f8f6;
     border-radius: 8px;
   }
+
+  .reviewList {
+    .reviewList__item {
+      padding: 24px 16px;
+      border-bottom: 1px solid var.$semantic-border-primary;
+    }
+  }

@@ -9,9 +9,12 @@ export interface ReviewResponse {
   rating: number;
   visitDate: string;
   imageIds: string[];
-  tags: TagCategory;
+  // tags: TagCategory;
+  tagIds: number[];
   cafeId: number;
   userId: number;
+  nickname: string;
+  isProfileImageExist: boolean;
   createdAt: string;
 }
 
@@ -43,5 +46,7 @@ export interface ShowReviewResponse {
   tagIds: number[];
   cafeId: number;
   userId: number;
+  nickname: string;
+  isProfileImageExist: boolean;
   createdAt: string;
 }

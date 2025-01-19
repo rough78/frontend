@@ -4,7 +4,7 @@ import bookmarkIcon from "@shared/assets/images/cafe/bookmark.svg";
 
 type CafeInfoItemProps = Pick<
   ICafeDescription,
-  "name" | "address" | "instaLink"
+  "name" | "address" | "link"
 > & {
   onBookmarkClick: () => void;
 };
@@ -12,7 +12,7 @@ type CafeInfoItemProps = Pick<
 const CafeInfoItem = ({
   name,
   address,
-  instaLink,
+  link: instaLink,
   onBookmarkClick,
 }: CafeInfoItemProps) => {
   return (

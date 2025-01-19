@@ -35,9 +35,9 @@ export interface CafeApiHook {
   saveCafe: (params: SaveCafeRequest) => Promise<SaveCafeResponse>
 }
 
-const mapCafeApiResponse = (response: ICafeApiResponse): ICafeDescription => {
+const mapCafeApiResponse = (response: ICafeApiResponse, cafeId: string): ICafeDescription => {
   return {
-    id: 0,
+    id: parseInt(cafeId, 10),
     name: response.cafeName,
     category: "카페",
     isClosedDown: response._closed_down,
@@ -49,7 +49,7 @@ const mapCafeApiResponse = (response: ICafeApiResponse): ICafeDescription => {
     isBookmark: false,
     avgStar: response.avgRating,
     profileImg: '',
-    image: []
+    imageIds: []
   };
 };
 
@@ -63,13 +63,8 @@ export const useCafeApi = (): CafeApiHook => {
   } = useApi<ICafeDescription>();
 
   const getCafe = async (cafeId: string): Promise<ICafeDescription> => {
-    try {
-      const response = await get<ICafeApiResponse>(`${BASE_URL}/${cafeId}`);
-      return mapCafeApiResponse(response);
-    } catch (error) {
-      console.error('카페 정보 조회 중 오류 발생:', error);
-      throw error;
-    }
+    const response = await get<ICafeApiResponse>(`${BASE_URL}/${cafeId}`);
+    return mapCafeApiResponse(response, cafeId);
   };
 
   const checkCafeExists = async (params: {

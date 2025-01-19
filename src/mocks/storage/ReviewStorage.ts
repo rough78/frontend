@@ -42,11 +42,17 @@ export class IndexedDBReviewStorage implements ReviewStorage {
       const request = store.add(review);
       request.onsuccess = () => {
         resolve({
-          id: request.result as number,
+          reviewId: request.result as number,
           content: review.content,
           rating: review.rating,
           visitDate: review.visitDate,
-          cafeId: review.cafeId
+          imageIds: review.imageIds || [],
+          tagIds: review.tagIds || [],
+          cafeId: review.cafeId,
+          userId: 1,
+          nickname: "User",
+          isProfileImageExist: false,
+          createdAt: new Date().toISOString()
         });
       };
       request.onerror = () => reject(request.error);

@@ -43,7 +43,7 @@ export const useReviewApi = () => {
   ) => {
     try {
       const response = await get<ShowReviewResponse[]>(
-        `/api/cafe/${cafeId}`,
+        `/api/reviews/cafe/${cafeId}`,
         { params },
         {
           onSuccess: options?.onSuccess,

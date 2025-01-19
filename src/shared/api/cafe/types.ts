@@ -14,7 +14,7 @@ export interface ICafeDescription {
     readonly mapy: string;
     readonly link: string;
     // 프론트엔드에서 추가로 사용하는 속성
-    readonly image?: string[];
+    readonly imageIds?: number[];
     readonly isBookmark: boolean;
     readonly avgStar: number;
     readonly profileImg: string;

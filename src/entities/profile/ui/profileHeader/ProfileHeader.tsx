@@ -1,5 +1,6 @@
 import styles from "./ProfileHeader.module.scss";
 import { ProfileHeaderProps } from "../../types";
+import MyProfileImage from "@shared/assets/images/profile/profile.svg";
 
 const ProfileHeader = ({ isScrolled }: ProfileHeaderProps) => {
   return (
@@ -10,7 +11,7 @@ const ProfileHeader = ({ isScrolled }: ProfileHeaderProps) => {
     >
       <img
         className={styles.profileHead__profileImg}
-        src="src/shared/assets/images/profile/profile.svg"
+        src={MyProfileImage}
         alt="myProfileImage"
       />
       <div className={styles.profileHead__meta}>

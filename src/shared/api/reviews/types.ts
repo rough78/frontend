@@ -21,10 +21,11 @@ export interface ReviewRequest {
   visitDate: string;
   content: string;
   imageIds: string[];
-  tags: {
-    menu: Array<{ id: number }>;
-    interior: Array<{ id: number }>;
-  };
+  // tagIds: {
+  //   menu: Array<{ id: number }>;
+  //   interior: Array<{ id: number }>;
+  // };
+  tagIds: number[];
 }
 
 export interface ShowCafeReviewRequest {

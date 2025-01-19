@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
 
-export const API_URL = import.meta.env.VITE_APP_REMOTE ? 'https://packetbreeze.com:8443' : ''
+export const API_URL = import.meta.env.VITE_APP_REMOTE ? import.meta.env.VITE_API_URL : ''
 export const NAVER_API_URL = 'https://openapi.naver.com/v1'
 export const AUTH_URL = `${API_URL}/oauth2/authorization`
 

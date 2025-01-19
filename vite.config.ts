@@ -8,7 +8,9 @@ import path from "path";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const isProduction = mode === 'production';
+  // @ts-ignore
   const isDevelopment = mode === 'development';
+  // @ts-ignore
   const isStaging = mode === 'staging';
   const isRemote = env.VITE_APP_REMOTE === 'true';
 

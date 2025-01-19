@@ -1,6 +1,7 @@
 import styles from "./ReviewTag.module.scss";
 import { ReviewTagProps } from "../../types";
 import { TagMapper } from "@shared/lib/tagMapper";
+import smallStarIcon from "@shared/assets/images/small-star.svg";
 
 interface ExtendedReviewTagProps extends ReviewTagProps {
   id: number;
@@ -12,7 +13,9 @@ const ReviewTag = ({ content, id }: ExtendedReviewTagProps) => {
     if (!icon) {
       icon = TagMapper.getTagIcon("interior", id, true);
     }
-    return icon ? `/src/shared/assets/images/tag-icon/${icon}` : "/src/shared/assets/images/small-star.svg";
+    return icon 
+      ? new URL(`/src/shared/assets/images/tag-icon/${icon}`, import.meta.url).href
+      : smallStarIcon;
   };
 
   return (

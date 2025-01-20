@@ -20,13 +20,13 @@ const CafeSearch = () => {
 
   const handleCafeSelect = async (cafe: ICafeDescription) => {
     try {
-      const { exist } = await checkCafeExists({
+      const { cafeId, exist } = await checkCafeExists({
         name: cafe.name,
         mapx: cafe.mapx,
         mapy: cafe.mapy,
       });
   
-      let cafeId = cafe.id;
+      let selectedCafeId = cafeId;
   
       if (!exist) {
         const saveResponse = await saveCafe({
@@ -40,7 +40,7 @@ const CafeSearch = () => {
         });
   
         if (saveResponse.cafeId) {
-          cafeId = saveResponse.cafeId;
+          selectedCafeId = saveResponse.cafeId;
         } else {
           console.error("카페 저장 실패");
           return;

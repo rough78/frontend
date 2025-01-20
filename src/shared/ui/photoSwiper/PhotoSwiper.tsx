@@ -10,9 +10,14 @@ import { useReviewImageApi } from "@shared/api/images";
 interface PhotoSwiperProps {
   imageIds: string[];
   showChips?: boolean;
+  cafeName?: string; // 카페 이름 prop 추가
 }
 
-const PhotoSwiper: FC<PhotoSwiperProps> = ({ imageIds, showChips = true }) => {
+const PhotoSwiper: FC<PhotoSwiperProps> = ({ 
+  imageIds, 
+  showChips = true,
+  cafeName = "" // 기본값 추가
+}) => {
   const { getUrl } = useReviewImageApi();
 
   if (!imageIds || imageIds.length === 0) {
@@ -21,13 +26,11 @@ const PhotoSwiper: FC<PhotoSwiperProps> = ({ imageIds, showChips = true }) => {
 
   return (
     <Swiper
-      className={styles.swiper as string}
+      className={styles.swiper}
       pagination={true}
       modules={[Pagination]}
       spaceBetween={50}
       slidesPerView={1}
-      onSlideChange={() => console.log("slide change")}
-      onSwiper={(swiper) => console.log(swiper)}
     >
       {imageIds.map((imageId) => (
         <SwiperSlide key={imageId} className={styles.swiperSlide}>
@@ -36,9 +39,9 @@ const PhotoSwiper: FC<PhotoSwiperProps> = ({ imageIds, showChips = true }) => {
             alt="Review"
             className={styles.image}
           />
-          {showChips && (
+          {showChips && cafeName && (
             <div className={styles.chipsWrap}>
-              <Chips />
+              <Chips cafeName={cafeName} />
             </div>
           )}
         </SwiperSlide>

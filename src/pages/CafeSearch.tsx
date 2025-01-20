@@ -48,7 +48,7 @@ const CafeSearch = () => {
       }
   
       if (isFromFooter) {
-        navigate(`/cafe/${cafeId}`);
+        navigate(`/cafe/${selectedCafeId}`);
       } else {
         setIsFromFooter(false);
         setReturnPath(returnPath || "/");

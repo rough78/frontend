@@ -69,16 +69,16 @@ export const AppRouter = () => {
               showFooter={true}
               showBackButton={true}
               headerTitle="장소 검색"
-              rightElement={
-                <button
-                  className={styles.completeButton}
-                  onClick={() => {
-                    /* 이벤트 처리 */
-                  }}
-                >
-                  완료
-                </button>
-              }
+              // rightElement={
+              //   <button
+              //     className={styles.completeButton}
+              //     onClick={() => {
+              //       /* 이벤트 처리 */
+              //     }}
+              //   >
+              //     완료
+              //   </button>
+              // }
             >
               <CafeSearch />
             </MainLayout>

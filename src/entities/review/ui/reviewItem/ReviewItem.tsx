@@ -18,7 +18,11 @@ const ReviewItem = ({ review, showChips = false }: ReviewItemProps) => {
         rating={review.rating}
         isProfileImageExist={review.isProfileImageExist}
       />
-      <PhotoSwiper imageIds={(review.imageIds || []).map(id => id.toString())} showChips={showChips} />
+      <PhotoSwiper 
+        imageIds={(review.imageIds || []).map(id => id.toString())} 
+        showChips={showChips}
+        cafeName={review.cafeName}
+      />
       <ReviewContent content={review.content} />
       <ReviewTagList tagIds={review.tagIds} />
     </div>

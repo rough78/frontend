@@ -55,7 +55,7 @@ const CafeSearch = () => {
         updateDraft({ 
           cafe: {
             ...cafe,
-            id: cafeId
+            id: selectedCafeId
           }
         });
         navigate('/review/write');

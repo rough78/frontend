@@ -6,6 +6,7 @@ import { useCafeSearch } from "@shared/api/cafe/cafeSearch";
 import { useReviewDraftStore } from "@shared/store/useReviewDraftStore";
 import { useNavigationStore } from "@shared/store/useNavigationStore";
 import type { ICafeDescription } from "@shared/api/cafe/types";
+import { useCafeApi } from "@/shared/api/cafe/cafe";
 import styles from "./styles/CafeSearch.module.scss";
 
 const CafeSearch = () => {
@@ -14,33 +15,53 @@ const CafeSearch = () => {
   const { updateDraft } = useReviewDraftStore();
   const { returnPath, setReturnPath, isFromFooter, setIsFromFooter } = useNavigationStore();
   const { searchByName, isLoading, error } = useCafeSearch();
+  const { checkCafeExists, saveCafe } = useCafeApi();
   const [cafes, setCafes] = useState<ICafeDescription[]>([]);
 
-  const handleCafeSelect = (cafe: ICafeDescription) => {
-    if (isFromFooter) {
-      setIsFromFooter(false);
-      navigate(`/cafe/${cafe.id}`);
-    } else {
-      setIsFromFooter(false);
-      setReturnPath(returnPath || "/");
-      updateDraft({ 
-        cafe: {
-          id: cafe.id,
-          name: cafe.name,
+  const handleCafeSelect = async (cafe: ICafeDescription) => {
+    try {
+      const { cafeId, exist } = await checkCafeExists({
+        name: cafe.name,
+        mapx: cafe.mapx,
+        mapy: cafe.mapy,
+      });
+  
+      let selectedCafeId = cafeId;
+  
+      if (!exist) {
+        const saveResponse = await saveCafe({
+          title: cafe.name,
           category: cafe.category,
-          isClosedDown: cafe.isClosedDown,
-          address: cafe.address,
-          roadAddress: cafe.roadAddress,
           mapx: cafe.mapx,
           mapy: cafe.mapy,
+          address: cafe.address,
+          roadAddress: cafe.roadAddress,
           link: cafe.link,
-          isBookmark: cafe.isBookmark,
-          avgStar: cafe.avgStar,
-          profileImg: cafe.profileImg,
-          image: cafe.image
-        } 
-      });
-      navigate('/review/write');
+        });
+  
+        if (saveResponse.cafeId) {
+          selectedCafeId = saveResponse.cafeId;
+        } else {
+          console.error("카페 저장 실패");
+          return;
+        }
+      }
+  
+      if (isFromFooter) {
+        navigate(`/cafe/${selectedCafeId}`);
+      } else {
+        setIsFromFooter(false);
+        setReturnPath(returnPath || "/");
+        updateDraft({ 
+          cafe: {
+            ...cafe,
+            id: selectedCafeId
+          }
+        });
+        navigate('/review/write');
+      }
+    } catch (error) {
+      console.error("카페 선택 중 오류 발생:", error);
     }
   };
 

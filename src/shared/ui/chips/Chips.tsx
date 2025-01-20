@@ -1,10 +1,15 @@
 import styles from "./Chips.module.scss";
+import ChipsImage from "@shared/assets/images/chips.svg";
 
-const Chips = () => {
+interface ChipsProps {
+  cafeName: string;
+}
+
+const Chips: React.FC<ChipsProps> = ({ cafeName }) => {
   return (
     <div className={styles.chips}>
-      <img src="/src/shared/assets/images/chips.svg" alt="location-icon" />
-      <p>기미사 성수</p>
+      <img src={ChipsImage} alt="location-icon" />
+      <p>{cafeName}</p>
     </div>
   );
 };

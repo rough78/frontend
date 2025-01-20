@@ -5,7 +5,7 @@ import App from "@app/App.tsx";
 import "./app/styles/main.scss";
 
 async function enableMocking() {
-  if (!import.meta.env.VITE_APP_REMOTE) {
+  if (!import.meta.env.VITE_APP_REMOTE && import.meta.env.MODE !== 'production') {
     const { worker } = await import('./mocks/browser')
     return worker.start()
   }

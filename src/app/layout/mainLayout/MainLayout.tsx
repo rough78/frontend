@@ -1,5 +1,5 @@
+import { ReactNode, useEffect } from "react"; // useEffect 추가
 import styles from "./MainLayout.module.scss";
-import { ReactNode } from "react";
 import Header from "../header/Header";
 import Footer from "../footer/Footer";
 import FloatingButton from "@shared/ui/floatingButton/FloatingButton";
@@ -25,6 +25,20 @@ const MainLayout = ({
   rightElement,
   bgColor = "#fff",
 }: MainLayoutProps) => {
+  useEffect(() => {
+    const setViewportHeight = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+
+    setViewportHeight();
+    window.addEventListener('resize', setViewportHeight);
+
+    return () => {
+      window.removeEventListener('resize', setViewportHeight);
+    };
+  }, []);
+
   return (
     <div className={styles.mainLayout}>
       {showHeader && (

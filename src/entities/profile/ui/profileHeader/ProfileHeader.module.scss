@@ -2,46 +2,71 @@
 @use "/src/app/styles/abstracts/variables" as var;
 
 .profileHead {
-  position: sticky;
-  top: 48px;
-  z-index: 2;
-  display: flex;
+  position: fixed;
+  top: var(--header-height);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  width: 100%;
+  max-width: 600px;
+  height: 212px;
   background-color: var.$primitive-secondary-brown50;
-  .profileHead__meta {
-    .profileHead__nickName {
-      @include mixins.apply-text-style(t2_bold);
-      color: var.$semantic-text-icon-primary;
-    }
-    .profileHead__introduction {
-      @include mixins.apply-text-style(b1_regular);
-      color: var.$semantic-text-icon-secondary;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-  }
-  &--large {
-    padding: 16px 0 32px;
-    gap: 20px;
+  border-left: 1px solid #d8d8d8;
+  border-right: 1px solid #d8d8d8;
+  overflow: hidden;
+  transition: all 0.3s ease;
+
+  &__inner {
+    display: flex;
     flex-direction: column;
     align-items: center;
-    .profileHead__profileImg {
-      width: 80px;
-    }
-    .profileHead__meta {
-      max-width: 343px;
-      text-align: center;
-    }
+    height: 100%;
+    padding: 16px 0 32px;
+    gap: 20px;
+    transition: all 0.3s ease;
+    transform-origin: top center;
   }
-  &--small {
-    padding: 0 16px 24px;
-    gap: 16px;
-    align-items: center;
+
+  &__meta {
+    max-width: 343px;
+    text-align: center;
+    transition: max-width 0.3s ease;
+  }
+
+  &__profileImg {
+    width: 80px;
+    transition: width 0.3s ease;
+  }
+
+  &__nickName {
+    @include mixins.apply-text-style(t2_bold);
+    color: var.$semantic-text-icon-primary;
+  }
+
+  &__introduction {
+    @include mixins.apply-text-style(b1_regular);
+    color: var.$semantic-text-icon-secondary;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &--shrink {
+    height: 76px;
+
+    .profileHead__inner {
+      padding: 16px;
+      gap: 16px;
+      flex-direction: row;
+    }
+
     .profileHead__profileImg {
       width: 52px;
     }
+
     .profileHead__meta {
       max-width: 275px;
+      text-align: left;
     }
   }
 }

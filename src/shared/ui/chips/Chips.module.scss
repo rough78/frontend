@@ -3,7 +3,7 @@
 
 .chips {
   padding: 4px 12px 4px 8px;
-  width: 100px;
+  max-width: fit-content;
   height: 24px;
 
   background-color: #6a635c;
@@ -14,4 +14,11 @@
   display: flex;
   align-items: center;
   gap: 8px;
+
+  p {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }

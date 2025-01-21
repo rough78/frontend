@@ -1,5 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { useNavigationStore } from "@shared/store/useNavigationStore";
+import { useReviewDraftStore } from "@shared/store/useReviewDraftStore";
 import PhotoSwiper from "@shared/ui/photoSwiper/PhotoSwiper.tsx";
 import CafeInfoItem from "@entities/cafeInfo/ui/CafeInfoItem";
 import { StarRating } from "@widgets/starRating";
@@ -19,6 +21,9 @@ const CafeInfo = () => {
   const [error, setError] = useState<Error | null>(null);
   const [reviews, setReviews] = useState<ShowReviewResponse[]>([]);
   const { getCafeReviews } = useReviewApi();
+  const navigate = useNavigate();
+  const { setReturnPath } = useNavigationStore();
+  const { updateDraft } = useReviewDraftStore();
   
   // 디버깅을 위한 로그 추가
   useEffect(() => {
@@ -73,6 +78,16 @@ const CafeInfo = () => {
     }
   }, [cafeInfo, fetchReviews]);
 
+  const handleWriteReviewClick = () => {
+    if (cafeInfo) {
+      setReturnPath(`/cafe/${cafeInfo.id}`);
+      updateDraft({ 
+        cafe: cafeInfo
+      });
+      navigate('/review/write');
+    }
+  };
+
   if (isLoading) {
     return <div>로딩 중...</div>;
   }
@@ -126,7 +141,10 @@ const CafeInfo = () => {
             <p className={styles.noRatingText__main}>아직 작성된 리뷰가 없어요</p>
             <p className={styles.noRatingText__sub}>이 카페의 첫 리뷰를 작성해 볼까요?</p>
           </div>
-          <button className={styles.writeReviewButton}>
+          <button 
+            className={styles.writeReviewButton}
+            onClick={handleWriteReviewClick}
+          >
             작성하러 가기
           </button>
         </div>

@@ -5,7 +5,7 @@ const Main = () => {
   return (
     <div>
       <ReviewFilter />
-      <ReviewList />
+      <ReviewList type="all" params={{ sort: "NEW", limit: 10 }} />
     </div>
   );
 };

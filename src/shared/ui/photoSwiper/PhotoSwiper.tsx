@@ -20,6 +20,16 @@ const PhotoSwiper: FC<PhotoSwiperProps> = ({
 }) => {
   const { getUrl } = useReviewImageApi();
 
+  // imageIds가 없고 cafeName과 showChips가 있는 경우에도 Chips 렌더링
+  if ((!imageIds || imageIds.length === 0) && showChips && cafeName) {
+    return (
+      <div className={styles.chipsOnly}>
+        <Chips cafeName={cafeName} />
+      </div>
+    );
+  }
+
+  // 이미지와 Chips가 모두 없는 경우 렌더링하지 않음
   if (!imageIds || imageIds.length === 0) {
     return null;
   }

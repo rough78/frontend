@@ -45,8 +45,22 @@ export interface ShowReviewResponse {
   imageIds: string[];
   tagIds: number[];
   cafeId: number;
+  cafeName: string;
   userId: number;
   nickname: string;
   isProfileImageExist: boolean;
   createdAt: string;
+}
+
+export interface ShowReviewListRequest {
+  sort?: string;
+  limit?: number;
+  timestamp?: string;
+  tagIds?: number[];
+  rating?: number;
+}
+
+export interface ShowUserReviewRequest {
+  limit?: number;
+  timestamp?: string;
 }

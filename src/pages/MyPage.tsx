@@ -50,7 +50,7 @@ const MyPage = () => {
       </div>
       <div ref={contentRef} style={{ paddingTop: isScrolled ? "84px" : "212px" }}>
         <FilterBtn />
-        <ReviewList />
+        <ReviewList type="my" params={{ limit: 10 }} />
         <button onClick={openModal}>Open Modal</button>
         <Modal
           isOpen={isModalOpen}

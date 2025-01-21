@@ -48,7 +48,7 @@ const MyPage = () => {
       <div ref={headerRef}>
         <ProfileHeader isScrolled={isScrolled} />
       </div>
-      <div ref={contentRef} style={{ paddingTop: isScrolled ? "84px" : "212px" }}>
+      <div ref={contentRef} style={{ paddingTop: isScrolled ? "84px" : "252px" }}>
         <FilterBtn />
         <ReviewList type="my" params={{ limit: 10 }} />
         <button onClick={openModal}>Open Modal</button>

@@ -10,13 +10,15 @@ import { useReviewImageApi } from "@shared/api/images";
 interface PhotoSwiperProps {
   imageIds: string[];
   showChips?: boolean;
-  cafeName?: string; // 카페 이름 prop 추가
+  cafeName?: string;
+  cafeId?: number;
 }
 
 const PhotoSwiper: FC<PhotoSwiperProps> = ({ 
   imageIds, 
   showChips = true,
-  cafeName = "" // 기본값 추가
+  cafeName = "",
+  cafeId
 }) => {
   const { getUrl } = useReviewImageApi();
 
@@ -24,7 +26,7 @@ const PhotoSwiper: FC<PhotoSwiperProps> = ({
   if ((!imageIds || imageIds.length === 0) && showChips && cafeName) {
     return (
       <div className={styles.chipsOnly}>
-        <Chips cafeName={cafeName} />
+        <Chips cafeName={cafeName} cafeId={cafeId} />
       </div>
     );
   }
@@ -51,7 +53,7 @@ const PhotoSwiper: FC<PhotoSwiperProps> = ({
           />
           {showChips && cafeName && (
             <div className={styles.chipsWrap}>
-              <Chips cafeName={cafeName} />
+              <Chips cafeName={cafeName} cafeId={cafeId} />
             </div>
           )}
         </SwiperSlide>

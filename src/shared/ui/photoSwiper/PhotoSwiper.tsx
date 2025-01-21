@@ -4,8 +4,9 @@ import "swiper/css";
 import "swiper/css/pagination";
 import styles from "./PhotoSwiper.module.scss";
 import { Pagination } from "swiper/modules";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useReviewImageApi } from "@shared/api/images";
+import FullScreenViewer from "../fullScreenViewer/FullScreenViewer";
 
 interface PhotoSwiperProps {
   imageIds: string[];
@@ -20,6 +21,8 @@ const PhotoSwiper: FC<PhotoSwiperProps> = ({
   cafeName = "",
   cafeId
 }) => {
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [initialSlideIndex, setInitialSlideIndex] = useState(0);
   const { getUrl } = useReviewImageApi();
 
   // imageIds가 없고 cafeName과 showChips가 있는 경우에도 Chips 렌더링
@@ -37,28 +40,45 @@ const PhotoSwiper: FC<PhotoSwiperProps> = ({
   }
 
   return (
-    <Swiper
-      className={styles.swiper}
-      pagination={true}
-      modules={[Pagination]}
-      spaceBetween={50}
-      slidesPerView={1}
-    >
-      {imageIds.map((imageId) => (
-        <SwiperSlide key={imageId} className={styles.swiperSlide}>
-          <img 
-            src={getUrl(imageId)}
-            alt="Review"
-            className={styles.image}
-          />
-          {showChips && cafeName && (
-            <div className={styles.chipsWrap}>
-              <Chips cafeName={cafeName} cafeId={cafeId} />
-            </div>
-          )}
-        </SwiperSlide>
-      ))}
-    </Swiper>
+    <>
+      <Swiper
+        className={styles.swiper}
+        pagination={true}
+        modules={[Pagination]}
+        spaceBetween={50}
+        slidesPerView={1}
+      >
+        {imageIds.map((imageId, index) => (
+          <SwiperSlide 
+            key={imageId} 
+            className={styles.swiperSlide}
+            onClick={() => {
+              setInitialSlideIndex(index);
+              setViewerOpen(true);
+            }}
+          >
+            <img 
+              src={getUrl(imageId)}
+              alt="Review"
+              className={styles.image}
+            />
+            {showChips && cafeName && (
+              <div className={styles.chipsWrap}>
+                <Chips cafeName={cafeName} cafeId={cafeId} />
+              </div>
+            )}
+          </SwiperSlide>
+        ))}
+      </Swiper>
+
+      {viewerOpen && (
+        <FullScreenViewer
+          images={imageIds.map(getUrl)}
+          initialIndex={initialSlideIndex}
+          onClose={() => setViewerOpen(false)}
+        />
+      )}
+    </>
   );
 };
 

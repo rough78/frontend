@@ -5,7 +5,6 @@ import { DatePicker } from "@widgets/datePicker";
 import { useReviewDraftStore } from "@shared/store/useReviewDraftStore";
 import { usePhotoUploaderStore } from "@shared/store/usePhotoUploaderStore";
 import { useEffect } from "react";
-import { Tag } from "@shared/ui/tag";
 import CafeListItem from "@entities/cafeListItem/CafeListItem";
 import { InputWrapper } from "@shared/ui/input/Input";
 import { Textarea } from "@shared/ui/textarea";
@@ -14,7 +13,7 @@ import { useReviewApi } from "@shared/api/reviews/reviewApi";
 import { ReviewRequest, ReviewResponse } from "@shared/api/reviews/types";
 import { PhotoUploader } from "@widgets/photoUploader";
 import { useCafeApi } from "@/shared/api/cafe/cafe";
-import { TAGS } from "@shared/constants/tags";
+import TagSelector from "@features/writeReview/ui/TagSelector";
 
 const WriteReview = () => {
   const navigate = useNavigate();
@@ -160,38 +159,7 @@ const WriteReview = () => {
         label="구체적으로 알려주세요."
         className={styles.visitDateLabel}
       >
-        <div className={styles.tagContainer}>
-          <div className={styles.tagSection}>
-            <h3>메뉴</h3>
-            <div className={styles.tags}>
-              {TAGS.menu.map((tag) => (
-                <Tag
-                  key={tag.id}
-                  content={tag.description}
-                  defaultIcon={tag.defaultIcon}
-                  activeIcon={tag.activeIcon}
-                  isActive={draft.tags?.menu?.includes(tag.id) || false}
-                  onClick={() => handleTagClick("menu", tag.id)}
-                />
-              ))}
-            </div>
-          </div>
-          <div className={styles.tagSection}>
-            <h3>인테리어</h3>
-            <div className={styles.tags}>
-              {TAGS.interior.map((tag) => (
-                <Tag
-                  key={tag.id}
-                  content={tag.description}
-                  defaultIcon={tag.defaultIcon}
-                  activeIcon={tag.activeIcon}
-                  isActive={draft.tags?.interior?.includes(tag.id) || false}
-                  onClick={() => handleTagClick("interior", tag.id)}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
+        <TagSelector selectedTags={draft.tags} onTagClick={handleTagClick} />
       </InputWrapper>
       <InputWrapper
         label={

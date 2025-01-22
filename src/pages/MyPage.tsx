@@ -24,13 +24,13 @@ const MyPage = () => {
         setIsScrolled(true);
 
         // 헤더 축소 후 스크롤 위치 보정하기
-        requestAnimationFrame(() => {
-          const newHeight = headerRef.current?.offsetHeight || 0;
-          const heightDiff = oldHeight - newHeight;
-          if (heightDiff > 0) {
-            mainContent.scrollTop += heightDiff;
-          }
-        });
+        // requestAnimationFrame(() => {
+        //   const newHeight = headerRef.current?.offsetHeight || 0;
+        //   const heightDiff = oldHeight - newHeight;
+        //   if (heightDiff > 0) {
+        //     mainContent.scrollTop += heightDiff;
+        //   }
+        // });
       } else if (isScrolled && scrollTop < 76) {
         setIsScrolled(false);
       }

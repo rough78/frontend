@@ -57,7 +57,7 @@ const WriteReview = () => {
   }
 
   const isValidForm = () => {
-    return draft.rating > 0 && draft.visitDate && draft.content?.trim();
+    return draft.rating > 0 && draft.visitDate;
   };
 
   return (

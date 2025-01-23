@@ -1,7 +1,18 @@
 import styles from "./ProfilForm.module.scss";
 import ProfileInputSection from "./ProfileInputSection";
+import { UserInfoResponse } from "@/shared/api/user/types";
 
-const ProfileForm = () => {
+interface ProfileFormProps {
+  userData: UserInfoResponse;
+  onNicknameChange: (nickname: string) => void;
+  nicknameError: string;
+}
+
+const ProfileForm = ({
+  userData,
+  onNicknameChange,
+  nicknameError,
+}: ProfileFormProps) => {
   return (
     <div className={styles.profileForm}>
       <ProfileInputSection
@@ -11,15 +22,19 @@ const ProfileForm = () => {
         showRight={false}
         showInput={false}
         showSocialAccount={true}
-        socialAccount="luna7252@google.com"
+        socialAccount={userData.email}
       />
       <ProfileInputSection
         label="닉네임"
         placeholder="닉네임"
+        required={true}
         maxLength={20}
         showInput={true}
         showRight={true}
         showSocialAccount={false}
+        value={userData.nickname}
+        onChange={onNicknameChange}
+        errorMessage={nicknameError}
       />
       <ProfileInputSection
         label="소개"
@@ -28,6 +43,7 @@ const ProfileForm = () => {
         showRight={true}
         showSocialAccount={false}
         showTextarea={true}
+        value={userData.introduce || ""}
       />
     </div>
   );

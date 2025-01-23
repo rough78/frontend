@@ -5,6 +5,7 @@ import {
   Outlet,
   Route,
   RouterProvider,
+  useNavigate,
 } from "react-router-dom";
 import MainLayout from "@app/layout/mainLayout/MainLayout";
 import Login from "@/pages/Login";
@@ -17,8 +18,7 @@ import MyPageEdit from "@/pages/MyPageEdit";
 import { ProtectedRoute } from "@app/routers/ProtectedRoute";
 import styles from "@app/layout/header/Header.module.scss";
 import { OAuthRedirect } from "@app/auth/OAuthRedirect";
-import Button from "@/shared/ui/button/ui/Button";
-import edit from "@shared/assets/images/profile/edit.svg";
+import NavBtn from "@/shared/ui/navButton/navBtn";
 
 export const AppRouter = () => {
   const routes = createRoutesFromElements(
@@ -123,13 +123,7 @@ export const AppRouter = () => {
               showFooter={true}
               showBackButton={false}
               bgColor="rgb(249, 248, 246)"
-              rightElement={
-                <Button
-                  className="imgBtn"
-                  imgUrl={edit}
-                  altText="프로필 수정"
-                />
-              }
+              rightElement={<NavBtn />}
             >
               <MyPage />
             </MainLayout>

@@ -137,7 +137,7 @@ const WriteReview = () => {
       <InputWrapper
         label={
           <div className={styles.reviewLabelContainer}>
-            <span>상세 리뷰</span>
+            <span className={styles.reviewSubLabel}>상세 리뷰</span>
             <span className={styles.charCount}>
               {draft.content?.length || 0} / 200자
             </span>
@@ -158,7 +158,7 @@ const WriteReview = () => {
       <InputWrapper
         label={
           <div className={styles.reviewLabelContainer}>
-            <span>사진 첨부</span>
+            <span className={styles.reviewSubLabel}>사진 첨부</span>
             <span className={styles.photoCount}>
               {images.length} / {config.maxCount}장
             </span>

@@ -14,7 +14,7 @@ const TagSelector = ({ selectedTags, onTagClick }: TagSelectorProps) => {
   return (
     <div className={styles.tagContainer}>
       <div className={styles.tagSection}>
-        <h3>메뉴</h3>
+        <span className={styles.tagSubLabel}>메뉴</span>
         <div className={styles.tags}>
           {TAGS.menu.map((tag) => (
             <Tag
@@ -29,7 +29,7 @@ const TagSelector = ({ selectedTags, onTagClick }: TagSelectorProps) => {
         </div>
       </div>
       <div className={styles.tagSection}>
-        <h3>인테리어</h3>
+      <span className={styles.tagSubLabel}>매장</span>
         <div className={styles.tags}>
           {TAGS.interior.map((tag) => (
             <Tag

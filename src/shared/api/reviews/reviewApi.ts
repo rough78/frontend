@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useApiQuery, useApiMutation } from "@shared/api/hooks/useQuery";
+import { useQueryClient } from '@tanstack/react-query';
 import type {
   ReviewRequest,
   ReviewResponse,
@@ -10,6 +11,8 @@ import type {
 } from "./types";
 
 export const useReviewApi = () => {
+  const queryClient = useQueryClient();
+
   const createReviewMutation = useApiMutation<ReviewResponse, ReviewRequest>(
     "/api/reviews",
     "post"
@@ -24,6 +27,8 @@ export const useReviewApi = () => {
   ) => {
     try {
       const response = await createReviewMutation.mutateAsync(request);
+      // 리뷰 작성 성공 시 reviews 관련 쿼리 무효화
+      await queryClient.invalidateQueries({ queryKey: ['reviews'] });
       options?.onSuccess?.(response);
       return response;
     } catch (error) {

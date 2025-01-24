@@ -12,7 +12,14 @@ const Main = () => {
   return (
     <div>
       <ReviewFilter onSortChange={handleSortChange} />
-      <ReviewList type="all" params={{ sort: sortType, limit: 10 }} />
+      <ReviewList 
+        type="all" 
+        params={{ 
+          sort: sortType, 
+          limit: 10 
+        }}
+        key={sortType}
+      />
     </div>
   );
 };

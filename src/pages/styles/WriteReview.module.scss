@@ -11,7 +11,7 @@ $spacing: 32px;
   position: relative;
   z-index: 1;
 
-  .visitDateLabel {
+  .inputLabel {
     color: #121212;
   }
 
@@ -130,16 +130,24 @@ $spacing: 32px;
   }
 }
 
-.starRatingStars {
-  --stars-gap: 8px;
-  --stars-background: #f9f8f6;
-  --stars-border-radius: 8px;
-  --stars-height: 80px;
-  gap: 8px;
+.starRatingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  height: 80px;
   background-color: #f9f8f6;
   border-radius: 8px;
+}
+
+.starRatingStars {
+  --stars-gap: 8px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  width: 100%;
+  
+  &.noMarginBottom {
+    margin-bottom: 0;
+  }
 }
 
 .errorInput {

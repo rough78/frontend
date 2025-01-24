@@ -68,7 +68,7 @@ const WriteReview = () => {
 
       <InputWrapper
         label={<span className={styles.mainLabel}>언제 방문했나요?</span>}
-        className={styles.visitDateLabel}
+        className={styles.inputLabel}
         isRequired={true}
         error={
           !draft.visitDate &&
@@ -91,7 +91,7 @@ const WriteReview = () => {
 
       <InputWrapper
         label={<span className={styles.mainLabel}>{draft.cafe.name} 어땠나요?</span>}
-        className={styles.visitDateLabel}
+        className={styles.inputLabel}
         isRequired={true}
         error={
           !draft.rating &&
@@ -103,7 +103,15 @@ const WriteReview = () => {
         <StarRating
           value={draft.rating}
           onChange={handleRatingChange}
-          starsContainerClassName={`${styles.starRatingStars} ${!draft.rating && (draft.tags.menu?.length > 0 || draft.tags.interior?.length > 0) ? styles.errorInput : ""}`}
+          showRatingText={true}
+          rootClassName={`${styles.starRatingContainer} ${
+            !draft.rating && (draft.tags.menu?.length > 0 || draft.tags.interior?.length > 0) 
+              ? styles.errorInput 
+              : ""
+          }`}
+          starsContainerClassName={`${styles.starRatingStars} ${
+            draft.rating > 0 ? styles.noMarginBottom : ""
+          }`}
         />
       </InputWrapper>
 
@@ -118,7 +126,7 @@ const WriteReview = () => {
             </span>
           </div>
         }
-        className={styles.visitDateLabel}
+        className={styles.inputLabel}
       >
         <TagSelector
           selectedTags={draft.tags}
@@ -136,7 +144,7 @@ const WriteReview = () => {
           </div>
         }
         fullWidthLabel={true}
-        className={styles.visitDateLabel}
+        className={styles.inputLabel}
       >
         <Textarea
           value={draft.content || ""}
@@ -157,7 +165,7 @@ const WriteReview = () => {
           </div>
         }
         fullWidthLabel={true}
-        className={styles.visitDateLabel}
+        className={styles.inputLabel}
       >
         <PhotoUploader
           initialImageIds={draft.imageIds}

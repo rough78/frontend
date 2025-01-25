@@ -16,15 +16,20 @@ import type { ShowReviewResponse } from "@shared/api/reviews/types";
 const CafeInfo = () => {
   const { id } = useParams();
   const { getCafe } = useCafeApi();
-  const { getCafeReviews } = useReviewApi();
+  const { useCafeReviews } = useReviewApi();
   const navigate = useNavigate();
   const { setReturnPath } = useNavigationStore();
   const { updateDraft } = useReviewDraftStore();
 
   const [cafeInfo, setCafeInfo] = useState<ICafeDescription | null>(null);
-  const [reviews, setReviews] = useState<ShowReviewResponse[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+
+  const reviewsQuery = useCafeReviews(Number(id), {
+    page: 1,
+    size: 10,
+    sort: "latest"
+  });
 
   useEffect(() => {
     const fetchCafeInfo = async () => {
@@ -37,13 +42,6 @@ const CafeInfo = () => {
       try {
         const data = await getCafe(id);
         setCafeInfo(data);
-        
-        const reviewsData = await getCafeReviews(data.id, {
-          page: 1,
-          size: 10,
-          sort: "latest"
-        });
-        setReviews(reviewsData);
       } catch (err) {
         setError(err instanceof Error ? err : new Error("카페 정보를 불러오는데 실패했습니다."));
       } finally {
@@ -62,11 +60,11 @@ const CafeInfo = () => {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || reviewsQuery.isLoading) {
     return <div>로딩 중...</div>;
   }
 
-  if (error || !cafeInfo) {
+  if (error || !cafeInfo || reviewsQuery.isError) {
     return <div>카페 정보를 불러오는데 실패했습니다.</div>;
   }
 
@@ -85,7 +83,7 @@ const CafeInfo = () => {
       <div className={styles.ratingWrapper}>
         <div className={styles.ratingHeader}>
           <label className={styles.ratingLabel}>리뷰</label>
-          <span className={styles.reviewCount}>({reviews.length}개)</span>
+          <span className={styles.reviewCount}>({reviewsQuery.data?.length ?? 0}개)</span>
         </div>
         <div className={styles.ratingScoreContainer}>
           <div className={styles.ratingScore}>
@@ -100,9 +98,9 @@ const CafeInfo = () => {
         </div>
       </div>
       
-      {reviews.length > 0 ? (
+      {reviewsQuery.data && reviewsQuery.data.length > 0 ? (
         <ul className={styles.reviewList}>
-          {reviews.map((review) => (
+          {reviewsQuery.data.map((review) => (
             <li key={review.reviewId} className={styles.reviewList__item}>
               <ReviewItem review={review} />
             </li>

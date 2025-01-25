@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useNavigationStore } from "@shared/store/useNavigationStore";
 import { StarRating } from "@widgets/starRating";
 import { DatePicker } from "@widgets/datePicker";
@@ -13,12 +13,15 @@ import { useReviewApi } from "@shared/api/reviews/reviewApi";
 import { PhotoUploader } from "@widgets/photoUploader";
 import TagSelector from "@features/writeReview/ui/TagSelector";
 import { useReviewHandlers } from "@features/writeReview/handlers/useReviewHandlers";
+import { useCafeApi } from "@shared/api/cafe/cafe";
 
 const WriteReview = () => {
   const returnPath = useNavigationStore((state) => state.returnPath);
   const { draft, updateDraft, clearDraft } = useReviewDraftStore();
   const { images, config } = usePhotoUploaderStore();
   const { createReview, isLoading } = useReviewApi();
+  const { getCafe } = useCafeApi();
+  const location = useLocation();
 
   const {
     handleSubmit,
@@ -38,15 +41,31 @@ const WriteReview = () => {
   );
 
   useEffect(() => {
-    if (localStorage.getItem("review-draft")) {
-      clearDraft(["cafe", "id"]);
-      return;
-    }
+    const fetchCafeInfo = async () => {
+      // DraftReview 페이지에서 온 경우
+      if (location.state?.from === '/draft' && draft.cafe?.id) {
+        try {
+          const cafeInfo = await getCafe(draft.cafe.id.toString());
+          updateDraft({ cafe: cafeInfo });
+        } catch (error) {
+          console.error("카페 정보 조회 실패:", error);
+        }
+        return;
+      }
 
-    if (!draft.cafe) {
-      clearDraft();
-    }
-  }, [clearDraft]);
+      // 일반적인 케이스 처리
+      if (localStorage.getItem("review-draft")) {
+        clearDraft(["cafe", "id"]);
+        return;
+      }
+
+      if (!draft.cafe) {
+        clearDraft();
+      }
+    };
+
+    fetchCafeInfo();
+  }, [clearDraft, location, draft.cafe?.id, getCafe, updateDraft]);
 
   if (!draft.cafe) {
     return (

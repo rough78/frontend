@@ -5,7 +5,13 @@ import {
   ShowUserDraftReviewResponse,
 } from "./types";
 import { useApiQuery, useApiMutation } from "@shared/api/hooks/useQuery";
-import { useQueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  useQueryClient,
+  UseQueryOptions,
+} from "@tanstack/react-query";
+import { ApiError } from "@shared/api/hooks/useApi";
+import { apiInstance } from "../base";
 
 export const useReviewDraftApi = () => {
   const queryClient = useQueryClient();
@@ -30,12 +36,35 @@ export const useReviewDraftApi = () => {
     "delete"
   );
 
+  const fetchDraftReview = async (
+    draftId: number | null
+  ): Promise<ShowUserDraftReviewResponse> => {
+    if (!draftId) {
+      throw new Error("Draft ID is required");
+    }
+
+    try {
+      const response = await apiInstance.get<ShowUserDraftReviewResponse>(
+        `/api/reviews/draft/${draftId}`
+      );
+      return response;
+    } catch (error) {
+      console.error("Failed to fetch draft review:", error);
+      throw new Error("Failed to fetch draft review");
+    }
+  };
+
   // 특정 초안 조회
-  const useDraftReview = (draftId: number) => {
-    return useApiQuery<ShowUserDraftReviewResponse>(
-      ["reviewDraft", draftId],
-      `/api/reviews/draft/${draftId}`
-    );
+  const useDraftReview = (
+    draftId: number | null,
+    options?: Partial<UseQueryOptions<ShowUserDraftReviewResponse, ApiError>>
+  ) => {
+    return useQuery<ShowUserDraftReviewResponse, ApiError>({
+      queryKey: ["draftReview", draftId],
+      queryFn: () => fetchDraftReview(draftId),
+      ...options,
+      enabled: draftId !== null && options?.enabled !== false,
+    });
   };
 
   // 사용자의 모든 초안 조회

@@ -24,6 +24,7 @@ export interface ReviewRequest {
   visitDate: string;
   content: string;
   imageIds: string[];
+  draftId: number;
   // tagIds: {
   //   menu: Array<{ id: number }>;
   //   interior: Array<{ id: number }>;
@@ -96,4 +97,9 @@ export interface ShowUserDraftReviewResponse {
   modifiedAt: string;
   cafeName: string; 
   cafeId: number;
+  content?: string;
+  rating?: number;
+  visitDate?: string;
+  imageIds?: number[];
+  tagIds?: number[];
 }

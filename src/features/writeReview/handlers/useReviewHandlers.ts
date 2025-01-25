@@ -5,6 +5,7 @@ import type { ReviewDraft } from "@shared/store/useReviewDraftStore";
 import { useCafeApi } from "@shared/api/cafe/cafe";
 import { useReviewDraftApi } from "@shared/api/reviews/reviewDraftApi";
 import { UpdateDraftReviewRequest } from '@/shared/api/reviews/types';
+import { useQueryClient } from '@tanstack/react-query'
 
 interface ReviewHandlers {
   handleSubmit: () => Promise<void>;
@@ -24,6 +25,7 @@ export const useReviewHandlers = (
   createReview: (request: ReviewRequest) => Promise<ReviewResponse>,
   returnPath: string
 ): ReviewHandlers => {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -61,6 +63,10 @@ export const useReviewHandlers = (
         }
 
         await updateDraft(draft.id, updatePayload);
+        // 특정 draft의 캐시를 무효화
+        await queryClient.invalidateQueries({ 
+          queryKey: ['draftReview', draft.id] 
+        });
       } catch (error) {
         console.error("리뷰 초안 업데이트 실패:", error);
       }
@@ -91,8 +97,13 @@ export const useReviewHandlers = (
         }
       }
 
+      if (!draft.id) {
+        throw new Error("리뷰 초안 ID가 없습니다.");
+      }
+
       // Create review
       await createReview({
+        draftId: draft.id,
         cafeId: draft.cafe.id,
         rating: draft.rating,
         visitDate: draft.visitDate,

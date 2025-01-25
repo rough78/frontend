@@ -90,3 +90,10 @@ export interface UpdateDraftReviewRequest {
   visitDate?: string;
   tagIds?: number[];
 }
+
+export interface ShowUserDraftReviewResponse {
+  draftReviewId: number;
+  modifiedAt: string;
+  cafeName: string; 
+  cafeId: number;
+}

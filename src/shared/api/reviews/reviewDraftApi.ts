@@ -2,6 +2,7 @@ import {
   DraftReviewResponse,
   CreateDraftReviewRequest,
   UpdateDraftReviewRequest,
+  ShowUserDraftReviewResponse,
 } from "./types";
 import { useApiQuery, useApiMutation } from "@shared/api/hooks/useQuery";
 import { useQueryClient } from "@tanstack/react-query";
@@ -31,7 +32,7 @@ export const useReviewDraftApi = () => {
 
   // 특정 초안 조회
   const useDraftReview = (draftId: number) => {
-    return useApiQuery<DraftReviewResponse>(
+    return useApiQuery<ShowUserDraftReviewResponse>(
       ["reviewDraft", draftId],
       `/api/reviews/draft/${draftId}`
     );
@@ -40,9 +41,9 @@ export const useReviewDraftApi = () => {
   // 사용자의 모든 초안 조회
   const useUserDraftReviews = (cafeId?: number) => {
     const queryString = cafeId ? `?cafeId=${cafeId}` : "";
-    return useApiQuery<DraftReviewResponse[]>(
+    return useApiQuery<ShowUserDraftReviewResponse[]>(
       ["reviewDrafts", "user", cafeId],
-      `/api/reviews/draft/all${queryString}`
+      `/api/my/draft-reviews${queryString}`
     );
   };
 

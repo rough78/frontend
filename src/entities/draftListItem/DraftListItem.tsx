@@ -1,11 +1,20 @@
 import { useState, useEffect } from 'react';
 import styles from "./DraftListItem.module.scss";
 import { formatDate } from '@shared/utils/formatDate';
-import type { ReviewDraft } from '@shared/store/useReviewDraftStore';
 import { useDraftSelectionStore } from '@shared/store/useDraftSelectionStore';
 
+interface DraftItemCafe {
+  id: number;
+  name: string;
+}
+
+interface DraftItemData {
+  id: number;
+  cafe: DraftItemCafe;
+}
+
 interface DraftListItemProps {
-  draft: ReviewDraft;
+  draft: DraftItemData;
   onSelect: () => void;
   createdAt: string;
 }

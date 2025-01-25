@@ -64,3 +64,30 @@ export interface ShowUserReviewRequest {
   limit?: number;
   timestamp?: string;
 }
+
+export interface DraftReviewResponse {
+  draftReviewId: number;
+  content: string;
+  rating: number;
+  visitDate: string;
+  imageIds: string[];
+  tagIds: number[];
+  cafeId: number;
+}
+
+export interface CreateDraftReviewRequest {
+  content?: string;
+  rating?: number;
+  visitDate?: string;
+  imageIds?: string[];
+  tagIds?: number[];
+  cafeId: number;
+}
+
+export interface UpdateDraftReviewRequest {
+  content?: string;
+  rating?: number;
+  visitDate?: string;
+  imageIds?: string[];
+  tagIds?: number[];
+}

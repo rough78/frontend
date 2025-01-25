@@ -43,8 +43,7 @@ export const useReviewDraftStore = create<ReviewDraftStore>()(
         set((state) => ({
           draft: {
             ...state.draft,
-            ...updates,
-            tags: updates.tags || state.draft.tags || initialDraft.tags
+            ...updates
           }
         })),
       clearDraft: (preserveFields = []) => set((state) => ({

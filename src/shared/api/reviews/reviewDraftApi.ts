@@ -111,7 +111,7 @@ export const useReviewDraftApi = () => {
         content: request.content,
         rating: request.rating,
         visitDate: request.visitDate,
-        tagIds: request.tagIds || [], // Ensure tagIds is sent as array
+        tagIds: request.tagIds,
       };
 
       const response = await updateDraftMutation.mutateAsync({

@@ -58,8 +58,8 @@ export const useReviewHandlers = (
         if ('content' in updates) updatePayload.content = updates.content;
         if ('rating' in updates) updatePayload.rating = updates.rating;
         if ('visitDate' in updates) updatePayload.visitDate = updates.visitDate;
-        if ('tags' in updates) {
-          updatePayload.tagIds = [...updates.tags!.menu, ...updates.tags!.interior];
+        if ('tags' in updates && updates.tags) {  // tags가 존재할 때만 tagIds 포함
+          updatePayload.tagIds = [...updates.tags.menu, ...updates.tags.interior];
         }
 
         await updateDraft(draft.id, updatePayload);

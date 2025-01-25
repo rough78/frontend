@@ -29,3 +29,31 @@
     }
   }
 }
+
+.bottomSheetContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.bottomSheetButtons {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+  
+  .resetButton {
+    flex: 1;
+    height: 56px;
+    border-radius: 8px;
+    background-color: #F9F8F6;
+    color: #374151;
+  }
+  
+  .confirmButton {
+    flex: 1;
+    height: 56px;
+    border-radius: 8px;
+    background-color: #FF8922;
+    color: white;
+  }
+}

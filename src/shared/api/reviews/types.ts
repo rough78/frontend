@@ -53,7 +53,7 @@ export interface ShowReviewResponse {
 }
 
 export interface ShowReviewListRequest {
-  sort?: string;
+  sort?: "NEW" | "HIGH_RATING";
   limit?: number;
   timestamp?: string;
   tagIds?: number[];

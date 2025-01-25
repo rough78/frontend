@@ -43,7 +43,7 @@ export const useReviewDraftApi = () => {
     const queryString = cafeId ? `?cafeId=${cafeId}` : "";
     return useApiQuery<ShowUserDraftReviewResponse[]>(
       ["reviewDrafts", "user", cafeId],
-      `/api/my/draft-reviews${queryString}`
+      `/api/reviews/draft/all${queryString}`
     );
   };
 

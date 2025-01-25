@@ -11,6 +11,7 @@ import Login from "@/pages/Login";
 import Main from "@/pages/Main";
 import CafeSearch from "@/pages/CafeSearch";
 import WriteReview from "@/pages/WriteReview";
+import DraftReview from "@/pages/DraftReview";
 import CafeInfo from "@/pages/CafeInfo";
 import MyPage from "@/pages/MyPage";
 import MyPageEdit from "@/pages/MyPageEdit";
@@ -19,6 +20,7 @@ import styles from "@app/layout/header/Header.module.scss";
 import { OAuthRedirect } from "@app/auth/OAuthRedirect";
 import Button from "@/shared/ui/button/ui/Button";
 import edit from "@shared/assets/images/profile/edit.svg";
+import DraftCounter from "@shared/ui/draftCounter/DraftCounter";
 
 export const AppRouter = () => {
   const routes = createRoutesFromElements(
@@ -69,16 +71,9 @@ export const AppRouter = () => {
               showFooter={true}
               showBackButton={true}
               headerTitle="장소 검색"
-              // rightElement={
-              //   <button
-              //     className={styles.completeButton}
-              //     onClick={() => {
-              //       /* 이벤트 처리 */
-              //     }}
-              //   >
-              //     완료
-              //   </button>
-              // }
+              rightElement={
+                <DraftCounter />
+              }
             >
               <CafeSearch />
             </MainLayout>
@@ -99,6 +94,21 @@ export const AppRouter = () => {
             </MainLayout>
           }
           handle={{ crumb: <Link to="/review/write">리뷰 작성</Link> }}
+        />
+        <Route
+          path="draft"
+          element={
+            <MainLayout
+              showHeader={true}
+              showFooter={false}
+              showBackButton={true}
+              showWriteButton={false}
+              headerTitle="작성 중인 리뷰"
+            >
+              <DraftReview />
+            </MainLayout>
+          }
+          handle={{ crumb: <Link to="/draft">작성 중인 리뷰</Link> }}
         />
         <Route
           path="cafe/:id"

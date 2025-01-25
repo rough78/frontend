@@ -18,8 +18,10 @@ export const useReviewDraftApi = () => {
   // 초안 수정
   const updateDraftMutation = useApiMutation<
     DraftReviewResponse,
-    UpdateDraftReviewRequest
-  >("/api/reviews/draft", "patch");
+    UpdateDraftReviewRequest & { id: number }
+  >("/api/reviews/draft/:id", "patch", {
+    urlTransform: ({ id }) => `/api/reviews/draft/${id}`,
+  });
 
   // 초안 삭제
   const deleteDraftMutation = useApiMutation<void, void>(
@@ -74,7 +76,18 @@ export const useReviewDraftApi = () => {
     }
   ) => {
     try {
-      const response = await updateDraftMutation.mutateAsync(request);
+      // Convert request payload to match backend format
+      const payload = {
+        content: request.content,
+        rating: request.rating,
+        visitDate: request.visitDate,
+        tagIds: request.tagIds || [], // Ensure tagIds is sent as array
+      };
+
+      const response = await updateDraftMutation.mutateAsync({
+        ...payload,
+        id: draftId,
+      });
       await queryClient.invalidateQueries({ queryKey: ["reviewDrafts"] });
       options?.onSuccess?.(response);
       return response;

@@ -39,7 +39,7 @@ const WriteReview = () => {
 
   useEffect(() => {
     if (localStorage.getItem("review-draft")) {
-      clearDraft(["cafe"]);
+      clearDraft(["cafe", "id"]);
       return;
     }
 

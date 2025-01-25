@@ -24,15 +24,19 @@ export const useApiQuery = <TData>(
 }
 
 export const useApiMutation = <TData, TVariables>(
-  endpoint: string,
-  method: 'post' | 'put' | 'patch' | 'delete',
-  options?: UseMutationOptions<TData, AxiosError, TVariables>
+  url: string,
+  method: string,
+  options?: {
+    urlTransform?: (variables: TVariables) => string;
+  }
 ) => {
   return useMutation<TData, AxiosError, TVariables>({
     mutationFn: async (variables) => {
-      const response = await apiInstance[method]<TData>(endpoint, variables)
+      const transformedUrl = options?.urlTransform 
+        ? options.urlTransform(variables) 
+        : url;
+      const response = await apiInstance[method]<TData>(transformedUrl, variables)
       return response
     },
-    ...options,
-  })
-}
+  });
+};

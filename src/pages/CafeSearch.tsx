@@ -7,6 +7,7 @@ import { useReviewDraftStore } from "@shared/store/useReviewDraftStore";
 import { useNavigationStore } from "@shared/store/useNavigationStore";
 import type { ICafeDescription } from "@shared/api/cafe/types";
 import { useCafeApi } from "@/shared/api/cafe/cafe";
+import { useReviewDraftApi } from "@shared/api/reviews/reviewDraftApi";
 import styles from "./styles/CafeSearch.module.scss";
 
 const CafeSearch = () => {
@@ -16,6 +17,7 @@ const CafeSearch = () => {
   const { returnPath, setReturnPath, isFromFooter, setIsFromFooter } = useNavigationStore();
   const { searchByName, isLoading, error } = useCafeSearch();
   const { checkCafeExists, saveCafe } = useCafeApi();
+  const { createDraft } = useReviewDraftApi();
   const [cafes, setCafes] = useState<ICafeDescription[]>([]);
 
   const handleCafeSelect = async (cafe: ICafeDescription) => {
@@ -52,13 +54,37 @@ const CafeSearch = () => {
       } else {
         setIsFromFooter(false);
         setReturnPath(returnPath || "/");
+        
         updateDraft({ 
           cafe: {
             ...cafe,
             id: selectedCafeId
           }
         });
-        navigate('/review/write');
+      
+        try {
+          await createDraft({
+            cafeId: selectedCafeId,
+            rating: 0,
+            visitDate: '',
+            content: '',
+            imageIds: [],
+            tagIds: []
+          }, {
+            onSuccess: (response) => {
+              updateDraft({ 
+                id: response.draftReviewId, // draft ID 저장
+                cafe: {
+                  ...cafe,
+                  id: selectedCafeId
+                }
+              });
+              navigate('/review/write');
+            }
+          });
+        } catch (error) {
+          console.error("리뷰 초안 생성 중 오류 발생:", error);
+        }
       }
     } catch (error) {
       console.error("카페 선택 중 오류 발생:", error);

@@ -88,6 +88,5 @@ export interface UpdateDraftReviewRequest {
   content?: string;
   rating?: number;
   visitDate?: string;
-  imageIds?: string[];
   tagIds?: number[];
 }

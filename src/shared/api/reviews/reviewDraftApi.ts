@@ -28,6 +28,27 @@ export const useReviewDraftApi = () => {
     UpdateDraftReviewRequest & { id: number }
   >("/api/reviews/draft/:id", "patch", {
     urlTransform: ({ id }) => `/api/reviews/draft/${id}`,
+    onMutate: async (variables) => {
+      // 이전 상태 백업
+      const previousDraft = queryClient.getQueryData<DraftReviewResponse>(['draftReview', variables.id]);
+      
+      // Ensure previousDraft exists before spreading
+      if (previousDraft) {
+        // 낙관적 업데이트
+        queryClient.setQueryData(['draftReview', variables.id], {
+          ...previousDraft,
+          ...variables
+        });
+      }
+      
+      return { previousDraft };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousDraft) {
+        // 에러시 롤백
+        queryClient.setQueryData(['draftReview', variables.id], context.previousDraft);
+      }
+    }
   });
 
   // 초안 삭제

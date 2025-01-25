@@ -28,6 +28,8 @@ export const useApiMutation = <TData, TVariables>(
   method: string,
   options?: {
     urlTransform?: (variables: TVariables) => string;
+    onMutate?: (variables: TVariables) => Promise<any>;
+    onError?: (error: any, variables: TVariables, context: any) => void;
   }
 ) => {
   return useMutation<TData, AxiosError, TVariables>({

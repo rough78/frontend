@@ -18,7 +18,8 @@ import { useCafeApi } from "@shared/api/cafe/cafe";
 const WriteReview = () => {
   const returnPath = useNavigationStore((state) => state.returnPath);
   const { draft, updateDraft, clearDraft } = useReviewDraftStore();
-  const { images, config } = usePhotoUploaderStore();
+  // draftReviewId를 명시적으로 전달
+  const { images, config } = usePhotoUploaderStore(draft.id!);
   const { createReview, isLoading } = useReviewApi();
   const { getCafe } = useCafeApi();
   const location = useLocation();
@@ -186,17 +187,22 @@ const WriteReview = () => {
         fullWidthLabel={true}
         className={styles.inputLabel}
       >
-        <PhotoUploader
-          initialImageIds={draft.imageIds}
-          onImageUploaded={(imageId) =>
-            handleImageUpload([...(draft.imageIds || []), imageId])
-          }
-          onImageRemoved={(imageId) =>
-            handleImageUpload(
-              draft.imageIds?.filter((id) => id !== imageId) || []
-            )
-          }
-        />
+        {draft.id ? (
+          <PhotoUploader
+            draftReviewId={draft.id}
+            initialImageIds={draft.imageIds}
+            onImageUploaded={(newImageIds: string[]) =>
+              handleImageUpload([...(draft.imageIds || []), ...newImageIds])
+            }
+            onImageRemoved={(imageId) =>
+              handleImageUpload(
+                draft.imageIds?.filter((id) => id !== imageId) || []
+              )
+            }
+          />
+        ) : (
+          <div>리뷰 초안이 필요합니다.</div>
+        )}
       </InputWrapper>
 
       {error && <div className={styles.error}>{error.message}</div>}

@@ -5,18 +5,20 @@ import { UploadButton } from "./UploadButton";
 import styles from "./PhotoUploader.module.scss";
 
 interface PhotoUploaderProps {
-  onImageUploaded?: (imageId: string) => void;
+  onImageUploaded?: (imageIds: string[]) => void;
   onImageRemoved?: (imageId: string) => void;
   initialImageIds?: string[];
+  draftReviewId: number;
 }
 
 export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
   onImageUploaded,
   onImageRemoved,
   initialImageIds = [],
+  draftReviewId,
 }) => {
   const { images, config, addImages, removeImage, cleanup, loadInitialImages } =
-    usePhotoUploaderStore();
+    usePhotoUploaderStore(draftReviewId);
 
   useEffect(() => {
     if (initialImageIds.length > 0) {
@@ -33,15 +35,10 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
 
   const handleFileSelect = async (files: FileList) => {
     const { error, newImages } = await addImages(Array.from(files));
-
-    if (error) {
-      alert(error);
-    } else {
-      // 새로 추가된 이미지를 기준으로 콜백 호출
-      // 필요하다면 여러 장을 업로드했을 때 여러 장을 모두 콜백으로 보낼 수도 있음
-      for (const image of newImages) {
-        onImageUploaded?.(image.id);
-      }
+    if (!error) {
+      // 모든 이미지 업로드가 완료된 후 한 번만 콜백 호출
+      const newImageIds = newImages.map(image => image.id);
+      onImageUploaded?.(newImageIds);
     }
   };
 

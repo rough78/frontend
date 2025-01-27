@@ -14,7 +14,7 @@ import styles from "./styles/CafeSearch.module.scss";
 const CafeSearch = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { updateDraft } = useReviewDraftStore();
+  const { updateDraft, clearDraft } = useReviewDraftStore();
   const { returnPath, setReturnPath, isFromFooter, setIsFromFooter } = useNavigationStore();
   const { searchByName, isLoading, error } = useCafeSearch();
   const { checkCafeExists, saveCafe } = useCafeApi();
@@ -85,16 +85,6 @@ const CafeSearch = () => {
   };
 
   const handleNewDraft = async (cafe: ICafeDescription, cafeId: number) => {
-    setIsFromFooter(false);
-    setReturnPath(returnPath || "/");
-    
-    updateDraft({ 
-      cafe: {
-        ...cafe,
-        id: cafeId
-      }
-    });
-  
     try {
       const response = await createDraft({
         cafeId: cafeId,
@@ -105,15 +95,29 @@ const CafeSearch = () => {
         tagIds: []
       });
 
+      console.log('Draft 생성:', response);
+
       await updateDraft({ 
         id: response.draftReviewId,
         cafe: {
           ...cafe,
           id: cafeId
+        },
+        rating: response.rating,
+        visitDate: response.visitDate,
+        content: response.content,
+        imageIds: response.imageIds,
+        tags: {
+          menu: response.tagIds.filter(id => id >= 1 && id <= 99),
+          interior: response.tagIds.filter(id => id >= 100)
         }
       });
 
-      setShouldNavigate(true);
+      // 직접 네비게이션
+      navigate('/review/write', {
+        replace: true,
+        state: { from: '/search' }
+      });
     } catch (error) {
       console.error('Draft 생성 실패:', error);
     }

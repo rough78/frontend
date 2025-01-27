@@ -49,6 +49,11 @@ const CafeSearch = () => {
         }
       }
   
+      if (!selectedCafeId) {
+        console.error("카페 ID가 없습니다.");
+        return;
+      }
+
       if (isFromFooter) {
         navigate(`/cafe/${selectedCafeId}`);
       } else {

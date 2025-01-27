@@ -21,8 +21,11 @@ import { OAuthRedirect } from "@app/auth/OAuthRedirect";
 import Button from "@/shared/ui/button/ui/Button";
 import edit from "@shared/assets/images/profile/edit.svg";
 import DraftCounter from "@shared/ui/draftCounter/DraftCounter";
+import { useNavigationStore } from "@shared/store/useNavigationStore";
 
 export const AppRouter = () => {
+  const { isFromFooter } = useNavigationStore();
+
   const routes = createRoutesFromElements(
     <Route path="/" element={<Outlet />}>
       <Route
@@ -72,7 +75,7 @@ export const AppRouter = () => {
               showBackButton={true}
               headerTitle="장소 검색"
               rightElement={
-                <DraftCounter />
+                !isFromFooter ? <DraftCounter /> : null
               }
             >
               <CafeSearch />

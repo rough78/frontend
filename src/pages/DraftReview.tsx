@@ -13,7 +13,7 @@ const DraftReview = () => {
   const queryClient = useQueryClient();
   const { updateDraft } = useReviewDraftStore();
   const { isSelectionMode } = useDraftSelectionStore();
-  const { useDraftReview } = useReviewDraftApi();
+  const { useDraftReview, useUserDraftReviews } = useReviewDraftApi();
   const [selectedDraftId, setSelectedDraftId] = useState<number | null>(null);
   
   // location.state에서 cafeId 추출

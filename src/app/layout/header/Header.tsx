@@ -5,6 +5,7 @@ import backIcon from "@shared/assets/images/common/back.svg";
 interface HeaderProps {
   showBackButton?: boolean;
   title?: string;
+  count?: number;  // 추가
   rightElement?: React.ReactNode;
   bgColor?: string;
 }
@@ -12,6 +13,7 @@ interface HeaderProps {
 const Header = ({
   showBackButton = true,
   title,
+  count,  // 추가
   rightElement,
   bgColor = "#fff",
 }: HeaderProps) => {
@@ -25,7 +27,12 @@ const Header = ({
             <img src={backIcon} alt="뒤로가기" />
           </button>
         )}
-        {title && <h1 className={styles.title}>{title}</h1>}
+        {title && (
+          <div className={styles.titleContainer}>  
+            <h1 className={styles.title}>{title}</h1>
+            {count !== undefined && <span className={styles.count}>{count}</span>}
+          </div>
+        )}
         {rightElement && (
           <div className={styles.rightElement}>{rightElement}</div>
         )}

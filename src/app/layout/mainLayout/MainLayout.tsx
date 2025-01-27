@@ -11,6 +11,7 @@ interface MainLayoutProps {
   showBackButton?: boolean;
   showWriteButton?: boolean;
   headerTitle?: string;
+  headerCount?: number;  // 추가
   rightElement?: React.ReactNode;
   bgColor?: string;
 }
@@ -22,6 +23,7 @@ const MainLayout = ({
   showBackButton = true,
   showWriteButton = true,
   headerTitle = "",
+  headerCount,  // 추가
   rightElement,
   bgColor = "#fff",
 }: MainLayoutProps) => {
@@ -44,6 +46,7 @@ const MainLayout = ({
       {showHeader && (
         <Header
           title={headerTitle}
+          count={headerCount}  // 추가
           showBackButton={showBackButton}
           rightElement={rightElement}
           bgColor={bgColor}

@@ -65,7 +65,17 @@ export function createPhotoUploaderStore({
           })
         );
 
-        // 업로드 처리
+        // 임시 이미지 추가 (로딩 상태)
+        const tempImages = files.map(file => ({
+          id: `temp_${Math.random()}`,
+          file,
+          previewUrl: URL.createObjectURL(file),
+          isUploading: true
+        }));
+        
+        set({ images: [...images, ...tempImages] });
+
+        // 실제 업로드 처리
         const newImages = await Promise.all(
           processedFiles.map(async (file) => {
             const imageId = await upload(file);
@@ -74,13 +84,17 @@ export function createPhotoUploaderStore({
               file,
               previewUrl: URL.createObjectURL(file),
               uploadedUrl: getUrl(imageId),
+              isUploading: false
             };
           })
         );
 
+        // 임시 이미지를 실제 업로드된 이미지로 교체
         set({ images: [...images, ...newImages] });
         return { error: null, newImages };
       } catch (error) {
+        // 에러 발생 시 임시 이미지 제거
+        set({ images });
         return {
           error: error instanceof Error ? error.message : "업로드 실패",
           newImages: [],

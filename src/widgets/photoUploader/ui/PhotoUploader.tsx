@@ -34,9 +34,9 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
   }, [cleanup]);
 
   const handleFileSelect = async (files: FileList) => {
+    // First add the images with loading state
     const { error, newImages } = await addImages(Array.from(files));
     if (!error) {
-      // 모든 이미지 업로드가 완료된 후 한 번만 콜백 호출
       const newImageIds = newImages.map(image => image.id);
       onImageUploaded?.(newImageIds);
     }

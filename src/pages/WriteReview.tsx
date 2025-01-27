@@ -41,16 +41,16 @@ const WriteReview = () => {
     returnPath ?? "/"
   );
 
-  console.log('WriteReview 마운트:', {
-    draft,
-    location: window.location.pathname
-  });
+  // console.log('WriteReview 마운트:', {
+  //   draft,
+  //   location: window.location.pathname
+  // });
 
   useEffect(() => {
-    console.log('WriteReview useEffect:', {
-      draftId: draft.id,
-      cafe: draft.cafe
-    });
+    // console.log('WriteReview useEffect:', {
+    //   draftId: draft.id,
+    //   cafe: draft.cafe
+    // });
   }, [draft]);
 
   useEffect(() => {

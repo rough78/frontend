@@ -61,3 +61,7 @@ export const useReviewDraftStore = create<ReviewDraftStore>()(
     }
   )
 );
+
+const store = useReviewDraftStore.getState();
+console.log('localStorage draft:', localStorage.getItem('review-draft'));
+console.log('store draft:', store.draft);

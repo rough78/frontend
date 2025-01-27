@@ -41,10 +41,22 @@ const WriteReview = () => {
     returnPath ?? "/"
   );
 
+  console.log('WriteReview 마운트:', {
+    draft,
+    location: window.location.pathname
+  });
+
+  useEffect(() => {
+    console.log('WriteReview useEffect:', {
+      draftId: draft.id,
+      cafe: draft.cafe
+    });
+  }, [draft]);
+
   useEffect(() => {
     const fetchCafeInfo = async () => {
-      // DraftReview 페이지에서 온 경우
-      if (location.state?.from === '/draft' && draft.cafe?.id) {
+      // DraftReview 또는 CafeSearch에서 온 경우
+      if ((location.state?.from === '/draft' || location.state?.from === '/search') && draft.cafe?.id) {
         try {
           const cafeInfo = await getCafe(draft.cafe.id.toString());
           updateDraft({ cafe: cafeInfo });

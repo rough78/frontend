@@ -12,6 +12,7 @@ import NoReview from "@shared/assets/images/review/no-review.svg";
 import { ReviewItem } from "@/entities/review/ui";
 import { useReviewApi } from "@shared/api/reviews/reviewApi";
 import type { ShowReviewResponse } from "@shared/api/reviews/types";
+import { useReviewDraftApi } from "@shared/api/reviews/reviewDraftApi";
 
 const CafeInfo = () => {
   const { id } = useParams();
@@ -20,10 +21,12 @@ const CafeInfo = () => {
   const navigate = useNavigate();
   const { setReturnPath } = useNavigationStore();
   const { updateDraft } = useReviewDraftStore();
+  const { createDraft } = useReviewDraftApi();
 
   const [cafeInfo, setCafeInfo] = useState<ICafeDescription | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [shouldNavigate, setShouldNavigate] = useState(false);
 
   const reviewsQuery = useCafeReviews(Number(id), {
     page: 1,
@@ -52,13 +55,55 @@ const CafeInfo = () => {
     fetchCafeInfo();
   }, [id]);
 
-  const handleWriteReviewClick = () => {
-    if (cafeInfo) {
+  const handleWriteReviewClick = async () => {
+    if (!cafeInfo) return;
+  
+    try {
+      // 1. 네비게이션 상태 업데이트
       setReturnPath(`/cafe/${cafeInfo.id}`);
-      updateDraft({ cafe: cafeInfo });
-      navigate('/review/write');
+      
+      // 2. Draft 스토어 업데이트
+      updateDraft({ 
+        cafe: cafeInfo
+      });
+  
+      // 3. Draft 생성
+      try {
+        const response = await createDraft({
+          cafeId: cafeInfo.id,
+          rating: 0,
+          visitDate: '',
+          content: '',
+          imageIds: [],
+          tagIds: []
+        });
+  
+        // 4. Draft ID 업데이트
+        await updateDraft({ 
+          id: response.draftReviewId,
+          cafe: cafeInfo
+        });
+
+        // 5. 네비게이션 트리거
+        setShouldNavigate(true);
+
+      } catch (error) {
+        console.error('Draft 생성 실패:', error);
+      }
+    } catch (error) {
+      console.error("리뷰 작성 페이지 이동 중 오류 발생:", error);
     }
   };
+
+  useEffect(() => {
+    if (shouldNavigate) {
+      navigate('/review/write', {
+        replace: true,
+        state: { from: `/cafe/${cafeInfo?.id}` }
+      });
+      setShouldNavigate(false);
+    }
+  }, [shouldNavigate, navigate, cafeInfo]);
 
   if (isLoading || reviewsQuery.isLoading) {
     return <div>로딩 중...</div>;

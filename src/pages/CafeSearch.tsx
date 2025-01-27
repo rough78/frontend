@@ -19,6 +19,7 @@ const CafeSearch = () => {
   const { checkCafeExists, saveCafe } = useCafeApi();
   const { createDraft } = useReviewDraftApi();
   const [cafes, setCafes] = useState<ICafeDescription[]>([]);
+  const [shouldNavigate, setShouldNavigate] = useState(false);
 
   const handleCafeSelect = async (cafe: ICafeDescription) => {
     try {
@@ -68,33 +69,43 @@ const CafeSearch = () => {
         });
       
         try {
-          await createDraft({
+          const response = await createDraft({
             cafeId: selectedCafeId,
             rating: 0,
             visitDate: '',
             content: '',
             imageIds: [],
             tagIds: []
-          }, {
-            onSuccess: (response) => {
-              updateDraft({ 
-                id: response.draftReviewId, // draft ID 저장
-                cafe: {
-                  ...cafe,
-                  id: selectedCafeId
-                }
-              });
-              navigate('/review/write');
+          });
+
+          await updateDraft({ 
+            id: response.draftReviewId,
+            cafe: {
+              ...cafe,
+              id: selectedCafeId
             }
           });
+
+          setShouldNavigate(true);
+
         } catch (error) {
-          console.error("리뷰 초안 생성 중 오류 발생:", error);
+          console.error('Draft 생성 실패:', error);
         }
       }
     } catch (error) {
       console.error("카페 선택 중 오류 발생:", error);
     }
   };
+
+  useEffect(() => {
+    if (shouldNavigate) {
+      navigate('/review/write', {
+        replace: true,
+        state: { from: '/search' }
+      });
+      setShouldNavigate(false);
+    }
+  }, [shouldNavigate, navigate]);
 
   useEffect(() => {
     const name = searchParams.get('name');

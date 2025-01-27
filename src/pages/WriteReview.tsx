@@ -4,7 +4,7 @@ import { StarRating } from "@widgets/starRating";
 import { DatePicker } from "@widgets/datePicker";
 import { useReviewDraftStore } from "@shared/store/useReviewDraftStore";
 import { usePhotoUploaderStore } from "@shared/store/usePhotoUploaderStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CafeListItem from "@entities/cafeListItem/CafeListItem";
 import { InputWrapper } from "@shared/ui/input/Input";
 import { Textarea } from "@shared/ui/textarea";
@@ -23,6 +23,7 @@ const WriteReview = () => {
   const { createReview, isLoading } = useReviewApi();
   const { getCafe } = useCafeApi();
   const location = useLocation();
+  const [isImageUploading, setIsImageUploading] = useState(false);
 
   const {
     handleSubmit,
@@ -89,7 +90,7 @@ const WriteReview = () => {
   }
 
   const isValidForm = () => {
-    return draft.rating > 0 && draft.visitDate;
+    return draft.rating > 0 && draft.visitDate && !isImageUploading;
   };
 
   return (
@@ -211,6 +212,7 @@ const WriteReview = () => {
                 draft.imageIds?.filter((id) => id !== imageId) || []
               )
             }
+            onUploadStateChange={setIsImageUploading}  // 추가
           />
         ) : (
           <div>리뷰 초안이 필요합니다.</div>

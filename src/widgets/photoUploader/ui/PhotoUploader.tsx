@@ -7,6 +7,7 @@ import styles from "./PhotoUploader.module.scss";
 interface PhotoUploaderProps {
   onImageUploaded?: (imageIds: string[]) => void;
   onImageRemoved?: (imageId: string) => void;
+  onUploadStateChange?: (isUploading: boolean) => void;  // 추가
   initialImageIds?: string[];
   draftReviewId: number;
 }
@@ -14,6 +15,7 @@ interface PhotoUploaderProps {
 export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
   onImageUploaded,
   onImageRemoved,
+  onUploadStateChange,  // 추가
   initialImageIds = [],
   draftReviewId,
 }) => {
@@ -32,6 +34,11 @@ export const PhotoUploader: React.FC<PhotoUploaderProps> = ({
       cleanup();
     };
   }, [cleanup]);
+
+  useEffect(() => {
+    const isUploading = images.some(image => image.isUploading);
+    onUploadStateChange?.(isUploading);
+  }, [images, onUploadStateChange]);
 
   const handleFileSelect = async (files: FileList) => {
     // First add the images with loading state

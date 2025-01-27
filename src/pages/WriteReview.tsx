@@ -16,14 +16,23 @@ import { useReviewHandlers } from "@features/writeReview/handlers/useReviewHandl
 import { useCafeApi } from "@shared/api/cafe/cafe";
 
 const WriteReview = () => {
-  const returnPath = useNavigationStore((state) => state.returnPath);
+  const location = useLocation();
+  const { returnPath, setReturnPath } = useNavigationStore();
   const { draft, updateDraft, clearDraft } = useReviewDraftStore();
   // draftReviewId를 명시적으로 전달
   const { images, config } = usePhotoUploaderStore(draft.id!);
   const { createReview, isLoading } = useReviewApi();
   const { getCafe } = useCafeApi();
-  const location = useLocation();
   const [isImageUploading, setIsImageUploading] = useState(false);
+
+  useEffect(() => {
+    const from = location.state?.from;
+    const searchParams = location.state?.searchParams;
+    if (from) {
+      const returnTo = searchParams ? `${from}${searchParams}` : from;
+      setReturnPath(returnTo);
+    }
+  }, [location.state, setReturnPath]);
 
   const {
     handleSubmit,
@@ -39,7 +48,7 @@ const WriteReview = () => {
     updateDraft,
     clearDraft,
     createReview,
-    returnPath ?? "/"
+    returnPath || "/"
   );
 
   // console.log('WriteReview 마운트:', {

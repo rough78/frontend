@@ -130,7 +130,6 @@ const CafeSearch = () => {
     if (!draftsQuery.data) return;
 
     if (draftsQuery.data.length === 1) {
-      // Single draft - go directly to WriteReview
       const draft = draftsQuery.data[0];
       updateDraft({
         id: draft.draftReviewId,
@@ -140,13 +139,18 @@ const CafeSearch = () => {
         }
       });
       navigate('/review/write', { 
-        replace: true,
-        state: { from: '/search' }
+        state: { 
+          from: '/search',
+          searchParams: window.location.search
+        }
       });
     } else {
-      // Multiple drafts - go to DraftReview
       navigate('/draft', { 
-        state: { cafeId: selectedCafe.cafeId }
+        state: { 
+          cafeId: selectedCafe.cafeId,
+          from: '/search',
+          searchParams: window.location.search
+        }
       });
     }
     setIsModalOpen(false);

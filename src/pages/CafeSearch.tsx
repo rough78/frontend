@@ -8,6 +8,7 @@ import { useNavigationStore } from "@shared/store/useNavigationStore";
 import type { ICafeDescription } from "@shared/api/cafe/types";
 import { useCafeApi } from "@/shared/api/cafe/cafe";
 import { useReviewDraftApi } from "@shared/api/reviews/reviewDraftApi";
+import Modal from "@shared/ui/modal/Modal";
 import styles from "./styles/CafeSearch.module.scss";
 
 const CafeSearch = () => {
@@ -17,9 +18,17 @@ const CafeSearch = () => {
   const { returnPath, setReturnPath, isFromFooter, setIsFromFooter } = useNavigationStore();
   const { searchByName, isLoading, error } = useCafeSearch();
   const { checkCafeExists, saveCafe } = useCafeApi();
-  const { createDraft } = useReviewDraftApi();
+  const { useUserDraftReviews, createDraft } = useReviewDraftApi();
   const [cafes, setCafes] = useState<ICafeDescription[]>([]);
   const [shouldNavigate, setShouldNavigate] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCafe, setSelectedCafe] = useState<{
+    cafe: ICafeDescription;
+    cafeId: number;
+  } | null>(null);
+
+  // Hook을 컴포넌트 최상위 레벨에서 호출
+  const draftsQuery = useUserDraftReviews(selectedCafe?.cafeId);
 
   const handleCafeSelect = async (cafe: ICafeDescription) => {
     try {
@@ -28,9 +37,15 @@ const CafeSearch = () => {
         mapx: cafe.mapx,
         mapy: cafe.mapy,
       });
+    
+      // First ensure cafeId is defined
+      if (typeof cafeId === 'undefined') {
+        console.error("카페 ID가 정의되지 않았습니다.");
+        return;
+      }
   
       let selectedCafeId = cafeId;
-  
+    
       if (!exist) {
         const saveResponse = await saveCafe({
           title: cafe.name,
@@ -41,7 +56,7 @@ const CafeSearch = () => {
           roadAddress: cafe.roadAddress,
           link: cafe.link,
         });
-  
+    
         if (saveResponse.cafeId) {
           selectedCafeId = saveResponse.cafeId;
         } else {
@@ -50,51 +65,80 @@ const CafeSearch = () => {
         }
       }
   
-      if (!selectedCafeId) {
-        console.error("카페 ID가 없습니다.");
-        return;
-      }
-
+      // At this point selectedCafeId is guaranteed to be a number
       if (isFromFooter) {
         navigate(`/cafe/${selectedCafeId}`);
-      } else {
-        setIsFromFooter(false);
-        setReturnPath(returnPath || "/");
-        
-        updateDraft({ 
-          cafe: {
-            ...cafe,
-            id: selectedCafeId
-          }
-        });
-      
-        try {
-          const response = await createDraft({
-            cafeId: selectedCafeId,
-            rating: 0,
-            visitDate: '',
-            content: '',
-            imageIds: [],
-            tagIds: []
-          });
-
-          await updateDraft({ 
-            id: response.draftReviewId,
-            cafe: {
-              ...cafe,
-              id: selectedCafeId
-            }
-          });
-
-          setShouldNavigate(true);
-
-        } catch (error) {
-          console.error('Draft 생성 실패:', error);
-        }
+        return;
       }
+  
+      setSelectedCafe({ cafe, cafeId: selectedCafeId });
     } catch (error) {
       console.error("카페 선택 중 오류 발생:", error);
     }
+  };
+
+  const handleNewDraft = async (cafe: ICafeDescription, cafeId: number) => {
+    setIsFromFooter(false);
+    setReturnPath(returnPath || "/");
+    
+    updateDraft({ 
+      cafe: {
+        ...cafe,
+        id: cafeId
+      }
+    });
+  
+    try {
+      const response = await createDraft({
+        cafeId: cafeId,
+        rating: 0,
+        visitDate: '',
+        content: '',
+        imageIds: [],
+        tagIds: []
+      });
+
+      await updateDraft({ 
+        id: response.draftReviewId,
+        cafe: {
+          ...cafe,
+          id: cafeId
+        }
+      });
+
+      setShouldNavigate(true);
+    } catch (error) {
+      console.error('Draft 생성 실패:', error);
+    }
+  };
+
+  const handleContinueWriting = () => {
+    if (!selectedCafe) return;
+
+    // draftsQuery 사용
+    if (!draftsQuery.data) return;
+
+    if (draftsQuery.data.length === 1) {
+      // Single draft - go directly to WriteReview
+      const draft = draftsQuery.data[0];
+      updateDraft({
+        id: draft.draftReviewId,
+        cafe: {
+          id: selectedCafe.cafeId,
+          name: draft.cafeName
+        }
+      });
+      navigate('/review/write', { 
+        replace: true,
+        state: { from: '/search' }
+      });
+    } else {
+      // Multiple drafts - go to DraftReview
+      navigate('/draft', { 
+        state: { cafeId: selectedCafe.cafeId }
+      });
+    }
+    setIsModalOpen(false);
   };
 
   useEffect(() => {
@@ -111,6 +155,16 @@ const CafeSearch = () => {
     const name = searchParams.get('name');
     searchByName(name).then(setCafes);
   }, [searchParams]); // searchByName 의존성 제거
+
+  useEffect(() => {
+    if (selectedCafe && draftsQuery.data) {
+      if (draftsQuery.data.length > 0) {
+        setIsModalOpen(true);
+      } else {
+        handleNewDraft(selectedCafe.cafe, selectedCafe.cafeId);
+      }
+    }
+  }, [draftsQuery.data, selectedCafe]);
 
   return (
     <div className={styles.searchPage}>
@@ -135,6 +189,26 @@ const CafeSearch = () => {
           <CafeList cafeInfo={cafes} onCafeSelect={handleCafeSelect} />
         )}
       </div>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title={`${selectedCafe?.cafe.name}의 리뷰를 이어서 작성하시겠어요?`}
+        primaryButton={{
+          text: "새로 작성하기",
+          onClick: () => {
+            setIsModalOpen(false);
+            if (selectedCafe) {
+              handleNewDraft(selectedCafe.cafe, selectedCafe.cafeId);
+            }
+          },
+          className: "modal-btn modal-btn-no",
+        }}
+        secondaryButton={{
+          text: "이어서 작성하기",
+          onClick: handleContinueWriting,
+          className: "modal-btn modal-btn-yes",
+        }}
+      />
     </div>
   );
 };

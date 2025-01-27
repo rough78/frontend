@@ -89,7 +89,7 @@ export const useReviewDraftApi = () => {
   };
 
   // 사용자의 모든 초안 조회
-  const useUserDraftReviews = (cafeId?: number) => {
+  const useUserDraftReviews = (cafeId?: number | null) => {
     const queryString = cafeId ? `?cafeId=${cafeId}` : "";
     return useApiQuery<ShowUserDraftReviewResponse[]>(
       ["reviewDrafts", "user", cafeId],

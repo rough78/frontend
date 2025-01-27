@@ -2,6 +2,8 @@ import ReactModal from "react-modal";
 import Button from "../button/ui/Button";
 import { ButtonProps } from "../button/types/types";
 
+ReactModal.setAppElement('#root');
+
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;

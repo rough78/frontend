@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { DraftList } from "@/widgets/draftList";
 import { useReviewDraftStore } from "@/shared/store/useReviewDraftStore";
 import { useDraftSelectionStore } from "@/shared/store/useDraftSelectionStore";
@@ -9,11 +9,15 @@ import { useQueryClient } from '@tanstack/react-query';
 
 const DraftReview = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const queryClient = useQueryClient();
   const { updateDraft } = useReviewDraftStore();
   const { isSelectionMode } = useDraftSelectionStore();
   const { useDraftReview } = useReviewDraftApi();
   const [selectedDraftId, setSelectedDraftId] = useState<number | null>(null);
+  
+  // location.state에서 cafeId 추출
+  const cafeId = location.state?.cafeId as number | undefined;
 
   const draftQuery = useDraftReview(selectedDraftId, {
     enabled: selectedDraftId !== null,
@@ -66,7 +70,7 @@ const DraftReview = () => {
 
   return (
     <div className={styles.draftReview}>
-      <DraftList onSelect={handleDraftSelect} />
+      <DraftList onSelect={handleDraftSelect} cafeId={cafeId} />
     </div>
   );
 };

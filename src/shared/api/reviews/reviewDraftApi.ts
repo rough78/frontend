@@ -89,12 +89,22 @@ export const useReviewDraftApi = () => {
   };
 
   // 사용자의 모든 초안 조회
-  const useUserDraftReviews = (cafeId?: number | null) => {
-    const queryString = cafeId ? `?cafeId=${cafeId}` : "";
-    return useApiQuery<ShowUserDraftReviewResponse[]>(
-      ["reviewDrafts", "user", cafeId],
-      `/api/reviews/draft/all${queryString}`
-    );
+  const useUserDraftReviews = (
+    cafeId?: number | null,
+    options?: Partial<UseQueryOptions<ShowUserDraftReviewResponse[], ApiError>>
+  ) => {
+    return useQuery<ShowUserDraftReviewResponse[], ApiError>({
+      queryKey: ["reviewDrafts", "user", cafeId],
+      queryFn: async () => {
+        const queryString = cafeId ? `?cafeId=${cafeId}` : "";
+        const response = await apiInstance.get<ShowUserDraftReviewResponse[]>(
+          `/api/reviews/draft/all${queryString}`
+        );
+        return response;
+      },
+      ...options,
+      enabled: options?.enabled !== false,
+    });
   };
 
   // 초안 생성 함수
@@ -107,7 +117,7 @@ export const useReviewDraftApi = () => {
   ) => {
     try {
       const response = await createDraftMutation.mutateAsync(request);
-      await queryClient.invalidateQueries({ queryKey: ["reviewDrafts"] });
+      // await queryClient.invalidateQueries({ queryKey: ["reviewDrafts"] });
       options?.onSuccess?.(response);
       return response;
     } catch (error) {
@@ -139,7 +149,7 @@ export const useReviewDraftApi = () => {
         ...payload,
         id: draftId,
       });
-      await queryClient.invalidateQueries({ queryKey: ["reviewDrafts"] });
+      // await queryClient.invalidateQueries({ queryKey: ["reviewDrafts"] });
       options?.onSuccess?.(response);
       return response;
     } catch (error) {

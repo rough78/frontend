@@ -27,8 +27,15 @@ const CafeSearch = () => {
     cafeId: number;
   } | null>(null);
 
-  // Hook을 컴포넌트 최상위 레벨에서 호출
-  const draftsQuery = useUserDraftReviews(selectedCafe?.cafeId);
+  useEffect(() => {
+    console.log('selectedCafe updated:', selectedCafe);
+  }, [selectedCafe]);
+
+  const draftsQuery = useUserDraftReviews(selectedCafe?.cafeId, {
+    enabled: selectedCafe !== null && 
+            typeof selectedCafe?.cafeId === 'number' &&
+            selectedCafe.cafeId > 0 // cafeId가 유효한 값인 경우에만 쿼리 실행
+  });
 
   const handleCafeSelect = async (cafe: ICafeDescription) => {
     try {
@@ -157,14 +164,16 @@ const CafeSearch = () => {
   }, [searchParams]); // searchByName 의존성 제거
 
   useEffect(() => {
-    if (selectedCafe && draftsQuery.data) {
-      if (draftsQuery.data.length > 0) {
-        setIsModalOpen(true);
-      } else {
-        handleNewDraft(selectedCafe.cafe, selectedCafe.cafeId);
-      }
+    // selectedCafe와 draftsQuery.data가 모두 있을 때만 실행
+    if (!selectedCafe || !draftsQuery.data) return;
+    
+    if (draftsQuery.data.length > 0 && !shouldNavigate) {
+      // shouldNavigate가 false일 때만 모달 표시
+      setIsModalOpen(true);
+    } else {
+      handleNewDraft(selectedCafe.cafe, selectedCafe.cafeId);
     }
-  }, [draftsQuery.data, selectedCafe]);
+  }, [draftsQuery.data, selectedCafe, shouldNavigate]);
 
   return (
     <div className={styles.searchPage}>
@@ -196,7 +205,7 @@ const CafeSearch = () => {
         primaryButton={{
           text: "새로 작성하기",
           onClick: () => {
-            setIsModalOpen(false);
+            // setIsModalOpen(false);
             if (selectedCafe) {
               handleNewDraft(selectedCafe.cafe, selectedCafe.cafeId);
             }

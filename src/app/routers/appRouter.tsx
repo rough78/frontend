@@ -23,6 +23,7 @@ import edit from "@shared/assets/images/profile/edit.svg";
 import DraftCounter from "@shared/ui/draftCounter/DraftCounter";
 import { useNavigationStore } from "@shared/store/useNavigationStore";
 import { useDraftCountStore } from "@shared/store/useDraftCountStore";
+import SelectionModeButton from "@shared/ui/selectionModeButton/SelectionModeButton";
 
 export const AppRouter = () => {
   const { isFromFooter } = useNavigationStore();
@@ -110,6 +111,7 @@ export const AppRouter = () => {
               showWriteButton={false}
               headerTitle="작성 중인 리뷰"
               headerCount={draftCount}  // count를 전달
+              rightElement={<SelectionModeButton />}
             >
               <DraftReview />
             </MainLayout>

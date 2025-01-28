@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import styles from "./DraftListItem.module.scss";
 import { formatDate } from '@shared/utils/formatDate';
 import { useDraftSelectionStore } from '@shared/store/useDraftSelectionStore';
+import uncheckedIcon from '@shared/assets/images/draft/unchecked.svg';
+import checkedIcon from '@shared/assets/images/draft/checked.svg';
 
 interface DraftItemCafe {
   id: number;
@@ -51,12 +53,14 @@ const DraftListItem = ({
         </div>
         {showCheckbox && (
           <div className={styles.draftItem__checkbox}>
-            <input
-              type="checkbox"
-              aria-label={`Select ${draft.cafe?.name} draft`}
-              checked={selectedDrafts.includes(draft.id!)}
-              onChange={() => toggleDraftSelection(draft.id!)}
-              onClick={(e) => e.stopPropagation()}
+            <img
+              src={selectedDrafts.includes(draft.id!) ? checkedIcon : uncheckedIcon}
+              alt={selectedDrafts.includes(draft.id!) ? "선택됨" : "선택되지 않음"}
+              className={styles.checkboxIcon}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleDraftSelection(draft.id!);
+              }}
             />
           </div>
         )}

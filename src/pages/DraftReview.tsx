@@ -12,7 +12,7 @@ const DraftReview = () => {
   const location = useLocation();
   const queryClient = useQueryClient();
   const { updateDraft } = useReviewDraftStore();
-  const { isSelectionMode } = useDraftSelectionStore();
+  const { isSelectionMode, selectedDrafts, setSelectionMode, clearSelection } = useDraftSelectionStore();
   const { useDraftReview, useUserDraftReviews } = useReviewDraftApi();
   const [selectedDraftId, setSelectedDraftId] = useState<number | null>(null);
   
@@ -60,6 +60,11 @@ const DraftReview = () => {
         navigate("/review/write", { state: { from: '/draft' } });
       });
     }
+
+    return () => {
+      setSelectionMode(false);
+      clearSelection();
+    };
   }, [draftQuery.data]);
 
   const handleDraftSelect = async (draftId: number) => {
@@ -71,7 +76,14 @@ const DraftReview = () => {
   return (
     <div className={styles.draftReview}>
       <div className={styles.draftGuide}>
-        최대 100개까지, 90일이 지나면 자동으로 사라져요.
+        {isSelectionMode 
+          ? (
+            <>
+              총 <span style={{ color: '#FF8922' }}>{selectedDrafts.length}</span>개 선택
+            </>
+          )
+          : "최대 100개까지, 90일이 지나면 자동으로 사라져요."
+        }
       </div>
       <DraftList onSelect={handleDraftSelect} cafeId={cafeId} />
     </div>

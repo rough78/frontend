@@ -70,6 +70,9 @@ const DraftReview = () => {
 
   return (
     <div className={styles.draftReview}>
+      <div className={styles.draftGuide}>
+        최대 100개까지, 90일이 지나면 자동으로 사라져요.
+      </div>
       <DraftList onSelect={handleDraftSelect} cafeId={cafeId} />
     </div>
   );

@@ -1,8 +1,16 @@
-.draftReview {
+@use "@app/styles/abstracts/variables" as var;
+@use "@app/styles/abstracts/mixins";
 
+.draftReview {
   h1 {
     margin-bottom: 16px;
     font-size: 20px;
     font-weight: bold;
   }
+}
+
+.draftGuide {
+  padding: 16px;
+  color: var.$semantic-text-icon-secondary;
+  @include mixins.apply-text-style(b2_regular);
 }

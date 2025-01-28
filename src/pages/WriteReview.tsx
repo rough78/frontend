@@ -29,23 +29,43 @@ const WriteReview = () => {
   const [isImageUploading, setIsImageUploading] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
-  
+
+  // location.state에서 preventBack 확인
+  const preventBack = location.state?.preventBack;
+
   // 초안 작성 여부 확인
-  const isDrafting = location.state?.from === '/search';
-  
+  const isDrafting = location.state?.from === "/search";
+
+  // BackButton 클릭 시 호출될 핸들러
+  const handleBackClick = (event?: React.MouseEvent) => {
+    if (event) {
+      event.preventDefault();
+    }
+    
+    if (preventBack || (draft.content || draft.rating > 0 || draft.visitDate || draft.tags.menu.length > 0 || draft.tags.interior.length > 0)) {
+      handleBlock();
+      return false;
+    }
+    
+    // 작성된 내용이 없는 경우
+    clearDraft();
+    navigate("/", { replace: true });
+    return true;
+  };
+
   // 페이지 이탈 시도 시 호출될 함수
   const handleBlock = () => {
     setIsModalOpen(true);
   };
 
-  const { setModalState } = useBlocker(handleBlock, isDrafting);
+  const { setModalState } = useBlocker(handleBlock, preventBack);
 
   // 모달에서 "나가기" 선택 시
   const handleExit = () => {
     setIsModalOpen(false);
     setModalState(false);
     clearDraft();
-    navigate('/', { replace: true });
+    navigate("/", { replace: true });
   };
 
   const handleContinue = () => {
@@ -94,7 +114,11 @@ const WriteReview = () => {
   useEffect(() => {
     const fetchCafeInfo = async () => {
       // DraftReview 또는 CafeSearch에서 온 경우
-      if ((location.state?.from === '/draft' || location.state?.from === '/search') && draft.cafe?.id) {
+      if (
+        (location.state?.from === "/draft" ||
+          location.state?.from === "/search") &&
+        draft.cafe?.id
+      ) {
         try {
           const cafeInfo = await getCafe(draft.cafe.id.toString());
           updateDraft({ cafe: cafeInfo });
@@ -128,13 +152,6 @@ const WriteReview = () => {
 
   const isValidForm = () => {
     return draft.rating > 0 && draft.visitDate && !isImageUploading;
-  };
-
-  // BackButton 클릭 시 호출될 핸들러
-  const handleBackClick = () => {
-    // 모달 표시 로직을 재사용
-    handleBlock();
-    return false; // 기본 뒤로가기 동작 방지
   };
 
   return (
@@ -175,7 +192,11 @@ const WriteReview = () => {
         </InputWrapper>
 
         <InputWrapper
-          label={<span className={styles.mainLabel}>{draft.cafe.name} 어땠나요?</span>}
+          label={
+            <span className={styles.mainLabel}>
+              {draft.cafe.name} 어땠나요?
+            </span>
+          }
           className={styles.inputLabel}
           isRequired={true}
           error={
@@ -190,8 +211,9 @@ const WriteReview = () => {
             onChange={handleRatingChange}
             showRatingText={true}
             rootClassName={`${styles.starRatingContainer} ${
-              !draft.rating && (draft.tags.menu?.length > 0 || draft.tags.interior?.length > 0) 
-                ? styles.errorInput 
+              !draft.rating &&
+              (draft.tags.menu?.length > 0 || draft.tags.interior?.length > 0)
+                ? styles.errorInput
                 : ""
             }`}
             starsContainerClassName={`${styles.starRatingStars} ${
@@ -206,9 +228,7 @@ const WriteReview = () => {
           label={
             <div className={styles.reviewLabelContainer}>
               <span className={styles.mainLabel}>구체적으로 알려주세요.</span>
-              <span className={styles.subLabel}>
-                (최대 5개)
-              </span>
+              <span className={styles.subLabel}>(최대 5개)</span>
             </div>
           }
           className={styles.inputLabel}
@@ -264,7 +284,7 @@ const WriteReview = () => {
                   draft.imageIds?.filter((id) => id !== imageId) || []
                 )
               }
-              onUploadStateChange={setIsImageUploading}  // 추가
+              onUploadStateChange={setIsImageUploading} // 추가
             />
           ) : (
             <div>리뷰 초안이 필요합니다.</div>

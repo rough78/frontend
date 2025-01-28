@@ -15,7 +15,8 @@ const CafeSearch = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { updateDraft, clearDraft } = useReviewDraftStore();
-  const { returnPath, setReturnPath, isFromFooter, setIsFromFooter } = useNavigationStore();
+  const { returnPath, setReturnPath, isFromFooter, setIsFromFooter } =
+    useNavigationStore();
   const { searchByName, isLoading, error } = useCafeSearch();
   const { checkCafeExists, saveCafe } = useCafeApi();
   const { useUserDraftReviews, createDraft } = useReviewDraftApi();
@@ -28,13 +29,14 @@ const CafeSearch = () => {
   } | null>(null);
 
   useEffect(() => {
-    console.log('selectedCafe updated:', selectedCafe);
+    console.log("selectedCafe updated:", selectedCafe);
   }, [selectedCafe]);
 
   const draftsQuery = useUserDraftReviews(selectedCafe?.cafeId, {
-    enabled: selectedCafe !== null && 
-            typeof selectedCafe?.cafeId === 'number' &&
-            selectedCafe.cafeId > 0 // cafeId가 유효한 값인 경우에만 쿼리 실행
+    enabled:
+      selectedCafe !== null &&
+      typeof selectedCafe?.cafeId === "number" &&
+      selectedCafe.cafeId > 0, // cafeId가 유효한 값인 경우에만 쿼리 실행
   });
 
   const handleCafeSelect = async (cafe: ICafeDescription) => {
@@ -44,15 +46,15 @@ const CafeSearch = () => {
         mapx: cafe.mapx,
         mapy: cafe.mapy,
       });
-    
+
       // First ensure cafeId is defined
-      if (typeof cafeId === 'undefined') {
+      if (typeof cafeId === "undefined") {
         console.error("카페 ID가 정의되지 않았습니다.");
         return;
       }
-  
+
       let selectedCafeId = cafeId;
-    
+
       if (!exist) {
         const saveResponse = await saveCafe({
           title: cafe.name,
@@ -63,7 +65,7 @@ const CafeSearch = () => {
           roadAddress: cafe.roadAddress,
           link: cafe.link,
         });
-    
+
         if (saveResponse.cafeId) {
           selectedCafeId = saveResponse.cafeId;
         } else {
@@ -71,12 +73,12 @@ const CafeSearch = () => {
           return;
         }
       }
-  
+
       if (isFromFooter) {
         navigate(`/cafe/${selectedCafeId}`);
         return;
       }
-  
+
       setSelectedCafe({ cafe, cafeId: selectedCafeId });
     } catch (error) {
       console.error("카페 선택 중 오류 발생:", error);
@@ -88,37 +90,40 @@ const CafeSearch = () => {
       const response = await createDraft({
         cafeId: cafeId,
         rating: 0,
-        visitDate: '',
-        content: '',
+        visitDate: "",
+        content: "",
         imageIds: [],
-        tagIds: []
+        tagIds: [],
       });
 
-      console.log('Draft 생성:', response);
+      console.log("Draft 생성:", response);
 
-      await updateDraft({ 
+      await updateDraft({
         id: response.draftReviewId,
         cafe: {
           ...cafe,
-          id: cafeId
+          id: cafeId,
         },
         rating: response.rating,
         visitDate: response.visitDate,
         content: response.content,
         imageIds: response.imageIds,
         tags: {
-          menu: response.tagIds.filter(id => id >= 1 && id <= 99),
-          interior: response.tagIds.filter(id => id >= 100)
-        }
+          menu: response.tagIds.filter((id) => id >= 1 && id <= 99),
+          interior: response.tagIds.filter((id) => id >= 100),
+        },
       });
 
-      // 직접 네비게이션
-      navigate('/review/write', {
+      // replace: true로 설정하여 현재 /search 페이지를 대체
+      navigate("/review/write", {
         replace: true,
-        state: { from: '/search' }
+        state: { 
+          from: "/search",
+          preventBack: true // 추가
+        }
       });
     } catch (error) {
-      console.error('Draft 생성 실패:', error);
+      console.error("Draft 생성 실패:", error);
     }
   };
 
@@ -134,22 +139,22 @@ const CafeSearch = () => {
         id: draft.draftReviewId,
         cafe: {
           id: selectedCafe.cafeId,
-          name: draft.cafeName
-        }
+          name: draft.cafeName,
+        },
       });
-      navigate('/review/write', { 
-        state: { 
-          from: '/search',
-          searchParams: window.location.search
-        }
+      navigate("/review/write", {
+        state: {
+          from: "/search",
+          searchParams: window.location.search,
+        },
       });
     } else {
-      navigate('/draft', { 
-        state: { 
+      navigate("/draft", {
+        state: {
           cafeId: selectedCafe.cafeId,
-          from: '/search',
-          searchParams: window.location.search
-        }
+          from: "/search",
+          searchParams: window.location.search,
+        },
       });
     }
     setIsModalOpen(false);
@@ -157,23 +162,23 @@ const CafeSearch = () => {
 
   useEffect(() => {
     if (shouldNavigate) {
-      navigate('/review/write', {
+      navigate("/review/write", {
         replace: true,
-        state: { from: '/search' }
+        state: { from: "/search" },
       });
       setShouldNavigate(false);
     }
   }, [shouldNavigate, navigate]);
 
   useEffect(() => {
-    const name = searchParams.get('name');
+    const name = searchParams.get("name");
     searchByName(name).then(setCafes);
   }, [searchParams]); // searchByName 의존성 제거
 
   useEffect(() => {
     // selectedCafe와 draftsQuery.data가 모두 있을 때만 실행
     if (!selectedCafe || !draftsQuery.data) return;
-    
+
     if (draftsQuery.data.length > 0 && !shouldNavigate) {
       // shouldNavigate가 false일 때만 모달 표시
       setIsModalOpen(true);

@@ -72,7 +72,6 @@ const CafeSearch = () => {
         }
       }
   
-      // At this point selectedCafeId is guaranteed to be a number
       if (isFromFooter) {
         navigate(`/cafe/${selectedCafeId}`);
         return;

@@ -14,6 +14,7 @@ interface MainLayoutProps {
   headerCount?: number;  // 추가
   rightElement?: React.ReactNode;
   bgColor?: string;
+  onBackClick?: () => void;
 }
 
 const MainLayout = ({

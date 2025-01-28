@@ -5,25 +5,36 @@ import backIcon from "@shared/assets/images/common/back.svg";
 interface HeaderProps {
   showBackButton?: boolean;
   title?: string;
-  count?: number;  // 추가
+  count?: number;
   rightElement?: React.ReactNode;
   bgColor?: string;
+  onBackClick?: () => void;
 }
 
 const Header = ({
   showBackButton = true,
   title,
-  count,  // 추가
+  count,
   rightElement,
   bgColor = "#fff",
+  onBackClick,
 }: HeaderProps) => {
   const navigate = useNavigate();
+
+  const handleBackClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (onBackClick) {
+      onBackClick();
+    } else {
+      navigate(-1);
+    }
+  };
 
   return (
     <header className={styles.header} style={{ backgroundColor: bgColor }}>
       <div className={styles.headerContent}>
         {showBackButton && (
-          <button onClick={() => navigate(-1)} className={styles.backButton}>
+          <button onClick={handleBackClick} className={styles.backButton}>
             <img src={backIcon} alt="뒤로가기" />
           </button>
         )}

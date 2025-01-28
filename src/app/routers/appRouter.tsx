@@ -89,15 +89,7 @@ export const AppRouter = () => {
         <Route
           path="review/write"
           element={
-            <MainLayout
-              showHeader={true}
-              showFooter={false}
-              showBackButton={true}
-              showWriteButton={false}
-              headerTitle="리뷰 작성"
-            >
-              <WriteReview />
-            </MainLayout>
+            <WriteReview />
           }
           handle={{ crumb: <Link to="/review/write">리뷰 작성</Link> }}
         />

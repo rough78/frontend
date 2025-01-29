@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import styles from "./Header.module.scss";
 import backIcon from "@shared/assets/images/common/back.svg";
+import cancelIcon from "@shared/assets/images/common/cancel.svg";
+import { useDraftSelectionStore } from "@/shared/store/useDraftSelectionStore";
 
 interface HeaderProps {
   showBackButton?: boolean;
@@ -20,10 +22,13 @@ const Header = ({
   onBackClick,
 }: HeaderProps) => {
   const navigate = useNavigate();
+  const { isSelectionMode, setSelectionMode } = useDraftSelectionStore();
 
   const handleBackClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (onBackClick) {
+    if (isSelectionMode) {
+      setSelectionMode(false);
+    } else if (onBackClick) {
       onBackClick();
     } else {
       navigate(-1);
@@ -35,7 +40,10 @@ const Header = ({
       <div className={styles.headerContent}>
         {showBackButton && (
           <button onClick={handleBackClick} className={styles.backButton}>
-            <img src={backIcon} alt="뒤로가기" />
+            <img 
+              src={isSelectionMode ? cancelIcon : backIcon} 
+              alt={isSelectionMode ? "선택 취소" : "뒤로가기"} 
+            />
           </button>
         )}
         {title && (

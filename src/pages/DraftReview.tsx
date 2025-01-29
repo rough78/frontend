@@ -86,6 +86,26 @@ const DraftReview = () => {
         }
       </div>
       <DraftList onSelect={handleDraftSelect} cafeId={cafeId} />
+      
+      {isSelectionMode && (
+        <>
+          <div className={styles.buttonOverlay} />
+          <div className={styles.buttonContainer}>
+            <button 
+              onClick={() => {/* 전체 삭제 로직 */}}
+              disabled={selectedDrafts.length === 0}
+            >
+              전체 삭제
+            </button>
+            <button 
+              onClick={() => {/* 선택 삭제 로직 */}}
+              disabled={selectedDrafts.length === 0}
+            >
+              선택 삭제
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 };

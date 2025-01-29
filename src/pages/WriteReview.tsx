@@ -304,7 +304,7 @@ const WriteReview = () => {
 
         <Modal
           isOpen={isModalOpen}
-          onClose={handleContinue} // Use handleContinue for modal close
+          onClose={handleContinue}
           title="정말 나가시겠어요?"
           description="작성 중인 내용은 임시 저장되어 다음에 이어서 작성할 수 있어요."
           primaryButton={{
@@ -314,7 +314,7 @@ const WriteReview = () => {
           }}
           secondaryButton={{
             text: "계속 작성하기",
-            onClick: handleContinue, // Use handleContinue here
+            onClick: handleContinue,
             className: "modal-btn modal-btn-no",
           }}
         />

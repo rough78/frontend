@@ -284,7 +284,7 @@ const WriteReview = () => {
                   draft.imageIds?.filter((id) => id !== imageId) || []
                 )
               }
-              onUploadStateChange={setIsImageUploading} // 추가
+              onUploadStateChange={setIsImageUploading}
             />
           ) : (
             <div>리뷰 초안이 필요합니다.</div>

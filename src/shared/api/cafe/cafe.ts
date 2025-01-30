@@ -92,7 +92,7 @@ export const useCafeApi = (): CafeApiHook => {
         throw error;
       }
     },
-    [] // Empty dependencies array since this function doesn't depend on any external values
+    []
   );
 
   const checkCafeExists = async (params: {

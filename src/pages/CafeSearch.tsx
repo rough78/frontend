@@ -47,7 +47,6 @@ const CafeSearch = () => {
         mapy: cafe.mapy,
       });
 
-      // First ensure cafeId is defined
       if (typeof cafeId === "undefined") {
         console.error("카페 ID가 정의되지 않았습니다.");
         return;
@@ -119,7 +118,7 @@ const CafeSearch = () => {
         replace: true,
         state: { 
           from: "/search",
-          preventBack: true // 추가
+          preventBack: true
         }
       });
     } catch (error) {

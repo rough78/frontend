@@ -113,7 +113,8 @@ export const useReviewHandlers = (
       });
 
       clearDraft();
-      navigate(returnPath || "/");
+      // navigate(returnPath || "/");
+      navigate("/", { replace: true });
 
     } catch (err) {
       setError(err instanceof Error ? err : new Error("리뷰 작성에 실패했습니다."));

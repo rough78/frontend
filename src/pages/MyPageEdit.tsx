@@ -1,30 +1,21 @@
 import { debounce } from "lodash";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useUserApi } from "@/shared/api/user/userApi";
+import { useUserStore } from "@/shared/store/useUserStore";
 import PhotoEdit from "@/entities/profile/ui/photoEdit/PhotoEdit";
 import ProfileBtnWrap from "@/entities/profile/ui/profileBtnWrap/ProfileBtnWrap";
 import ProfileForm from "@/entities/profile/ui/profileForm/ProfileForm";
 import styles from "./styles/MyPageEdit.module.scss";
-import {
-  UserInfoResponse,
-  IsExistNicknameResponse,
-} from "@/shared/api/user/types";
 
 const MyPageEdit = () => {
   const { getUserInfo, checkNicknameExistence } = useUserApi();
-  const [userData, setUserData] = useState<UserInfoResponse>({
-    nickname: "",
-    introduce: "",
-    email: "",
-    isProfileImageExist: false,
-  });
-  const [nicknameError, setNicknameError] = useState<string>("");
+  const { setUserData, setNicknameError } = useUserStore();
 
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
         await getUserInfo({
-          onSuccess: (data: UserInfoResponse) => {
+          onSuccess: (data) => {
             console.log("사용자 정보 조회 성공:", data);
             setUserData(data);
           },
@@ -38,18 +29,17 @@ const MyPageEdit = () => {
     };
 
     fetchUserInfo();
-  }, []);
+  }, [setUserData]);
 
   const handleNicknameChange = debounce(async (nickname: string) => {
     try {
-      const response: IsExistNicknameResponse =
-        await checkNicknameExistence(nickname);
+      const response = await checkNicknameExistence(nickname);
       if (response.exist) {
         setNicknameError("중복된 닉네임입니다.");
         console.log("중복");
       } else {
         setNicknameError("");
-        setUserData((prevData) => ({ ...prevData, nickname }));
+        setUserData((prev) => ({ ...prev, nickname }));
       }
     } catch (error) {
       console.error("닉네임 중복 확인 실패:", error);
@@ -59,11 +49,7 @@ const MyPageEdit = () => {
   return (
     <div className={styles.MyPageEdit}>
       <PhotoEdit />
-      <ProfileForm
-        userData={userData}
-        onNicknameChange={handleNicknameChange}
-        nicknameError={nicknameError}
-      />
+      <ProfileForm onNicknameChange={handleNicknameChange} />
       <ProfileBtnWrap />
     </div>
   );

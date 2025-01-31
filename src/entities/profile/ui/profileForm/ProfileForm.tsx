@@ -1,18 +1,13 @@
 import styles from "./ProfilForm.module.scss";
 import ProfileInputSection from "./ProfileInputSection";
-import { UserInfoResponse } from "@/shared/api/user/types";
+import { useUserStore } from "@/shared/store/useUserStore";
 
 interface ProfileFormProps {
-  userData: UserInfoResponse;
   onNicknameChange: (nickname: string) => void;
-  nicknameError: string;
 }
 
-const ProfileForm = ({
-  userData,
-  onNicknameChange,
-  nicknameError,
-}: ProfileFormProps) => {
+const ProfileForm = ({ onNicknameChange }: ProfileFormProps) => {
+  const { userData, nicknameError } = useUserStore();
   return (
     <div className={styles.profileForm}>
       <ProfileInputSection

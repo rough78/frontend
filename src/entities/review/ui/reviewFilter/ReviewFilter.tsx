@@ -56,18 +56,29 @@ const ReviewFilter = ({ onSortChange, onTagsConfirm }: ReviewFilterProps) => {
           onClick={() => handleFilterClick("highRating")}
         />
       </div>
-      <Button 
-        imgUrl={filter} 
-        altText="태그 필터링 버튼" 
-        className="imgBtn"
-        onClick={() => setIsTagSelectorOpen(true)} 
-      />
+      <div className={styles.filterButtonContainer}>
+        <Button
+          imgUrl={filter}
+          altText="태그 필터링 버튼"
+          className={`imgBtn ${styles.filterButton}`}
+          onClick={() => setIsTagSelectorOpen(true)} 
+        />
+        {Object.values(selectedTags).flat().length > 0 && (
+          <div className={styles.filterDot} />
+        )}
+      </div>
 
       <BottomSheet 
         isOpen={isTagSelectorOpen} 
         onClose={() => setIsTagSelectorOpen(false)}
       >
         <div className={styles.bottomSheetContainer}>
+          <div className={styles.titleContainer}>
+            <h2 className={styles.title}>필터</h2>
+            <span className={styles.tagCount}>
+              {Object.values(selectedTags).flat().length}
+            </span>
+          </div>
           <TagSelector
             selectedTags={selectedTags}
             onTagClick={handleTagClick}

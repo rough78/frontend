@@ -12,22 +12,22 @@ interface ReviewListProps {
 const ReviewList = ({ type = 'all', params = { limit: 10 } }: ReviewListProps) => {
   const { useReviewList, useMyReviews } = useReviewApi();
   
-  const reviewListQuery = useReviewList({
+  const reviewListQuery = type === 'all' ? useReviewList({
     sort: "NEW",
     ...params as ShowReviewListRequest
-  });
+  }) : undefined;
   
-  const myReviewsQuery = useMyReviews({
+  const myReviewsQuery = type === 'my' ? useMyReviews({
     ...params as ShowUserReviewRequest
-  });
+  }) : undefined;
 
-  const reviews = type === 'all' ? reviewListQuery.data : myReviewsQuery.data;
+  const reviews = type === 'all' ? reviewListQuery?.data : myReviewsQuery?.data;
 
-  if (reviewListQuery.isError || myReviewsQuery.isError) {
+  if (reviewListQuery?.isError || myReviewsQuery?.isError) {
     return <div>리뷰를 불러오는데 실패했습니다.</div>;
   }
 
-  if (reviewListQuery.isLoading || myReviewsQuery.isLoading) {
+  if (reviewListQuery?.isLoading || myReviewsQuery?.isLoading) {
     return <div>로딩 중...</div>;
   }
 

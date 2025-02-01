@@ -4,6 +4,7 @@ import Button from "@/shared/ui/button/ui/Button";
 import filter from "@shared/assets/images/filter.svg";
 import BottomSheet from "@shared/ui/bottomSheet/BottomSheet";
 import TagSelector from "@/features/writeReview/ui/TagSelector";
+import resetIcon from "@shared/assets/images/reset.svg";
 
 interface ReviewFilterProps {
   onSortChange: (filter: "latest" | "highRating") => void;
@@ -86,7 +87,12 @@ const ReviewFilter = ({ onSortChange, onTagsConfirm }: ReviewFilterProps) => {
           <div className={styles.bottomSheetButtons}>
             <Button
               className={styles.resetButton}
-              text="초기화"
+              text={
+                <div className={styles.resetButtonContent}>
+                  <img src={resetIcon} alt="초기화" className={styles.resetIcon} />
+                  <span>초기화</span>
+                </div>
+              }
               onClick={() => {
                 setSelectedTags({ menu: [], interior: [] });
               }}

@@ -13,13 +13,16 @@ import type {
 export const useReviewApi = () => {
   const queryClient = useQueryClient();
 
-  const createReviewMutation = useApiMutation<ReviewResponse, ReviewRequest>(
-    "/api/reviews",
-    "post"
+  const createReviewMutation = useApiMutation<ReviewResponse, ReviewRequest & { draftId: number }>(
+    '/api/reviews/:draftId',  // base URL
+    'post',                   // HTTP method
+    {
+      urlTransform: (request) => `/api/reviews/${request.draftId}`
+    }
   );
 
   const createReview = async (
-    request: ReviewRequest,
+    request: ReviewRequest & { draftId: number },
     options?: {
       onSuccess?: (response: ReviewResponse) => void;
       onError?: (error: any) => void;

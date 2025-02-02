@@ -27,4 +27,5 @@ dist-ssr
 localhost.pem
 localhost-key.pem
 
+.specstory
 .specstory/**

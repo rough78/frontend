@@ -22,6 +22,20 @@ const ReviewMore = ({
   const { deleteReview } = useReviewApi();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // 표시할 수 있는 버튼의 개수를 계산
+  const getVisibleButtonCount = () => {
+    let count = 0;
+    if (isOwner) {
+      count += 2; // 수정, 삭제 버튼
+    }
+    // 향후 다른 버튼들이 추가될 때마다 조건에 따라 카운트 증가
+    // 예: if (canShare) count++;
+    return count;
+  };
+
+  // 외부에서 버튼 표시 여부를 확인할 수 있도록 버튼 카운트 노출
+  const visibleButtonCount = getVisibleButtonCount();
+
   const openModal = () => {
     setIsModalOpen(true);
     onModalOpen?.();
@@ -89,4 +103,5 @@ const ReviewMore = ({
   );
 };
 
+export { type ReviewMoreProps };
 export default ReviewMore;

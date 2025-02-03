@@ -59,11 +59,12 @@ export const useFavoriteApi = () => {
     onError: (_, __, context) => {
       if (context?.previousFavorites) {
         queryClient.setQueryData(['favorites', 'cafes'], context.previousFavorites);
+        queryClient.invalidateQueries({ queryKey: ['favorites', 'cafes'] });
       }
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['favorites', 'cafes'] });
-    },
+    // onSettled: () => {
+    //   queryClient.invalidateQueries({ queryKey: ['favorites', 'cafes'] });
+    // },
   });
 
   const toggleFavorite = async (

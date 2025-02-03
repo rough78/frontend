@@ -104,11 +104,13 @@ const CafeInfo = () => {
       await toggleFavorite(
         {
           cafeId: cafeInfo.id,
-          isScrap: !cafeInfo.isBookmark // 현재 상태의 반대로 토글
+          isScrap: !cafeInfo.isScrap
         },
         {
-          onSuccess: (response) => {
-            console.log("즐겨찾기 토글 성공:", response.message);
+          onSuccess: async () => {
+            // 북마크 토글 후 카페 정보 다시 가져오기
+            const updatedCafeInfo = await getCafe(cafeInfo.id.toString());
+            setCafeInfo(updatedCafeInfo);
           },
           onError: (error) => {
             console.error("즐겨찾기 토글 실패:", error.message);
@@ -148,6 +150,7 @@ const CafeInfo = () => {
         address={cafeInfo.address}
         link={cafeInfo.link}
         onBookmarkClick={handleBookmarkClick}
+        isBookmarked={cafeInfo.isScrap ?? false}
       />
       <div className={styles.divider} />
       <div className={styles.ratingWrapper}>

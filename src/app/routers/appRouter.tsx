@@ -20,7 +20,26 @@ import styles from "@app/layout/header/Header.module.scss";
 import { OAuthRedirect } from "@app/auth/OAuthRedirect";
 import NavBtn from "@/shared/ui/navButton/navBtn";
 
+import { useProfileStore } from "@shared/store/useProfileStore";
+import { useProfileImageApi } from "@shared/api/user/useProfileImagesApi";
+
 export const AppRouter = () => {
+  const { file } = useProfileStore();
+  const { uploadProfileImage } = useProfileImageApi();
+
+  const handleCompleteClick = async () => {
+    if (file) {
+      try {
+        await uploadProfileImage(file);
+        alert("프로필 이미지가 업로드되었습니다!");
+      } catch {
+        alert("업로드 실패");
+      }
+    } else {
+      alert("선택된 이미지가 없습니다.");
+    }
+  };
+
   const routes = createRoutesFromElements(
     <Route path="/" element={<Outlet />}>
       <Route
@@ -142,9 +161,7 @@ export const AppRouter = () => {
               rightElement={
                 <button
                   className={`${styles.completeButton} ${styles["completeButton--color"]}`}
-                  onClick={() => {
-                    /* 이벤트 처리 */
-                  }}
+                  onClick={handleCompleteClick}
                 >
                   완료
                 </button>

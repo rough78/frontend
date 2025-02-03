@@ -3,6 +3,7 @@ import { ReviewItem } from "@/entities/review/ui";
 import { useReviewApi } from "@shared/api/reviews/reviewApi";
 import type { ShowReviewResponse, ShowReviewListRequest, ShowUserReviewRequest } from "@shared/api/reviews/types";
 import styles from "./ReviewList.module.scss";
+import { useUserApi } from "@shared/api/user/userApi";
 
 interface ReviewListProps {
   type?: 'all' | 'my';
@@ -11,7 +12,22 @@ interface ReviewListProps {
 
 const ReviewList = ({ type = 'all', params = { limit: 10 } }: ReviewListProps) => {
   const { useReviewList, useMyReviews } = useReviewApi();
+  const { getUserInfo } = useUserApi();
+  const [currentUserId, setCurrentUserId] = useState<number | undefined>();
   
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const userInfo = await getUserInfo();
+        setCurrentUserId(userInfo.userId);
+      } catch (error) {
+        console.error("사용자 정보 조회 실패:", error);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
+
   const reviewListQuery = type === 'all' ? useReviewList({
     sort: "NEW",
     ...params as ShowReviewListRequest
@@ -35,7 +51,11 @@ const ReviewList = ({ type = 'all', params = { limit: 10 } }: ReviewListProps) =
     <ul className={styles.reviewList}>
       {reviews?.map(review => (
         <li key={review.reviewId} className={styles.reviewList__item}>
-          <ReviewItem review={review} showChips={true} />
+          <ReviewItem 
+            review={review} 
+            showChips={true}
+            currentUserId={currentUserId} 
+          />
         </li>
       ))}
     </ul>

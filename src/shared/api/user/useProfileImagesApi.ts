@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useApi } from "@shared/api/hooks/useApi";
 
-const PROFILE_UPLOAD_URL = "http://localhost:8080/api/images/profile";
+const PROFILE_UPLOAD_URL = "/api/images/profile";
 
 export const useProfileImageApi = () => {
   const { post } = useApi();

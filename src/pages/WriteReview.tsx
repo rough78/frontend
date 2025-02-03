@@ -14,7 +14,7 @@ import { useReviewApi } from "@shared/api/reviews/reviewApi";
 import { ReviewRequest, ReviewResponse } from "@shared/api/reviews/types";
 import { PhotoUploader } from "@widgets/photoUploader";
 import { useCafeApi } from "@/shared/api/cafe/cafe";
-import { TAGS } from "@/constants/tags";
+import { TAGS } from "@shared/constants/tags";
 
 const WriteReview = () => {
   const navigate = useNavigate();
@@ -84,10 +84,11 @@ const WriteReview = () => {
     visitDate: draft.visitDate,
     content: draft.content || "",
     imageIds: draft.imageIds || [],
-    tags: {
-      menu: draft.tags.menu.map((tagId) => ({ id: tagId })),
-      interior: draft.tags.interior.map((tagId) => ({ id: tagId })),
-    },
+    // tagIds: {
+    //   menu: draft.tags.menu.map((tagId) => ({ id: tagId })),
+    //   interior: draft.tags.interior.map((tagId) => ({ id: tagId })),
+    // },
+    tagIds: [...draft.tags.menu, ...draft.tags.interior],
   });
 
   const submitReview = async (request: ReviewRequest) => {

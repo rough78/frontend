@@ -2,10 +2,13 @@ import { useState } from "react";
 import styles from "./ReviewContent.module.scss";
 import chevronDown from "@shared/assets/images/chevron-down.svg";
 
-const reviewContent = () => {
+interface ReviewContentProps {
+  content: string;
+}
+
+const ReviewContent = ({ content }: ReviewContentProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
-  const content =
-    "조용하고 아늑한 분위기의 카페입니다. 커피는 향이 풍부하고 맛이 뛰어나며, 특히 카푸치노가 좋았습니다. 직원들도 친절하고 서비스가 신속해 기분 좋게 방문할 수 있었습니다.";
+
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
   };
@@ -21,7 +24,7 @@ const reviewContent = () => {
         <button onClick={toggleExpand} className={styles.toggleButton}>
           {isExpanded ? "접기" : "더보기"}
           <img
-            src={chevronDown}  // import한 이미지 사용
+            src={chevronDown}
             alt="content-toggle-button"
             className={isExpanded ? styles.imgRotated : styles.imgNormal}
           />
@@ -31,4 +34,4 @@ const reviewContent = () => {
   );
 };
 
-export default reviewContent;
+export default ReviewContent;

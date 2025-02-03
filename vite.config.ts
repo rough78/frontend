@@ -8,7 +8,9 @@ import path from "path";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   const isProduction = mode === 'production';
+  // @ts-ignore
   const isDevelopment = mode === 'development';
+  // @ts-ignore
   const isStaging = mode === 'staging';
   const isRemote = env.VITE_APP_REMOTE === 'true';
 
@@ -18,11 +20,13 @@ export default defineConfig(({ mode }) => {
     base: isProduction ? '/prod/' : '/',
     define: {
       __APP_MODE__: JSON.stringify(mode),
+      'import.meta.env.VITE_APP_REMOTE': JSON.stringify(isRemote),
+      'import.meta.env.MODE': JSON.stringify(mode)
     },
     build: {
       sourcemap: !isProduction,
       minify: isProduction,
-      outDir: isProduction ? 'dist' : 'dist-dev'
+      outDir: 'dist'
     },
     resolve: {
       alias: {
@@ -36,17 +40,17 @@ export default defineConfig(({ mode }) => {
       },
     },
     server: {
-      https: {
+      https: !isProduction ? {
         key: process.env.SSL_KEY_PATH 
           ? fs.readFileSync(process.env.SSL_KEY_PATH)
           : fs.readFileSync(path.resolve(__dirname, "localhost-key.pem")),
         cert: process.env.SSL_CERT_PATH 
           ? fs.readFileSync(process.env.SSL_CERT_PATH)
           : fs.readFileSync(path.resolve(__dirname, "localhost.pem")),
-      },
+      } : undefined,
       proxy: {
         "/api": {
-          target: isRemote ? env.VITE_API_URL : "",
+          target: isRemote || isProduction ? env.VITE_API_URL : "",
           changeOrigin: true,
           secure: true,
           configure: (proxy, _options) => {

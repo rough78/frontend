@@ -5,6 +5,7 @@ import {
   Outlet,
   Route,
   RouterProvider,
+  useNavigate,
 } from "react-router-dom";
 import MainLayout from "@app/layout/mainLayout/MainLayout";
 import Login from "@/pages/Login";
@@ -17,10 +18,28 @@ import MyPageEdit from "@/pages/MyPageEdit";
 import { ProtectedRoute } from "@app/routers/ProtectedRoute";
 import styles from "@app/layout/header/Header.module.scss";
 import { OAuthRedirect } from "@app/auth/OAuthRedirect";
-import Button from "@/shared/ui/button/ui/Button";
-import edit from "@shared/assets/images/profile/edit.svg";
+import NavBtn from "@/shared/ui/navButton/navBtn";
+
+import { useProfileStore } from "@shared/store/useProfileStore";
+import { useProfileImageApi } from "@shared/api/user/useProfileImagesApi";
 
 export const AppRouter = () => {
+  const { file } = useProfileStore();
+  const { uploadProfileImage } = useProfileImageApi();
+
+  const handleCompleteClick = async () => {
+    if (file) {
+      try {
+        await uploadProfileImage(file);
+        alert("프로필 이미지가 업로드되었습니다!");
+      } catch {
+        alert("업로드 실패");
+      }
+    } else {
+      alert("선택된 이미지가 없습니다.");
+    }
+  };
+
   const routes = createRoutesFromElements(
     <Route path="/" element={<Outlet />}>
       <Route
@@ -69,16 +88,16 @@ export const AppRouter = () => {
               showFooter={true}
               showBackButton={true}
               headerTitle="장소 검색"
-              rightElement={
-                <button
-                  className={styles.completeButton}
-                  onClick={() => {
-                    /* 이벤트 처리 */
-                  }}
-                >
-                  완료
-                </button>
-              }
+              // rightElement={
+              //   <button
+              //     className={styles.completeButton}
+              //     onClick={() => {
+              //       /* 이벤트 처리 */
+              //     }}
+              //   >
+              //     완료
+              //   </button>
+              // }
             >
               <CafeSearch />
             </MainLayout>
@@ -123,13 +142,7 @@ export const AppRouter = () => {
               showFooter={true}
               showBackButton={false}
               bgColor="rgb(249, 248, 246)"
-              rightElement={
-                <Button
-                  className="imgBtn"
-                  imgUrl={edit}
-                  altText="프로필 수정"
-                />
-              }
+              rightElement={<NavBtn />}
             >
               <MyPage />
             </MainLayout>
@@ -148,9 +161,7 @@ export const AppRouter = () => {
               rightElement={
                 <button
                   className={`${styles.completeButton} ${styles["completeButton--color"]}`}
-                  onClick={() => {
-                    /* 이벤트 처리 */
-                  }}
+                  onClick={handleCompleteClick}
                 >
                   완료
                 </button>

@@ -1,4 +1,4 @@
-import { TAGS } from '@/constants/tags';
+import { TAGS } from '@shared/constants/tags';
 import type { TagCategory } from '@/shared/api/reviews/types';
 
 export class TagMapper {

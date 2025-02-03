@@ -7,6 +7,7 @@ interface HeaderProps {
   title?: string;
   rightElement?: React.ReactNode;
   bgColor?: string;
+  onBackButtonClick?: () => void;
 }
 
 const Header = ({
@@ -14,14 +15,15 @@ const Header = ({
   title,
   rightElement,
   bgColor = "#fff",
+  onBackButtonClick,
 }: HeaderProps) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   return (
     <header className={styles.header} style={{ backgroundColor: bgColor }}>
       <div className={styles.headerContent}>
         {showBackButton && (
-          <button onClick={() => navigate(-1)} className={styles.backButton}>
+          <button onClick={onBackButtonClick} className={styles.backButton}>
             <img src={backIcon} alt="뒤로가기" />
           </button>
         )}

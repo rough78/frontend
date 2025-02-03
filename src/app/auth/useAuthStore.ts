@@ -14,8 +14,11 @@ export const useAuthStore = create<AuthStore>((set) => ({
   isAuthenticated: false,
   
   login: async (provider: string) => {
-    console.log('Remote mode:', import.meta.env.VITE_APP_REMOTE)
-    if (!import.meta.env.VITE_APP_REMOTE) {
+    const isRemote: boolean = import.meta.env.VITE_APP_REMOTE
+    const isProduction: boolean = import.meta.env.MODE === 'production'
+    console.log('Remote mode:', isRemote)
+    console.log('Production mode:', isProduction)
+    if (!(isRemote || isProduction)) {
       // MSW 모드
       try {
         console.log('Sending request to MSW endpoint:', `/api/auth/${provider}/login`)

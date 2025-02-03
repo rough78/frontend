@@ -122,11 +122,37 @@ export function useApi<T>(initialState?: T) {
     return request<R>('delete', endpoint, config, apiOptions)
   }, [request])
 
+  const patch = useCallback(<R = T>(
+    endpoint: string,
+    data?: unknown,
+    config?: {
+      params?: unknown
+      headers?: Record<string, string>
+    } & Omit<AxiosRequestConfig, 'data' | 'params' | 'headers' | 'method'>,
+    apiOptions?: UseApiOptions<R>
+  ) => {
+    return request<R>('patch', endpoint, { ...config, data }, apiOptions)
+  }, [request])
+
+  const put = useCallback(<R = T>(
+    endpoint: string,
+    data?: unknown,
+    config?: {
+      params?: unknown
+      headers?: Record<string, string>
+    } & Omit<AxiosRequestConfig, 'data' | 'params' | 'headers' | 'method'>,
+    apiOptions?: UseApiOptions<R>
+  ) => {
+    return request<R>('put', endpoint, { ...config, data }, apiOptions)
+  }, [request])
+
   return {
     ...state,
     request,
     get,
     post,
-    remove
+    remove,
+    patch,
+    put
   }
 }

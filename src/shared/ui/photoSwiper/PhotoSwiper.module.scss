@@ -12,15 +12,15 @@
     background-position: center;
     position: relative;
 
-    &:nth-child(1) {
-      background-image: url("@shared/assets/images/slide1.jpg");
-    }
-    &:nth-child(2) {
-      background-image: url("@shared/assets/images/slide2.jpg");
-    }
-    &:nth-child(3) {
-      background-image: url("@shared/assets/images/slide3.png");
-    }
+    // &:nth-child(1) {
+    //   background-image: url("@shared/assets/images/slide1.jpg");
+    // }
+    // &:nth-child(2) {
+    //   background-image: url("@shared/assets/images/slide2.jpg");
+    // }
+    // &:nth-child(3) {
+    //   background-image: url("@shared/assets/images/slide3.png");
+    // }
     .chipsWrap {
       position: absolute;
       bottom: 8px;
@@ -51,4 +51,9 @@
 /* 활성화된 페이지네이션 버튼 */
 :global(.swiper .swiper-pagination .swiper-pagination-bullet-active) {
   background-color: #cdc3b9;
+}
+
+.chipsOnly {
+  // padding: 8px;
+  // margin-bottom: 16px;
 }

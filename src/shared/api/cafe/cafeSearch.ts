@@ -39,7 +39,7 @@ export const useCafeSearch = (): CafeSearchHook => {
           .filter(item => item.category?.includes("카페"))
           .map((item, index) => ({
             ...CafeMapper.toICafeDescription(item),
-            id: index + 1
+            // id: index + 1 // 이 부분은 서버에서 처리하도록 변경
           }));
       }
 

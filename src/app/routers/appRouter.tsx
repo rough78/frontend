@@ -19,8 +19,7 @@ import MyPageEdit from "@/pages/MyPageEdit";
 import { ProtectedRoute } from "@app/routers/ProtectedRoute";
 import styles from "@app/layout/header/Header.module.scss";
 import { OAuthRedirect } from "@app/auth/OAuthRedirect";
-import NavBtn from "@/shared/ui/navButton/navBtn";
-
+import NavBtn from "@/shared/ui/navButton/NavBtn";
 import { useProfileStore } from "@shared/store/useProfileStore";
 import { useProfileImageApi } from "@shared/api/user/useProfileImagesApi";
 import DraftCounter from "@shared/ui/draftCounter/DraftCounter";

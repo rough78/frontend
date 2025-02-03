@@ -11,6 +11,8 @@ interface ReviewerInfoProps {
   rating: number;
   isProfileImageExist: boolean;
   reviewId: number;
+  userId: number;
+  currentUserId?: number;
 }
 
 const ReviewerInfo = ({ 
@@ -18,9 +20,12 @@ const ReviewerInfo = ({
   visitDate, 
   rating, 
   isProfileImageExist,
-  reviewId
+  reviewId,
+  userId,
+  currentUserId 
 }: ReviewerInfoProps) => {
   const [showReviewMore, setShowReviewMore] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // 모달 상태 추가
   const reviewMoreRef = useRef<HTMLDivElement | null>(null);
 
   const toggleReviewMore = () => {
@@ -28,6 +33,9 @@ const ReviewerInfo = ({
   };
 
   const handleClickOutside = (event: MouseEvent) => {
+    // 모달이 열려있을 때는 클릭 이벤트를 무시
+    if (isModalOpen) return;
+    
     if (
       reviewMoreRef.current &&
       !reviewMoreRef.current.contains(event.target as Node)
@@ -41,7 +49,7 @@ const ReviewerInfo = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [isModalOpen]);
 
   const formatVisitDate = (date: string) => {
     return new Date(date).toLocaleDateString('ko-KR', { 
@@ -50,6 +58,8 @@ const ReviewerInfo = ({
       day: '2-digit' 
     }).replace(/\./g, '.');
   };
+
+  const isOwner = currentUserId === userId;
 
   return (
     <div className={styles.reviewerInfo}>
@@ -76,7 +86,15 @@ const ReviewerInfo = ({
           alt="더보기 아이콘"
           onClick={toggleReviewMore}
         />
-        {showReviewMore && <ReviewMore reviewId={reviewId} onDelete={() => setShowReviewMore(false)} />}
+        {showReviewMore && (
+          <ReviewMore 
+            reviewId={reviewId}
+            isOwner={isOwner}
+            onDelete={() => setShowReviewMore(false)}
+            onModalOpen={() => setIsModalOpen(true)}
+            onModalClose={() => setIsModalOpen(false)}
+          />
+        )}
       </div>
     </div>
   );

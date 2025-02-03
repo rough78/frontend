@@ -12,6 +12,7 @@ interface UserStore {
 
 export const useUserStore = create<UserStore>((set) => ({
   userData: {
+    userId: 0,
     nickname: "",
     introduce: "",
     email: "",

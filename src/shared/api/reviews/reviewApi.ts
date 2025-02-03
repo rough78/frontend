@@ -14,8 +14,8 @@ export const useReviewApi = () => {
   const queryClient = useQueryClient();
 
   const createReviewMutation = useApiMutation<ReviewResponse, ReviewRequest & { draftId: number }>(
-    '/api/reviews/:draftId',  // base URL
-    'post',                   // HTTP method
+    '/api/reviews/:draftId',
+    'post',
     {
       urlTransform: (request) => `/api/reviews/${request.draftId}`
     }
@@ -37,6 +37,32 @@ export const useReviewApi = () => {
     } catch (error) {
       console.error("리뷰 작성 중 오류 발생:", error);
       options?.onError?.(error);
+      throw error;
+    }
+  };
+
+  const deleteReviewMutation = useApiMutation<void, number>(
+    '/api/reviews/:reviewId',
+    'delete',
+    {
+      urlTransform: (reviewId) => `/api/reviews/${reviewId}`
+    }
+  );
+
+  const deleteReview = async (
+    reviewId: number,
+    options?: {
+      onSuccess?: () => void;
+      onError?: (error: any) => void;
+    }
+  ) => {
+    try {
+      await deleteReviewMutation.mutateAsync(reviewId);
+      await queryClient.invalidateQueries({ queryKey: ["reviews"] });
+      options?.onSuccess?.();
+    } catch (error) {
+      console.error("리뷰 삭제 중 오류 발생:", error);
+      options?.onError?.(error); 
       throw error;
     }
   };
@@ -147,6 +173,9 @@ export const useReviewApi = () => {
     getCafeReviews,
     getReviewList,
     getMyReviews,
+
+    deleteReview,
+    deleteReviewMutation,
 
     isLoading: createReviewMutation.isPending,
     error: createReviewMutation.error,

@@ -10,13 +10,15 @@ interface ReviewerInfoProps {
   visitDate: string;
   rating: number;
   isProfileImageExist: boolean;
+  reviewId: number;
 }
 
 const ReviewerInfo = ({ 
   nickname, 
   visitDate, 
   rating, 
-  isProfileImageExist 
+  isProfileImageExist,
+  reviewId
 }: ReviewerInfoProps) => {
   const [showReviewMore, setShowReviewMore] = useState<boolean>(false);
   const reviewMoreRef = useRef<HTMLDivElement | null>(null);
@@ -74,7 +76,7 @@ const ReviewerInfo = ({
           alt="더보기 아이콘"
           onClick={toggleReviewMore}
         />
-        {showReviewMore && <ReviewMore />}
+        {showReviewMore && <ReviewMore reviewId={reviewId} onDelete={() => setShowReviewMore(false)} />}
       </div>
     </div>
   );

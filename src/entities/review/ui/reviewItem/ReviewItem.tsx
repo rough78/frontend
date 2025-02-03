@@ -17,6 +17,7 @@ const ReviewItem = ({ review, showChips = false }: ReviewItemProps) => {
         visitDate={review.visitDate}
         rating={review.rating}
         isProfileImageExist={review.isProfileImageExist}
+        reviewId={review.reviewId}
       />
       <PhotoSwiper 
         imageIds={(review.imageIds || []).map(id => id.toString())} 

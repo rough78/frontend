@@ -5,6 +5,7 @@ import {
   Outlet,
   Route,
   RouterProvider,
+  useNavigate,
 } from "react-router-dom";
 import MainLayout from "@app/layout/mainLayout/MainLayout";
 import Login from "@/pages/Login";
@@ -18,8 +19,9 @@ import MyPageEdit from "@/pages/MyPageEdit";
 import { ProtectedRoute } from "@app/routers/ProtectedRoute";
 import styles from "@app/layout/header/Header.module.scss";
 import { OAuthRedirect } from "@app/auth/OAuthRedirect";
-import Button from "@/shared/ui/button/ui/Button";
-import edit from "@shared/assets/images/profile/edit.svg";
+import NavBtn from "@/shared/ui/navButton/NavBtn";
+import { useProfileStore } from "@shared/store/useProfileStore";
+import { useProfileImageApi } from "@shared/api/user/useProfileImagesApi";
 import DraftCounter from "@shared/ui/draftCounter/DraftCounter";
 import { useNavigationStore } from "@shared/store/useNavigationStore";
 import { useDraftCountStore } from "@shared/store/useDraftCountStore";
@@ -29,6 +31,22 @@ import headerLogo from "@shared/assets/images/logo/logo-header.svg";
 export const AppRouter = () => {
   const { isFromFooter } = useNavigationStore();
   const draftCount = useDraftCountStore((state) => state.count);
+
+  const { file } = useProfileStore();
+  const { uploadProfileImage } = useProfileImageApi();
+
+  const handleCompleteClick = async () => {
+    if (file) {
+      try {
+        await uploadProfileImage(file);
+        alert("프로필 이미지가 업로드되었습니다!");
+      } catch {
+        alert("업로드 실패");
+      }
+    } else {
+      alert("선택된 이미지가 없습니다.");
+    }
+  };
 
   const routes = createRoutesFromElements(
     <Route path="/" element={<Outlet />}>
@@ -140,13 +158,7 @@ export const AppRouter = () => {
               showFooter={true}
               showBackButton={false}
               bgColor="rgb(249, 248, 246)"
-              rightElement={
-                <Button
-                  className="imgBtn"
-                  imgUrl={edit}
-                  altText="프로필 수정"
-                />
-              }
+              rightElement={<NavBtn />}
             >
               <MyPage />
             </MainLayout>
@@ -165,9 +177,7 @@ export const AppRouter = () => {
               rightElement={
                 <button
                   className={`${styles.completeButton} ${styles["completeButton--color"]}`}
-                  onClick={() => {
-                    /* 이벤트 처리 */
-                  }}
+                  onClick={handleCompleteClick}
                 >
                   완료
                 </button>

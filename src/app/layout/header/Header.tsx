@@ -11,6 +11,7 @@ interface HeaderProps {
   rightElement?: React.ReactNode;
   bgColor?: string;
   onBackClick?: () => void;
+  onBackButtonClick?: () => void;
 }
 
 const Header = ({
@@ -20,8 +21,9 @@ const Header = ({
   rightElement,
   bgColor = "#fff",
   onBackClick,
+  onBackButtonClick,
 }: HeaderProps) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { isSelectionMode, setSelectionMode } = useDraftSelectionStore();
 
   const handleBackClick = (e: React.MouseEvent) => {

@@ -7,8 +7,10 @@ import Button from "@/shared/ui/button/ui/Button";
 
 const PhotoEdit = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { file, setFile } = useProfileStore();
-  const preview = file ? URL.createObjectURL(file) : profile;
+  const { file, setFile, profileImageUrl } = useProfileStore();
+  useProfileStore();
+
+  const preview = file ? URL.createObjectURL(file) : profileImageUrl || profile;
 
   const handleClick = () => {
     fileInputRef.current?.click();
@@ -26,7 +28,7 @@ const PhotoEdit = () => {
       <div className={styles.photoEditBox}>
         <img
           className={styles.photoEditBox__profile}
-          src={preview ?? profile}
+          src={preview}
           alt="profile-img"
         />
 

@@ -42,6 +42,16 @@ const MyPageEdit = () => {
   }, [setUserData, getProfileImage, setProfileImageUrl]);
 
   const handleNicknameChange = debounce(async (nickname: string) => {
+    if (nickname.length === 0) {
+      setNicknameError("닉네임은 1자 이상 20자 이하로 입력해주세요.");
+      return;
+    }
+    if (nickname.length < 1 || nickname.length > 20) {
+      setNicknameError("닉네임은 1자 이상 20자 이하로 입력해주세요.");
+      return;
+    }
+    setNicknameError("");
+
     try {
       const response = await checkNicknameExistence(nickname);
       if (response.exist) {

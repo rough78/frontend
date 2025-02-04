@@ -20,31 +20,39 @@ import { ProtectedRoute } from "@app/routers/ProtectedRoute";
 import styles from "@app/layout/header/Header.module.scss";
 import { OAuthRedirect } from "@app/auth/OAuthRedirect";
 import NavBtn from "@/shared/ui/navButton/NavBtn";
-import { useProfileStore } from "@shared/store/useProfileStore";
-import { useProfileImageApi } from "@shared/api/user/useProfileImagesApi";
 import DraftCounter from "@shared/ui/draftCounter/DraftCounter";
 import { useNavigationStore } from "@shared/store/useNavigationStore";
 import { useDraftCountStore } from "@shared/store/useDraftCountStore";
 import SelectionModeButton from "@shared/ui/selectionModeButton/SelectionModeButton";
 import headerLogo from "@shared/assets/images/logo/logo-header.svg";
 
+import { useProfileStore } from "@shared/store/useProfileStore";
+import { useProfileImageApi } from "@shared/api/user/useProfileImagesApi";
+import { useUserStore } from "@shared/store/useUserStore";
+import { useUserApi } from "@shared/api/user/userApi";
+
 export const AppRouter = () => {
   const { isFromFooter } = useNavigationStore();
   const draftCount = useDraftCountStore((state) => state.count);
 
   const { file } = useProfileStore();
+  const { userData, nicknameError } = useUserStore();
   const { uploadProfileImage } = useProfileImageApi();
+  const { updateUserInfo } = useUserApi();
 
   const handleCompleteClick = async () => {
-    if (file) {
-      try {
+    try {
+      if (file) {
         await uploadProfileImage(file);
-        alert("프로필 이미지가 업로드되었습니다!");
-      } catch {
-        alert("업로드 실패");
       }
-    } else {
-      alert("선택된 이미지가 없습니다.");
+
+      const { nickname, introduce } = userData;
+      await updateUserInfo({ nickname, introduce });
+
+      alert("프로필 수정이 완료되었습니다!");
+      window.location.href = "/mypage";
+    } catch (error) {
+      alert("수정 중 오류가 발생했습니다.");
     }
   };
 
@@ -81,13 +89,7 @@ export const AppRouter = () => {
               showHeader={true}
               showFooter={true}
               showBackButton={false}
-              headerTitle={
-                <img 
-                  src={headerLogo} 
-                  alt="카페2025 로고"
-
-                />
-              }
+              headerTitle={<img src={headerLogo} alt="카페2025 로고" />}
             >
               <Main />
             </MainLayout>
@@ -102,9 +104,7 @@ export const AppRouter = () => {
               showFooter={true}
               showBackButton={true}
               headerTitle="장소 검색"
-              rightElement={
-                !isFromFooter ? <DraftCounter /> : null
-              }
+              rightElement={!isFromFooter ? <DraftCounter /> : null}
             >
               <CafeSearch />
             </MainLayout>
@@ -113,9 +113,7 @@ export const AppRouter = () => {
         />
         <Route
           path="review/write"
-          element={
-            <WriteReview />
-          }
+          element={<WriteReview />}
           handle={{ crumb: <Link to="/review/write">리뷰 작성</Link> }}
         />
         <Route
@@ -127,7 +125,7 @@ export const AppRouter = () => {
               showBackButton={true}
               showWriteButton={false}
               headerTitle="작성 중인 리뷰"
-              headerCount={draftCount}  // count를 전달
+              headerCount={draftCount} // count를 전달
               rightElement={<SelectionModeButton />}
             >
               <DraftReview />
@@ -178,6 +176,7 @@ export const AppRouter = () => {
                 <button
                   className={`${styles.completeButton} ${styles["completeButton--color"]}`}
                   onClick={handleCompleteClick}
+                  disabled={!!nicknameError}
                 >
                   완료
                 </button>

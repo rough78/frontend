@@ -36,7 +36,7 @@ export const AppRouter = () => {
   const draftCount = useDraftCountStore((state) => state.count);
 
   const { file } = useProfileStore();
-  const { userData } = useUserStore();
+  const { userData, nicknameError } = useUserStore();
   const { uploadProfileImage } = useProfileImageApi();
   const { updateUserInfo } = useUserApi();
 
@@ -176,6 +176,7 @@ export const AppRouter = () => {
                 <button
                   className={`${styles.completeButton} ${styles["completeButton--color"]}`}
                   onClick={handleCompleteClick}
+                  disabled={!!nicknameError}
                 >
                   완료
                 </button>

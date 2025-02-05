@@ -11,16 +11,16 @@ const ProfileHeader = ({ isScrolled }: ProfileHeaderProps) => {
   const { getUserInfo } = useUserApi();
   const { getProfileImage } = useProfileImageApi();
   const [userInfo, setUserInfo] = useState<UserInfoResponse | null>(null);
-
   const { profileImageUrl, setProfileImageUrl } = useProfileStore();
 
+  // 별도의 useEffect로 분리
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         const response = await getUserInfo();
         setUserInfo(response);
 
-        // 여기서 userId를 이용해 프로필 이미지를 가져옴
+        // 프로필 이미지 로딩
         if (response.userId) {
           const newImageUrl = await getProfileImage(response.userId);
           if (newImageUrl) {
@@ -32,10 +32,9 @@ const ProfileHeader = ({ isScrolled }: ProfileHeaderProps) => {
       }
     };
 
-    if (!profileImageUrl) {
-      fetchUserData();
-    }
-  }, [profileImageUrl]);
+    // 컴포넌트 마운트 시 한 번만 실행
+    fetchUserData();
+  }, []); // 빈 의존성 배열
 
   return (
     <div

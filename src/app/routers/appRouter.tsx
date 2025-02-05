@@ -35,9 +35,9 @@ export const AppRouter = () => {
   const { isFromFooter } = useNavigationStore();
   const draftCount = useDraftCountStore((state) => state.count);
 
-  const { file } = useProfileStore();
+  const { file, setProfileImageUrl } = useProfileStore();
   const { userData, nicknameError } = useUserStore();
-  const { uploadProfileImage } = useProfileImageApi();
+  const { uploadProfileImage, getProfileImage } = useProfileImageApi();
   const { updateUserInfo } = useUserApi();
 
   const handleCompleteClick = async () => {
@@ -46,9 +46,14 @@ export const AppRouter = () => {
         await uploadProfileImage(file);
       }
 
-      const { nickname, introduce } = userData;
+      const { nickname, introduce, userId } = userData;
       await updateUserInfo({ nickname, introduce });
-
+      if (userId) {
+        const newImageUrl = await getProfileImage(userId);
+        if (newImageUrl) {
+          setProfileImageUrl(newImageUrl);
+        }
+      }
       alert("프로필 수정이 완료되었습니다!");
       window.location.href = "/mypage";
     } catch (error) {

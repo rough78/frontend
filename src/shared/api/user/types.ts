@@ -4,6 +4,7 @@ export interface UserInfoResponse {
   introduce: string;
   email: string;
   isProfileImageExist: boolean;
+  profileImage?: string;
 }
 
 export interface UserUpdateRequest {

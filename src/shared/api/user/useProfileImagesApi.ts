@@ -1,19 +1,31 @@
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import { useApi } from "@shared/api/hooks/useApi";
 
 const PROFILE_IMAGE_URL = "/api/images/profile";
 
 export const useProfileImageApi = () => {
   const { get, post } = useApi();
+  const prevUrl = useRef<string | null>(null);
 
   const getProfileImage = useCallback(
     async (userId: number): Promise<string | null> => {
       try {
-        const response: Blob = await get(`${PROFILE_IMAGE_URL}/${userId}`, {
-          responseType: "blob",
-        });
+        // 캐시 방지를 위한 타임스탬프 추가
+        const timestamp = Date.now();
+        const response: Blob = await get(
+          `${PROFILE_IMAGE_URL}/${userId}?t=${timestamp}`, 
+          {
+            responseType: "blob",
+          }
+        );
+
+        // 이전 URL 해제
+        if (prevUrl.current) {
+          URL.revokeObjectURL(prevUrl.current);
+        }
 
         const imageUrl = URL.createObjectURL(response);
+        prevUrl.current = imageUrl;
 
         return imageUrl;
       } catch (error) {

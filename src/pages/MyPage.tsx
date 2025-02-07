@@ -88,31 +88,6 @@ const MyPage = () => {
           />
         )}
 
-        <button onClick={openModal}>Open Modal</button>
-        <Modal
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          title="정말 나가시겠어요?"
-          description="작성 중인 내용은 임시 저장되어 다음에 이어서 작성할 수 있어요."
-          primaryButton={{
-            text: "나가기",
-            altText: "나가기",
-            onClick: closeModal,
-            className: "modal-btn modal-btn-yes",
-          }}
-          secondaryButton={{
-            text: "계속 작성하기",
-            altText: "계속 작성하기",
-            onClick: closeModal,
-            className: "modal-btn modal-btn-no",
-          }}
-        />
-        <Toast
-          icon={true}
-          message="리뷰 작성이 완료되었습니다"
-          linkTo="/search"
-          linkText="보러가기"
-        />
       </div>
     </div>
   );

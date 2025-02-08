@@ -27,3 +27,5 @@
 
 ### 4. 특정 카페 리뷰 탐색  
 - 특정 카페의 리뷰만 모아서 탐색 가능  
+
+<img src="https://raw.githubusercontent.com/cafeLogProject/README/main/image/video/fe/검색.gif" width="100">

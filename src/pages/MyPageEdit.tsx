@@ -47,33 +47,43 @@ const MyPageEdit = () => {
   }, [setUserData, getProfileImage, setProfileImageUrl]);
 
   useEffect(() => {
-    navigateRef.current = navigate;
+    // navigate 함수 변경 시 로그 출력 - 버그 수정, 호출 최적화 후 삭제할 것
+    if (navigateRef.current !== navigate) {
+      console.log('navigate 함수 변경됨:', {
+        oldNavigate: navigateRef.current,
+        newNavigate: navigate,
+        timestamp: new Date().toISOString()
+      });
+      navigateRef.current = navigate;
+    }
   }, [navigate]);
 
-  useEffect(() => {
-    setHandleComplete(async () => {
-      try {
-        if (file) {
-          await uploadProfileImage(file);
-        }
-
-        const { nickname, introduce, userId } = userData;
-        await updateUserInfo({ nickname, introduce });
-        
-        if (userId) {
-          const newImageUrl = await getProfileImage(userId);
-          if (newImageUrl) {
-            setProfileImageUrl(newImageUrl);
-          }
-        }
-        
-        alert("프로필 수정이 완료되었습니다!");
-        navigateRef.current("/mypage", { replace: true });
-      } catch (error) {
-        alert("수정 중 오류가 발생했습니다.");
+  const handleComplete = async () => {
+    try {
+      if (file) {
+        await uploadProfileImage(file);
       }
-    });
-  }, [file, userData, setHandleComplete]);
+
+      const { nickname, introduce, userId } = userData;
+      await updateUserInfo({ nickname, introduce });
+      
+      if (userId) {
+        const newImageUrl = await getProfileImage(userId);
+        if (newImageUrl) {
+          setProfileImageUrl(newImageUrl);
+        }
+      }
+      
+      alert("프로필 수정이 완료되었습니다!");
+      navigateRef.current("/mypage", { replace: true });
+    } catch (error) {
+      alert("수정 중 오류가 발생했습니다.");
+    }
+  };
+
+  useEffect(() => {
+    setHandleComplete(handleComplete);
+  }, [file, userData]);
 
   const handleNicknameChange = debounce(async (nickname: string) => {
     if (nickname.length === 0) {

@@ -57,12 +57,31 @@ const ReviewList = ({ type = 'all', params = { limit: 10 }, onLoadMore }: Review
     }
   }, [reviewListQuery?.data]);
 
+  const normalizeTimestamp = (timestamp: string) => {
+    // 'Z' 제거
+    const cleanTime = timestamp.endsWith('Z') ? timestamp.slice(0, -1) : timestamp;
+    
+    // 소수점 처리
+    const [datePart, nanosPart = ''] = cleanTime.split('.');
+    
+    // 마이크로초 정규화 (6자리)
+    const micros = nanosPart.padEnd(6, '0').slice(0, 6);  // 마이크로초 부분만 사용
+    const microsInt = parseInt(micros) - 1;  // 1 마이크로초 감소
+    const normalizedMicros = microsInt.toString().padStart(6, '0');
+        
+    return `${datePart}.${normalizedMicros}`;
+  };
+
   const handleObserver = useCallback((entries: IntersectionObserverEntry[]) => {
     const [target] = entries;
     if (target.isIntersecting && hasMore && !isLoading) {
       const lastReview = reviews[reviews.length - 1];
       if (lastReview && onLoadMore) {
         console.log('Load more reviews:', lastReview.createdAt);
+        /**
+         * 백엔드 파트에서 타임스탬프보다 낮은 리뷰를 가져오도록 API를 수정해줘서 주석 처리
+         */
+        // onLoadMore(normalizeTimestamp(lastReview.createdAt));
         onLoadMore(lastReview.createdAt);
       }
     }

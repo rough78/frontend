@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useNavigationStore } from "@shared/store/useNavigationStore";
 import { useReviewDraftStore } from "@shared/store/useReviewDraftStore";
@@ -12,87 +12,131 @@ import NoReview from "@shared/assets/images/review/no-review.svg";
 import { ReviewItem } from "@/entities/review/ui";
 import { useReviewApi } from "@shared/api/reviews/reviewApi";
 import type { ShowReviewResponse } from "@shared/api/reviews/types";
+import { useReviewDraftApi } from "@shared/api/reviews/reviewDraftApi";
+import { useFavoriteApi } from "@shared/api/favorite";
 
 const CafeInfo = () => {
   const { id } = useParams();
   const { getCafe } = useCafeApi();
-  const [cafeInfo, setCafeInfo] = useState<ICafeDescription | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-  const [reviews, setReviews] = useState<ShowReviewResponse[]>([]);
-  const { getCafeReviews } = useReviewApi();
+  const { useCafeReviews } = useReviewApi();
   const navigate = useNavigate();
   const { setReturnPath } = useNavigationStore();
   const { updateDraft } = useReviewDraftStore();
-  
-  // 디버깅을 위한 로그 추가
+  const { createDraft } = useReviewDraftApi();
+  const { toggleFavorite } = useFavoriteApi();
+
+  const [cafeInfo, setCafeInfo] = useState<ICafeDescription | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+  const [shouldNavigate, setShouldNavigate] = useState(false);
+
+  const reviewsQuery = useCafeReviews(Number(id), {
+    page: 1,
+    size: 10,
+    sort: "latest"
+  });
+
   useEffect(() => {
-    console.log('Current URL id parameter:', id);
+    const fetchCafeInfo = async () => {
+      if (!id) {
+        setError(new Error("카페 ID가 없습니다. URL을 확인해주세요."));
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const data = await getCafe(id);
+        setCafeInfo(data);
+      } catch (err) {
+        setError(err instanceof Error ? err : new Error("카페 정보를 불러오는데 실패했습니다."));
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCafeInfo();
   }, [id]);
 
-  const dependencies = useRef({ id, getCafe });
-  dependencies.current = { id, getCafe };
-
-  const fetchCafeInfo = useCallback(async () => {
-    const { id, getCafe } = dependencies.current;
-    console.log('Attempting to fetch cafe with id:', id); // 디버깅 로그
-    
-    if (!id) {
-      setError(new Error("카페 ID가 없습니다. URL을 확인해주세요."));
-      setIsLoading(false);
-      return; 
-    }
-
+  const handleWriteReviewClick = async () => {
+    if (!cafeInfo) return;
+  
     try {
-      const data = await getCafe(id);
-      setCafeInfo(data);
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error("카페 정보를 불러오는데 실패했습니다."));
-    } finally {
-      setIsLoading(false); 
-    }
-  }, []);
-
-  const fetchReviews = useCallback(async () => {
-    if (!cafeInfo?.id) return;
-
-    try {
-      const response = await getCafeReviews(cafeInfo.id, { 
-        page: 1, 
-        size: 10,
-        sort: "latest" 
-      });
-      setReviews(response);
-    } catch (err) {
-      console.error("리뷰 조회 중 오류 발생:", err);
-    }
-  }, [cafeInfo?.id]);
-
-  useEffect(() => {
-    fetchCafeInfo();
-  }, [fetchCafeInfo]);
-
-  useEffect(() => {
-    if (cafeInfo) {
-      fetchReviews();
-    }
-  }, [cafeInfo, fetchReviews]);
-
-  const handleWriteReviewClick = () => {
-    if (cafeInfo) {
+      // 1. 네비게이션 상태 업데이트
       setReturnPath(`/cafe/${cafeInfo.id}`);
+      
+      // 2. Draft 스토어 업데이트
       updateDraft({ 
         cafe: cafeInfo
       });
-      navigate('/review/write');
+  
+      // 3. Draft 생성
+      try {
+        const response = await createDraft({
+          cafeId: cafeInfo.id,
+          rating: 0,
+          visitDate: '',
+          content: '',
+          imageIds: [],
+          tagIds: []
+        });
+  
+        // 4. Draft ID 업데이트
+        await updateDraft({ 
+          id: response.draftReviewId,
+          cafe: cafeInfo
+        });
+
+        // 5. 네비게이션 트리거
+        setShouldNavigate(true);
+
+      } catch (error) {
+        console.error('Draft 생성 실패:', error);
+      }
+    } catch (error) {
+      console.error("리뷰 작성 페이지 이동 중 오류 발생:", error);
     }
   };
 
-  if (isLoading) {
+  const handleBookmarkClick = async () => {
+    if (!cafeInfo) return;
+    
+    try {
+      await toggleFavorite(
+        {
+          cafeId: cafeInfo.id,
+          isScrap: !cafeInfo.isScrap
+        },
+        {
+          onSuccess: async () => {
+            // 북마크 토글 후 카페 정보 다시 가져오기
+            const updatedCafeInfo = await getCafe(cafeInfo.id.toString());
+            setCafeInfo(updatedCafeInfo);
+          },
+          onError: (error) => {
+            console.error("즐겨찾기 토글 실패:", error.message);
+          }
+        }
+      );
+    } catch (error) {
+      console.error("즐겨찾기 처리 중 오류 발생:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (shouldNavigate) {
+      navigate('/review/write', {
+        replace: true,
+        state: { from: `/cafe/${cafeInfo?.id}` }
+      });
+      setShouldNavigate(false);
+    }
+  }, [shouldNavigate, navigate, cafeInfo]);
+
+  if (isLoading || reviewsQuery.isLoading) {
     return <div>로딩 중...</div>;
   }
 
-  if (error || !cafeInfo) {
+  if (error || !cafeInfo || reviewsQuery.isError) {
     return <div>카페 정보를 불러오는데 실패했습니다.</div>;
   }
 
@@ -105,19 +149,20 @@ const CafeInfo = () => {
         name={cafeInfo.name}
         address={cafeInfo.address}
         link={cafeInfo.link}
-        onBookmarkClick={() => console.log("Bookmark clicked")}
+        onBookmarkClick={handleBookmarkClick}
+        isBookmarked={cafeInfo.isScrap ?? false}
       />
       <div className={styles.divider} />
       <div className={styles.ratingWrapper}>
         <div className={styles.ratingHeader}>
           <label className={styles.ratingLabel}>리뷰</label>
-          <span className={styles.reviewCount}>({reviews.length}개)</span>
+          <span className={styles.reviewCount}>({reviewsQuery.data?.length ?? 0}개)</span>
         </div>
         <div className={styles.ratingScoreContainer}>
           <div className={styles.ratingScore}>
             <StarRating 
               value={cafeInfo.avgStar || 0}
-              showRatingText={true}
+              showRatingValue={true}
               size={36}
               starsContainerClassName={styles.starRatingStars}
               ratingTextClassName={styles.ratingText}
@@ -126,9 +171,9 @@ const CafeInfo = () => {
         </div>
       </div>
       
-      {reviews.length > 0 ? (
+      {reviewsQuery.data && reviewsQuery.data.length > 0 ? (
         <ul className={styles.reviewList}>
-          {reviews.map((review) => (
+          {reviewsQuery.data.map((review) => (
             <li key={review.reviewId} className={styles.reviewList__item}>
               <ReviewItem review={review} />
             </li>

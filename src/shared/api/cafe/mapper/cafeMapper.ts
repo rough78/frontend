@@ -14,9 +14,9 @@ export class CafeMapper {
       mapy: naverResponse.mapy || '',
       link: naverResponse.link || '',
       imageIds: [],
-      isBookmark: false,
       avgStar: 0,
-      profileImg: ''
+      profileImg: '',
+      isScrap: false
     };
   }
 
@@ -32,7 +32,13 @@ export class CafeMapper {
   }
 
   private static sanitizeTitle(title: string): string {
-    return title.replace(/<[^>]*>/g, '');
+    const decodedTitle = title
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'");
+    return decodedTitle.replace(/<[^>]*>/g, '');
   }
 
   private static convertNaverCoordinate(coord: string): number {

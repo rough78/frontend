@@ -9,12 +9,13 @@
   z-index: 100;
   width: 100%;
   max-width: 600px;
-  height: 212px;
+  height: 252px;
   background-color: var.$primitive-secondary-brown50;
   border-left: 1px solid #d8d8d8;
   border-right: 1px solid #d8d8d8;
   overflow: hidden;
   transition: all 0.3s ease;
+  pointer-events: none;
 
   &__inner {
     display: flex;
@@ -34,7 +35,9 @@
   }
 
   &__profileImg {
-    width: 80px;
+    width: 132px;
+    height: 132px;
+    border-radius: 50%;
     transition: width 0.3s ease;
   }
 
@@ -62,6 +65,8 @@
 
     .profileHead__profileImg {
       width: 52px;
+      height: 52px;
+      border-radius: 50%;
     }
 
     .profileHead__meta {

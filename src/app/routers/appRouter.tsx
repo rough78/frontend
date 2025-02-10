@@ -12,33 +12,31 @@ import Login from "@/pages/Login";
 import Main from "@/pages/Main";
 import CafeSearch from "@/pages/CafeSearch";
 import WriteReview from "@/pages/WriteReview";
+import DraftReview from "@/pages/DraftReview";
 import CafeInfo from "@/pages/CafeInfo";
 import MyPage from "@/pages/MyPage";
 import MyPageEdit from "@/pages/MyPageEdit";
 import { ProtectedRoute } from "@app/routers/ProtectedRoute";
 import styles from "@app/layout/header/Header.module.scss";
 import { OAuthRedirect } from "@app/auth/OAuthRedirect";
-import NavBtn from "@/shared/ui/navButton/navBtn";
+import NavBtn from "@/shared/ui/navButton/NavBtn";
+import DraftCounter from "@shared/ui/draftCounter/DraftCounter";
+import { useNavigationStore } from "@shared/store/useNavigationStore";
+import { useDraftCountStore } from "@shared/store/useDraftCountStore";
+import SelectionModeButton from "@shared/ui/selectionModeButton/SelectionModeButton";
+import headerLogo from "@shared/assets/images/logo/logo-header.svg";
 
 import { useProfileStore } from "@shared/store/useProfileStore";
 import { useProfileImageApi } from "@shared/api/user/useProfileImagesApi";
+import { useUserStore } from "@shared/store/useUserStore";
+import { useUserApi } from "@shared/api/user/userApi";
+import { useProfileEditStore } from "@shared/store/useProfileEditStore";
 
 export const AppRouter = () => {
-  const { file } = useProfileStore();
-  const { uploadProfileImage } = useProfileImageApi();
-
-  const handleCompleteClick = async () => {
-    if (file) {
-      try {
-        await uploadProfileImage(file);
-        alert("프로필 이미지가 업로드되었습니다!");
-      } catch {
-        alert("업로드 실패");
-      }
-    } else {
-      alert("선택된 이미지가 없습니다.");
-    }
-  };
+  const { isFromFooter } = useNavigationStore();
+  const draftCount = useDraftCountStore((state) => state.count);
+  const { nicknameError } = useUserStore();
+  const { handleComplete } = useProfileEditStore();
 
   const routes = createRoutesFromElements(
     <Route path="/" element={<Outlet />}>
@@ -73,7 +71,7 @@ export const AppRouter = () => {
               showHeader={true}
               showFooter={true}
               showBackButton={false}
-              headerTitle="BrewScape"
+              headerTitle={<img src={headerLogo} alt="카페2025 로고" />}
             >
               <Main />
             </MainLayout>
@@ -88,16 +86,7 @@ export const AppRouter = () => {
               showFooter={true}
               showBackButton={true}
               headerTitle="장소 검색"
-              // rightElement={
-              //   <button
-              //     className={styles.completeButton}
-              //     onClick={() => {
-              //       /* 이벤트 처리 */
-              //     }}
-              //   >
-              //     완료
-              //   </button>
-              // }
+              rightElement={!isFromFooter ? <DraftCounter /> : null}
             >
               <CafeSearch />
             </MainLayout>
@@ -106,18 +95,25 @@ export const AppRouter = () => {
         />
         <Route
           path="review/write"
+          element={<WriteReview />}
+          handle={{ crumb: <Link to="/review/write">리뷰 작성</Link> }}
+        />
+        <Route
+          path="draft"
           element={
             <MainLayout
               showHeader={true}
               showFooter={false}
               showBackButton={true}
               showWriteButton={false}
-              headerTitle="리뷰 작성"
+              headerTitle="작성 중인 리뷰"
+              headerCount={draftCount} // count를 전달
+              rightElement={<SelectionModeButton />}
             >
-              <WriteReview />
+              <DraftReview />
             </MainLayout>
           }
-          handle={{ crumb: <Link to="/review/write">리뷰 작성</Link> }}
+          handle={{ crumb: <Link to="/draft">작성 중인 리뷰</Link> }}
         />
         <Route
           path="cafe/:id"
@@ -161,7 +157,8 @@ export const AppRouter = () => {
               rightElement={
                 <button
                   className={`${styles.completeButton} ${styles["completeButton--color"]}`}
-                  onClick={handleCompleteClick}
+                  onClick={handleComplete}
+                  disabled={!!nicknameError}
                 >
                   완료
                 </button>

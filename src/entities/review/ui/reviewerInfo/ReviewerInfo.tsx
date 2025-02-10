@@ -4,28 +4,72 @@ import SimpleStarRating from "@/widgets/simpleStarRating/ui/SimpleStarRating";
 import ReviewMore from "../reviewMore/ReviewMore";
 import profileIcon from "@shared/assets/images/profile.svg";
 import moreIcon from "@shared/assets/images/more.svg";
+import { useProfileImageApi } from "@/shared/api/user/useProfileImagesApi";
 
 interface ReviewerInfoProps {
   nickname: string;
   visitDate: string;
   rating: number;
   isProfileImageExist: boolean;
+  reviewId: number;
+  userId: number;
+  currentUserId?: number;
 }
 
 const ReviewerInfo = ({ 
   nickname, 
   visitDate, 
   rating, 
-  isProfileImageExist 
+  isProfileImageExist,
+  reviewId,
+  userId,
+  currentUserId 
 }: ReviewerInfoProps) => {
   const [showReviewMore, setShowReviewMore] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const reviewMoreRef = useRef<HTMLDivElement | null>(null);
+  const isOwner = currentUserId === userId;
+
+  const { getProfileImage } = useProfileImageApi();
+  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadProfileImage = async () => {
+      if (isProfileImageExist && userId) {
+        try {
+          const imageUrl = await getProfileImage(userId);
+          setProfileImageUrl(imageUrl);
+        } catch (error) {
+          console.error("프로필 이미지 로드 실패:", error);
+          setProfileImageUrl(null);
+        }
+      }
+    };
+
+    loadProfileImage();
+  }, [isProfileImageExist, userId, getProfileImage]);
+
+  // 표시할 버튼 개수 계산
+  const getVisibleButtonCount = () => {
+    let count = 0;
+    if (isOwner) {
+      count += 2; // 수정, 삭제 버튼
+    }
+    // 향후 다른 버튼들이 추가될 때마다 조건에 따라 카운트 증가
+    // 예: if (canShare) count++;
+    return count;
+  };
+
+  const hasVisibleButtons = getVisibleButtonCount() > 0;
 
   const toggleReviewMore = () => {
     setShowReviewMore((prev) => !prev);
   };
 
   const handleClickOutside = (event: MouseEvent) => {
+    // 모달이 열려있을 때는 클릭 이벤트를 무시
+    if (isModalOpen) return;
+    
     if (
       reviewMoreRef.current &&
       !reviewMoreRef.current.contains(event.target as Node)
@@ -39,7 +83,7 @@ const ReviewerInfo = ({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [isModalOpen]);
 
   const formatVisitDate = (date: string) => {
     return new Date(date).toLocaleDateString('ko-KR', { 
@@ -53,8 +97,8 @@ const ReviewerInfo = ({
     <div className={styles.reviewerInfo}>
       <img
         className={styles.reviewerInfo__profilePicture}
-        src={isProfileImageExist ? `path/to/profile/${nickname}` : profileIcon}
-        alt="프로필"
+        src={profileImageUrl || profileIcon}
+        alt={`${nickname}의 프로필`}
       />
       <div className={styles.reviewerInfo__details}>
         <p className={styles.reviewerInfo__name}>{nickname}</p>
@@ -67,15 +111,25 @@ const ReviewerInfo = ({
         </div>
       </div>
 
-      <div ref={reviewMoreRef} className={styles.reviewerInfo__moreWrapper}>
-        <img
-          className={styles.reviewerInfo__moreIcon}
-          src={moreIcon}
-          alt="더보기 아이콘"
-          onClick={toggleReviewMore}
-        />
-        {showReviewMore && <ReviewMore />}
-      </div>
+      {hasVisibleButtons && (
+        <div ref={reviewMoreRef} className={styles.reviewerInfo__moreWrapper}>
+          <img
+            className={styles.reviewerInfo__moreIcon}
+            src={moreIcon}
+            alt="더보기 아이콘"
+            onClick={toggleReviewMore}
+          />
+          {showReviewMore && (
+            <ReviewMore 
+              reviewId={reviewId}
+              isOwner={isOwner}
+              onDelete={() => setShowReviewMore(false)}
+              onModalOpen={() => setIsModalOpen(true)}
+              onModalClose={() => setIsModalOpen(false)}
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 };

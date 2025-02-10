@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type { ICafeDescription } from '@shared/api/cafe/types';
 
-interface ReviewDraft {
+export interface ReviewDraft {
   id?: number;
   cafe: ICafeDescription | null;
   rating: number;
@@ -43,8 +43,7 @@ export const useReviewDraftStore = create<ReviewDraftStore>()(
         set((state) => ({
           draft: {
             ...state.draft,
-            ...updates,
-            tags: updates.tags || state.draft.tags || initialDraft.tags
+            ...updates
           }
         })),
       clearDraft: (preserveFields = []) => set((state) => ({
@@ -62,3 +61,7 @@ export const useReviewDraftStore = create<ReviewDraftStore>()(
     }
   )
 );
+
+const store = useReviewDraftStore.getState();
+console.log('localStorage draft:', localStorage.getItem('review-draft'));
+console.log('store draft:', store.draft);

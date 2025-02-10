@@ -7,7 +7,7 @@ interface ProfileFormProps {
 }
 
 const ProfileForm = ({ onNicknameChange }: ProfileFormProps) => {
-  const { userData, nicknameError } = useUserStore();
+  const { userData, nicknameError, setUserData } = useUserStore();
   return (
     <div className={styles.profileForm}>
       <ProfileInputSection
@@ -39,6 +39,9 @@ const ProfileForm = ({ onNicknameChange }: ProfileFormProps) => {
         showSocialAccount={false}
         showTextarea={true}
         value={userData.introduce || ""}
+        onChange={(value) =>
+          setUserData((prev) => ({ ...prev, introduce: value }))
+        }
       />
     </div>
   );

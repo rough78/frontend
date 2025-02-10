@@ -11,7 +11,6 @@ const ProfileHeader = ({ isScrolled }: ProfileHeaderProps) => {
   const { getUserInfo } = useUserApi();
   const { getProfileImage } = useProfileImageApi();
   const [userInfo, setUserInfo] = useState<UserInfoResponse | null>(null);
-
   const { profileImageUrl, setProfileImageUrl } = useProfileStore();
 
   useEffect(() => {
@@ -20,7 +19,6 @@ const ProfileHeader = ({ isScrolled }: ProfileHeaderProps) => {
         const response = await getUserInfo();
         setUserInfo(response);
 
-        // 여기서 userId를 이용해 프로필 이미지를 가져옴
         if (response.userId) {
           const newImageUrl = await getProfileImage(response.userId);
           if (newImageUrl) {
@@ -32,10 +30,8 @@ const ProfileHeader = ({ isScrolled }: ProfileHeaderProps) => {
       }
     };
 
-    if (!profileImageUrl) {
-      fetchUserData();
-    }
-  }, [profileImageUrl]);
+    fetchUserData();
+  }, []);
 
   return (
     <div

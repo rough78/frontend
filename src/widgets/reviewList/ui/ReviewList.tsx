@@ -8,7 +8,7 @@ import { useUserApi } from "@shared/api/user/userApi";
 interface ReviewListProps {
   type?: 'all' | 'my';
   params?: ShowReviewListRequest | ShowUserReviewRequest;
-  onLoadMore?: (timestamp: string) => void;
+  onLoadMore?: (timestamp: string, rating?: number) => void;
 }
 
 const ReviewList = ({ type = 'all', params = { limit: 10 }, onLoadMore }: ReviewListProps) => {
@@ -36,39 +36,32 @@ const ReviewList = ({ type = 'all', params = { limit: 10 }, onLoadMore }: Review
   }, []);
 
   const reviewListQuery = type === 'all' ? useReviewList({
-    sort: "NEW",
-    ...params as ShowReviewListRequest
-  }) : undefined;
+    ...{sort: "NEW"},
+    ...(params as ShowReviewListRequest)
+}) : undefined
   
   const myReviewsQuery = type === 'my' ? useMyReviews({
     ...params as ShowUserReviewRequest
   }) : undefined;
 
   useEffect(() => {
-    if (reviewListQuery?.data) {
+    const queryData = type === 'all' ? reviewListQuery?.data : myReviewsQuery?.data;
+    if (queryData) {
       if (params.timestamp === new Date(3000, 0, 1).toISOString()) {
-        // 필터 변경으로 인한 새로운 쿼리
-        setReviews(reviewListQuery.data);
+        setReviews(queryData);
       } else {
-        // 기존 리뷰에 추가
-        setReviews(prev => [...prev, ...reviewListQuery.data]);
+        setReviews(prev => [...prev, ...queryData]);
       }
-      setHasMore(reviewListQuery.data.length === params.limit);
+      setHasMore(queryData.length === params.limit);
     }
-  }, [reviewListQuery?.data]);
+  }, [reviewListQuery?.data, myReviewsQuery?.data]);
 
   const normalizeTimestamp = (timestamp: string) => {
-    // 'Z' 제거
     const cleanTime = timestamp.endsWith('Z') ? timestamp.slice(0, -1) : timestamp;
-    
-    // 소수점 처리
     const [datePart, nanosPart = ''] = cleanTime.split('.');
-    
-    // 마이크로초 정규화 (6자리)
-    const micros = nanosPart.padEnd(6, '0').slice(0, 6);  // 마이크로초 부분만 사용
-    const microsInt = parseInt(micros) - 1;  // 1 마이크로초 감소
+    const micros = nanosPart.padEnd(6, '0').slice(0, 6);
+    const microsInt = parseInt(micros) - 1;
     const normalizedMicros = microsInt.toString().padStart(6, '0');
-        
     return `${datePart}.${normalizedMicros}`;
   };
 
@@ -77,15 +70,15 @@ const ReviewList = ({ type = 'all', params = { limit: 10 }, onLoadMore }: Review
     if (target.isIntersecting && hasMore && !isLoading) {
       const lastReview = reviews[reviews.length - 1];
       if (lastReview && onLoadMore) {
-        console.log('Load more reviews:', lastReview.createdAt);
-        /**
-         * 백엔드 파트에서 타임스탬프보다 낮은 리뷰를 가져오도록 API를 수정해줘서 주석 처리
-         */
-        // onLoadMore(normalizeTimestamp(lastReview.createdAt));
-        onLoadMore(lastReview.createdAt);
+        // Only check for HIGH_RATING sort in 'all' type reviews
+        if (type === 'all' && (params as ShowReviewListRequest).sort === "HIGH_RATING") {
+          onLoadMore(lastReview.createdAt, lastReview.rating);
+        } else {
+          onLoadMore(lastReview.createdAt);
+        }
       }
     }
-  }, [hasMore, isLoading, reviews]);
+  }, [hasMore, isLoading, reviews, onLoadMore, type, params]);
 
   useEffect(() => {
     setIsLoading(reviewListQuery?.isFetching || myReviewsQuery?.isFetching || false);
@@ -94,8 +87,8 @@ const ReviewList = ({ type = 'all', params = { limit: 10 }, onLoadMore }: Review
   useEffect(() => {
     const observer = new IntersectionObserver(handleObserver, {
       root: null,
-      rootMargin: '100px', // 더 일찍 트리거되도록 증가
-      threshold: 0.1 // 요소의 10%만 보여도 트리거
+      rootMargin: '100px',
+      threshold: 0.1
     });
 
     if (loadMoreTriggerRef.current) {

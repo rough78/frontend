@@ -30,36 +30,13 @@ import { useProfileStore } from "@shared/store/useProfileStore";
 import { useProfileImageApi } from "@shared/api/user/useProfileImagesApi";
 import { useUserStore } from "@shared/store/useUserStore";
 import { useUserApi } from "@shared/api/user/userApi";
+import { useProfileEditStore } from "@shared/store/useProfileEditStore";
 
 export const AppRouter = () => {
   const { isFromFooter } = useNavigationStore();
   const draftCount = useDraftCountStore((state) => state.count);
-
-  const { file, setProfileImageUrl } = useProfileStore();
-  const { userData, nicknameError } = useUserStore();
-  const { uploadProfileImage, getProfileImage } = useProfileImageApi();
-  const { updateUserInfo } = useUserApi();
-
-  const handleCompleteClick = async () => {
-    try {
-      if (file) {
-        await uploadProfileImage(file);
-      }
-
-      const { nickname, introduce, userId } = userData;
-      await updateUserInfo({ nickname, introduce });
-      if (userId) {
-        const newImageUrl = await getProfileImage(userId);
-        if (newImageUrl) {
-          setProfileImageUrl(newImageUrl);
-        }
-      }
-      alert("프로필 수정이 완료되었습니다!");
-      window.location.href = "/mypage";
-    } catch (error) {
-      alert("수정 중 오류가 발생했습니다.");
-    }
-  };
+  const { nicknameError } = useUserStore();
+  const { handleComplete } = useProfileEditStore();
 
   const routes = createRoutesFromElements(
     <Route path="/" element={<Outlet />}>
@@ -180,7 +157,7 @@ export const AppRouter = () => {
               rightElement={
                 <button
                   className={`${styles.completeButton} ${styles["completeButton--color"]}`}
-                  onClick={handleCompleteClick}
+                  onClick={handleComplete}
                   disabled={!!nicknameError}
                 >
                   완료

@@ -87,7 +87,6 @@ const MyPage = () => {
               timestamp: lastTimestamp 
             }}
             onLoadMore={handleLoadMore}
-            key={lastTimestamp} // 타임스탬프 변경 시 리스트 리렌더링
           />
         ) : isLoading ? (
           <div>로딩 중...</div>

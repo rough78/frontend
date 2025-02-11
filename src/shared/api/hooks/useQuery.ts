@@ -19,6 +19,7 @@ export const useApiQuery = <TData>(
       const response = await apiInstance.get<TData>(endpoint)
       return response
     },
+    throwOnError: true,
     ...options,
   })
 }
@@ -29,7 +30,7 @@ export const useApiMutation = <TData, TVariables>(
   options?: {
     urlTransform?: (variables: TVariables) => string;
     onMutate?: (variables: TVariables) => Promise<any>;
-    onError?: (error: any, variables: TVariables, context: any) => void;
+    // onError?: (error: any, variables: TVariables, context: any) => void;
   }
 ) => {
   return useMutation<TData, AxiosError, TVariables>({
@@ -40,5 +41,6 @@ export const useApiMutation = <TData, TVariables>(
       const response = await apiInstance[method]<TData>(transformedUrl, variables)
       return response
     },
+    throwOnError: true
   });
 };

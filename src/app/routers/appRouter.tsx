@@ -30,6 +30,9 @@ import { useProfileStore } from "@shared/store/useProfileStore";
 import { useProfileImageApi } from "@shared/api/user/useProfileImagesApi";
 import { useUserStore } from "@shared/store/useUserStore";
 import { useUserApi } from "@shared/api/user/userApi";
+import NotFoundPage from "@/shared/components/NotFoundPage";
+import ErrorBoundary from "@/shared/components/ErrorBoundary";
+import TestError from "@/shared/components/TestError";
 
 export const AppRouter = () => {
   const { isFromFooter } = useNavigationStore();
@@ -66,6 +69,7 @@ export const AppRouter = () => {
       <Route
         path="login"
         element={
+          <ErrorBoundary>
           <MainLayout
             showHeader={false}
             showFooter={false}
@@ -75,6 +79,7 @@ export const AppRouter = () => {
           >
             <Login />
           </MainLayout>
+          </ErrorBoundary>
         }
       />
 
@@ -90,6 +95,7 @@ export const AppRouter = () => {
         <Route
           index
           element={
+            <ErrorBoundary>
             <MainLayout
               showHeader={true}
               showFooter={true}
@@ -98,12 +104,14 @@ export const AppRouter = () => {
             >
               <Main />
             </MainLayout>
+            </ErrorBoundary>
           }
           handle={{ crumb: <Link to="/">Main</Link> }}
         />
         <Route
           path="search"
           element={
+            <ErrorBoundary>
             <MainLayout
               showHeader={true}
               showFooter={true}
@@ -113,6 +121,7 @@ export const AppRouter = () => {
             >
               <CafeSearch />
             </MainLayout>
+            </ErrorBoundary>
           }
           handle={{ crumb: <Link to="/search">카페 검색</Link> }}
         />
@@ -124,6 +133,7 @@ export const AppRouter = () => {
         <Route
           path="draft"
           element={
+            <ErrorBoundary>
             <MainLayout
               showHeader={true}
               showFooter={false}
@@ -135,12 +145,14 @@ export const AppRouter = () => {
             >
               <DraftReview />
             </MainLayout>
+            </ErrorBoundary>
           }
           handle={{ crumb: <Link to="/draft">작성 중인 리뷰</Link> }}
         />
         <Route
           path="cafe/:id"
           element={
+            <ErrorBoundary>
             <MainLayout
               showHeader={true}
               showFooter={false}
@@ -150,12 +162,14 @@ export const AppRouter = () => {
             >
               <CafeInfo />
             </MainLayout>
+            </ErrorBoundary>
           }
           handle={{ crumb: <Link to="/cafe">카페 정보</Link> }}
         />
         <Route
           path="mypage"
           element={
+            <ErrorBoundary>
             <MainLayout
               showHeader={true}
               showFooter={true}
@@ -165,12 +179,14 @@ export const AppRouter = () => {
             >
               <MyPage />
             </MainLayout>
+            </ErrorBoundary>
           }
           handle={{ crumb: <Link to="/mypage">마이페이지</Link> }}
         />
         <Route
           path="mypage/edit"
           element={
+            <ErrorBoundary>
             <MainLayout
               showHeader={true}
               showFooter={true}
@@ -189,11 +205,42 @@ export const AppRouter = () => {
             >
               <MyPageEdit />
             </MainLayout>
+            </ErrorBoundary>
+          }
+          handle={{ crumb: <Link to="/mypage/edit">마이페이지 수정</Link> }}
+        />
+        <Route
+          path="test/error"
+          element={
+            <ErrorBoundary>
+              <TestError />
+            </ErrorBoundary>
           }
           handle={{ crumb: <Link to="/mypage/edit">마이페이지 수정</Link> }}
         />
       </Route>
-    </Route>
+      <Route
+          path="*"
+          element={
+            <ErrorBoundary>
+            <MainLayout
+              showHeader={true}
+              showFooter={false}
+              showBackButton={true}
+              showWriteButton={false}
+              // onBackClick={handleBackButtonClick}
+              bgColor="rgb(249, 248, 246)"
+            >
+              <NotFoundPage />
+            </MainLayout>
+            </ErrorBoundary>
+          }
+          handle={{ crumb: <Link to="/notfound">not Found 에러</Link> }}
+      />
+      </Route>
+      
+      
+      
   );
 
   return <RouterProvider router={createBrowserRouter(routes)} />;

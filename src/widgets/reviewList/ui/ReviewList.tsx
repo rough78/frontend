@@ -56,6 +56,7 @@ const ReviewList = ({ type = 'all', params = { limit: 10 }, onLoadMore }: Review
     }
   }, [reviewListQuery?.data, myReviewsQuery?.data]);
 
+  // 백엔드에서 대신 처리해줘서 사용되지 않는 함수. 삭제해도 무방하지만 추후 유틸리티 클래스로 이동할 수도 있음.
   const normalizeTimestamp = (timestamp: string) => {
     const cleanTime = timestamp.endsWith('Z') ? timestamp.slice(0, -1) : timestamp;
     const [datePart, nanosPart = ''] = cleanTime.split('.');
@@ -70,7 +71,6 @@ const ReviewList = ({ type = 'all', params = { limit: 10 }, onLoadMore }: Review
     if (target.isIntersecting && hasMore && !isLoading) {
       const lastReview = reviews[reviews.length - 1];
       if (lastReview && onLoadMore) {
-        // Only check for HIGH_RATING sort in 'all' type reviews
         if (type === 'all' && (params as ShowReviewListRequest).sort === "HIGH_RATING") {
           onLoadMore(lastReview.createdAt, lastReview.rating);
         } else {

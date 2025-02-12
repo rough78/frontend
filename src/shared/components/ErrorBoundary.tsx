@@ -1,5 +1,6 @@
 import {Component, ReactNode} from "react";
 import GeneralErrorPage from "./GeneralErrorPage";
+import MainLayout from "@/app/layout/mainLayout/MainLayout";
 
 class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
 
@@ -22,7 +23,22 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boole
   
     render() {
       if (this.state.hasError) {
-        return <GeneralErrorPage />;
+        // return <GeneralErrorPage />;
+        return (
+          <MainLayout
+            showHeader={true}
+            showFooter={false}
+            showBackButton={true}
+            showWriteButton={false}
+            // onBackClick={handleBackButtonClick}
+            bgColor="rgb(249, 248, 246)"
+          >
+            <GeneralErrorPage 
+              mainText={"서버에 문제가 발생했어요"} 
+              subText={"잠시 후 다시 시도해주세요"} 
+            />
+          </MainLayout>
+        );
       }
 
       return this.props.children;

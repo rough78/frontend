@@ -2,19 +2,28 @@ import { useNavigate } from "react-router-dom";
 import styles from "./styles/GeneralErrorPage.module.scss";
 import Error from "@shared/assets/images/error.svg";
 
-const GeneralErrorPage = () => {
+type GeneralErrorPageProps = {
+	mainText: string;
+	subText: string;
+};
+
+const GeneralErrorPage = (
+	{ mainText, subText }: GeneralErrorPageProps
+) => {
 	return (
 		<div>
 			<div className={styles.generalErrorPageContainer}>
-				<img src={Error} alt="Error" />
-				<p className={styles.generalErrorText__main}>서버에 문제가 발생했어요</p>
-				<p>잠시후 다시 시도해주세요</p>
+				<div className={styles.generalErrorText}>
+					<img src={Error} alt="Error" />
+					<p className={styles.generalErrorText__main}>{mainText}</p>
+					<p className={styles.generalErrorText__sub}>{subText}</p>
+				</div>
 				<button
-				className={styles.tag}
+				className={styles.generalErrorButton}
 				onClick={() => window.location.replace("/")}
-				type="button"
+				type="button" 
 				>
-					홈으로 이동하기
+					<p className={styles.content}>홈으로 이동하기</p>
 				</button>
 			</div>
 		</div>

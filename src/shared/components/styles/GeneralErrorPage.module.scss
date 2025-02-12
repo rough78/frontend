@@ -9,49 +9,36 @@
     justify-content: center;
     align-items: center;
     margin-top: 60px;
-    padding: 0 16px;
-
-    img {
-      margin-bottom: 8px;
-    }
 
     .generalErrorText {
-      margin-top: 20px;
       text-align: center;
 
       &__main {
+        margin-top: 21px;
         @include mixins.apply-text-style(b1_bold);
         color: var.$semantic-text-icon-primary;
-        margin-bottom: 4px;
+        // margin-bottom: 4px;
       }
 
       &__sub {
+        margin-top: 2px;
         @include mixins.apply-text-style(b2_regular);
         color: var.$semantic-text-icon-secondary;
       }
-    }
-    
-    .writeReviewButton {
-      margin-top: 16px;
-      width: 117px;
-      height: 40px;
-      background-color: var.$semantic-background-button-default;
-      color: var.$primitive-system-white;
-      border-radius: var.$radius-radius-md;
-      @include mixins.apply-text-style(b1_bold);
-    }
-  }
   
-  .tag {
-    padding: 4px 12px 4px 8px;
-    height: 32px;
-    border: 1px solid var.$semantic-border-secondary;
-    background-color: var.$semantic-background-primary;
-    transition: all 0.2s ease;
-    border-radius: var.$radius-radius-md;
+    }
+    .generalErrorButton {
+      margin-top: 16px;
+      padding: 4px 16px 4px 16px;
+      height: 40px;
+      border: 1px solid var.$semantic-border-secondary;
+      background-color: var.$semantic-background-primary;
+      border-radius: var.$radius-radius-md;
+      
+      .content {
+        color: var.$semantic-text-icon-primary;
+        @include mixins.apply-text-style(b1_bold);
+      }
+    }  
     
-  .content {
-    color: var.$semantic-text-icon-primary;
-    @include mixins.apply-text-style(b2_regular);
   }
-  }  

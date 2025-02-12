@@ -33,6 +33,7 @@ import { useUserApi } from "@shared/api/user/userApi";
 import NotFoundPage from "@/shared/components/NotFoundPage";
 import ErrorBoundary from "@/shared/components/ErrorBoundary";
 import TestError from "@/shared/components/TestError";
+import GeneralErrorPage from "@/shared/components/GeneralErrorPage";
 
 export const AppRouter = () => {
   const { isFromFooter } = useNavigationStore();
@@ -223,10 +224,12 @@ export const AppRouter = () => {
               showFooter={false}
               showBackButton={true}
               showWriteButton={false}
-              // onBackClick={handleBackButtonClick}
               bgColor="rgb(249, 248, 246)"
             >
-              <NotFoundPage />
+              <GeneralErrorPage 
+                mainText={"화면을 불러올 수 없어요"} 
+                subText={"존재하지 않는 페이지입니다"} 
+              />
             </MainLayout>
           }
           handle={{ crumb: <Link to="/notfound">not Found 에러</Link> }}

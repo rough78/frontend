@@ -18,6 +18,9 @@ const MyPage = () => {
   const { favorites, isLoading } = useFavoriteApi();
   const headerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const [lastTimestamp, setLastTimestamp] = useState<string>(
+    new Date(3000, 0, 1).toISOString()
+  );
 
   useEffect(() => {
     const mainContent = document.querySelector(`.${styles.mainContent}`);
@@ -59,6 +62,10 @@ const MyPage = () => {
     window.location.href = `/cafe/${cafe.id}`;
   };
 
+  const handleLoadMore = (timestamp: string) => {
+    setLastTimestamp(timestamp);
+  };
+
   return (
     <div>
       <div ref={headerRef}>
@@ -73,7 +80,14 @@ const MyPage = () => {
         <FilterBtn onChange={handleFilterChange} activeType={activeFilter} />
 
         {activeFilter === "review" ? (
-          <ReviewList type="my" params={{ limit: 10 }} />
+          <ReviewList 
+            type="my" 
+            params={{ 
+              limit: 10,
+              timestamp: lastTimestamp 
+            }}
+            onLoadMore={handleLoadMore}
+          />
         ) : isLoading ? (
           <div>로딩 중...</div>
         ) : (

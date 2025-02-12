@@ -1,34 +1,41 @@
 import { useApiQuery, useApiMutation } from "@shared/api/hooks/useQuery";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useApi } from "../api/hooks/useApi";
 
 
 
 const TestError = () => {
-    const { data, error, isLoading } = useApiQuery<any>(
-      ["testData"],
-    //   "/api/images/draftReview?draftReviewId=1&imageId=1000"
-      "/test/http/500"
-    );
+  // useApiQuery를 사용하여 API 호출
+  const { data, error, isLoading } = useApiQuery<any>(
+    ["testData"],
+  //   "/api/images/draftReview?draftReviewId=1&imageId=1000"   
+    "/test/http/500"
+  );
+
+
+  // --------------------------------------------
+  // const [apiResponse, setApiResponse] = useState<string>("");
   
-    useEffect(() => {
-      if (error) {
-        console.error("API 호출 중 오류 발생:", error);
-      }
-    }, [error]);
-  
-    if (isLoading) {
-      return <div>로딩 중...</div>;
-    }
-  
-    if (error) {
-      return <div>오류가 발생했습니다.</div>;
-    }
-  
-    return (
-      <div>
-        테스트 페이지
-      </div>
-    );
+  // // useApi를 사용하여 API 호출
+  // const { get, post } = useApi();
+  // const getApiTest = async () => {
+  //   const response: string = await get(
+  //     `/api/images/draftReview?draftReviewId=1&imageId=1000`, 
+  //   );
+  // };
+
+  //   useEffect(() => {
+  //     getApiTest();
+  //   }, []);
+
+  // --------------------------------------------
+
+
+  return (
+    <div>
+      테스트 페이지
+    </div>
+  );
 };
   
 

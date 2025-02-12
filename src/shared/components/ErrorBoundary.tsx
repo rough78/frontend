@@ -22,8 +22,6 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boole
   
     render() {
       if (this.state.hasError) {
-        console.log("ErrorBoundary 마운트됨");
-        // this.setState({ hasError: false });
         return <GeneralErrorPage />;
       }
 

@@ -145,6 +145,7 @@ const CafeSearch = () => {
         state: {
           from: "/search",
           searchParams: window.location.search,
+          isContinue: true,
         },
       });
     } else {
@@ -189,7 +190,7 @@ const CafeSearch = () => {
   return (
     <div className={styles.searchPage}>
       <div className={styles.searchBarWrapper}>
-        <SearchBar />
+        <SearchBar initialValue={searchParams.get('name') || ''} />
       </div>
       <div className={styles.cafeListContainer}>
         {isLoading ? (

@@ -7,6 +7,12 @@ export const useBlocker = (blocker: () => void, enabled = true) => {
   const location = useLocation();
 
   useEffect(() => {
+    return () => {
+      hasPushedState.current = false;
+    };
+  }, []);
+
+  useEffect(() => {
     if (!enabled) return;
 
     const currentPathname = location.pathname;

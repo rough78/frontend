@@ -3,7 +3,7 @@ import { ReviewItem } from "@/entities/review/ui";
 import { useReviewApi } from "@shared/api/reviews/reviewApi";
 import type { ShowReviewResponse, ShowReviewListRequest, ShowUserReviewRequest } from "@shared/api/reviews/types";
 import styles from "./ReviewList.module.scss";
-import { useUserApi } from "@shared/api/user/userApi";
+import { useMyStore } from "@shared/store/useMyStore";
 
 interface ReviewListProps {
   type?: 'all' | 'my';
@@ -19,14 +19,16 @@ const ReviewList = ({ type = 'all', params = { limit: 10 }, onLoadMore }: Review
   const loadMoreTriggerRef = useRef<HTMLDivElement>(null);
 
   const { useReviewList, useMyReviews } = useReviewApi();
-  const { getUserInfo } = useUserApi();
+  const { getUser } = useMyStore();
   const [currentUserId, setCurrentUserId] = useState<number | undefined>();
   
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
-        const userInfo = await getUserInfo();
-        setCurrentUserId(userInfo.userId);
+        const userInfo = await getUser();
+        if (userInfo) {
+          setCurrentUserId(userInfo.userId);
+        }
       } catch (error) {
         console.error("사용자 정보 조회 실패:", error);
       }

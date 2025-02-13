@@ -12,10 +12,8 @@ export const useBlocker = (blocker: () => void, enabled = true) => {
     const currentPathname = location.pathname;
 
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      if (!isModalOpen.current) {
         event.preventDefault();
         event.returnValue = "";
-      }
     };
 
     const handlePopState = (event: PopStateEvent) => {

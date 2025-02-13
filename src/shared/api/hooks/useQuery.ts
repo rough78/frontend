@@ -19,6 +19,7 @@ export const useApiQuery = <TData>(
       const response = await apiInstance.get<TData>(endpoint)
       return response
     },
+    throwOnError: true,
     ...options,
   })
 }
@@ -40,5 +41,6 @@ export const useApiMutation = <TData, TVariables>(
       const response = await apiInstance[method]<TData>(transformedUrl, variables)
       return response
     },
+    throwOnError: true
   });
 };

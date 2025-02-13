@@ -1,4 +1,3 @@
-// src/shared/store/createMyStore.ts
 import { create } from "zustand";
 import type { UserInfoResponse } from "@shared/api/user/types";
 
@@ -38,9 +37,11 @@ export function createMyStore({ getUserInfo }: MyStoreApi) {
     getUser: async () => {
       const state = get();
       if (state.userInfo) {
+        console.log('user info already exists');
         return state.userInfo;
       }
       if (!state.isLoading) {
+        console.log('fetching user info');
         await state.fetchUserInfo();
       }
       return get().userInfo;

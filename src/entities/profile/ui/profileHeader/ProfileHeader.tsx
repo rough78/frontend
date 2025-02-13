@@ -1,26 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import styles from "./ProfileHeader.module.scss";
 import { ProfileHeaderProps } from "../../types";
 import MyProfileImage from "@shared/assets/images/profile/profile.svg";
-import { useUserApi } from "@shared/api/user/userApi";
-import type { UserInfoResponse } from "@shared/api/user/types";
 import { useProfileStore } from "@shared/store/useProfileStore";
 import { useProfileImageApi } from "@shared/api/user/useProfileImagesApi";
+import { useMyStore } from "@shared/store/useMyStore";
 
 const ProfileHeader = ({ isScrolled }: ProfileHeaderProps) => {
-  const { getUserInfo } = useUserApi();
+  const { getUser, userInfo } = useMyStore();
   const { getProfileImage } = useProfileImageApi();
-  const [userInfo, setUserInfo] = useState<UserInfoResponse | null>(null);
   const { profileImageUrl, setProfileImageUrl } = useProfileStore();
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await getUserInfo();
-        setUserInfo(response);
-
-        if (response.userId) {
-          const newImageUrl = await getProfileImage(response.userId);
+        const userInfo = await getUser();
+        if (userInfo?.userId) {
+          const newImageUrl = await getProfileImage(userInfo.userId);
           if (newImageUrl) {
             setProfileImageUrl(newImageUrl);
           }
@@ -34,11 +30,7 @@ const ProfileHeader = ({ isScrolled }: ProfileHeaderProps) => {
   }, []);
 
   return (
-    <div
-      className={`${styles.profileHead} ${
-        isScrolled ? styles["profileHead--shrink"] : ""
-      }`}
-    >
+    <div className={`${styles.profileHead} ${isScrolled ? styles["profileHead--shrink"] : ""}`}>
       <div className={styles.profileHead__inner}>
         <img
           className={styles.profileHead__profileImg}
